@@ -20,8 +20,8 @@ const AuthProvider = ({ children }) => {
   };
 
   const signUp = async (data) => {
-    const red = await supabase.auth.signUp(data);
-    return red;
+    const res = await supabase.auth.signUp(data);
+    return res;
   };
 
   useEffect(() => {

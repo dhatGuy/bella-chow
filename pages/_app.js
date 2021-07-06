@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { AuthProvider } from "../components/context/AuthContext";
 import { CartProvider } from "../components/context/CartContext";
+import { OrderProvider } from "../components/context/OrderContext";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -18,7 +19,9 @@ function MyApp({ Component, pageProps }) {
     <ChakraProvider>
       <AuthProvider>
         <CartProvider>
-          <Component {...pageProps} />
+          <OrderProvider>
+            <Component {...pageProps} />
+          </OrderProvider>
         </CartProvider>
       </AuthProvider>
       {/* <ReactQueryDevtools initialIsOpen={false} /> */}

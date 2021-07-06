@@ -10,14 +10,31 @@ const CartProvider = ({ children }) => {
   const { user } = useAuth();
   const toast = useToast();
 
+  const cartTotal = async () => {
+    const { data, error } = await supabase
+      .from("cartDetails")
+      .select()
+      .eq("cart_id", cart?.id);
+    const totalAmount = data.reduce(
+      (total, item) => total + item.total_price,
+      0
+    );
+    const { data: update, error: updateError } = await supabase
+      .from("cart")
+      .update({ totalAmount })
+      .match({ id: cart.id });
+    console.log(update || updateError);
+
+    return totalAmount;
+  };
+
   useEffect(() => {
-    console.log("change detected");
     const getCart = async () => {
       const { data, error } = await supabase
         .from("cart")
         .select(
           `
-        id,
+        *,
         cartDetails(*, menu(*))
       `,
           { count: "exact" }
@@ -58,7 +75,8 @@ const CartProvider = ({ children }) => {
           item.id === data.id ? data : item
         );
 
-        setCart({ ...cart, cartDetails: newCart });
+        const totalAmount = await cartTotal();
+        setCart({ ...cart, totalAmount, cartDetails: newCart });
       } else {
         const { data, error } = await supabase
           .from("cartDetails")
@@ -74,10 +92,14 @@ const CartProvider = ({ children }) => {
           .filter("menu_id", "eq", menu.id)
           .filter("cart_id", "eq", cart.id)
           .single();
-        console.log(data);
 
+        const totalAmount = await cartTotal();
         !error &&
-          setCart({ ...cart, cartDetails: [...cart.cartDetails, data] });
+          setCart({
+            ...cart,
+            totalAmount,
+            cartDetails: [...cart.cartDetails, data],
+          });
       }
 
       toast({
@@ -131,13 +153,13 @@ const CartProvider = ({ children }) => {
       .filter("cart_id", "eq", cart.id)
       .single();
 
-    console.log(updateData);
     if (!updateError) {
       const newCart = cart.cartDetails.map((item) =>
         item.id === updateData.id ? updateData : item
       );
 
-      setCart({ ...cart, cartDetails: newCart });
+      const totalAmount = await cartTotal();
+      setCart({ ...cart, totalAmount, cartDetails: newCart });
     }
   };
 
@@ -164,22 +186,22 @@ const CartProvider = ({ children }) => {
       .filter("cart_id", "eq", cart.id)
       .single();
 
-    console.log(updateData);
     if (!updateError) {
       const newCart = cart.cartDetails.map((item) =>
         item.id === updateData.id ? updateData : item
       );
 
-      setCart({ ...cart, cartDetails: newCart });
+      const totalAmount = await cartTotal();
+      setCart({ ...cart, totalAmount, cartDetails: newCart });
     }
   };
 
   const clearCart = async () => {
     await supabase.from("cartDetails").delete().match({ cart_id: cart?.id });
-    setCart({ ...cart, cartDetails: [] });
+    const totalAmount = await cartTotal();
+    setCart({ ...cart, totalAmount, cartDetails: [] });
   };
 
-  // Will be passed down to Signup, Login and Dashboard components
   const value = {
     cart,
     addItem,

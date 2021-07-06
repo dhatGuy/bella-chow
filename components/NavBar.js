@@ -106,9 +106,17 @@ export default function Simple() {
         {isOpen ? (
           <Box pb={4} display={{ md: "none" }}>
             <Stack as={"nav"} spacing={4}>
-              <Link as={NextLink}>cart</Link>
-              <Link as={NextLink}>login</Link>
-              <Link as={NextLink}>signup</Link>
+              <NextLink href={"/signup"} passHref>
+                <Link>signup</Link>
+              </NextLink>
+              <NextLink href={"/login"} passHref>
+                <Link>login</Link>
+              </NextLink>
+              <Avatar size={"sm"} onClick={onOpenCart}>
+                <AvatarBadge boxSize="1.25em" bg="green.500">
+                  {cart?.cartDetails.length || 0}
+                </AvatarBadge>
+              </Avatar>
             </Stack>
           </Box>
         ) : null}
