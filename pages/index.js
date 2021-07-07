@@ -1,21 +1,16 @@
 import Head from "next/head";
 import Image from "next/image";
-import { useEffect, useState } from "react";
 import { supabase } from "../api";
-import { SimpleGrid } from "@chakra-ui/react";
+import { SimpleGrid, Container } from "@chakra-ui/react";
 import MenuItem from "../components/MenuItem";
 import NavBar from "../components/NavBar";
+import MenuList from "../components/MenuList";
 
 export default function Home({ menus }) {
   return (
-    <div>
-      <NavBar />
-      <SimpleGrid minChildWidth="250px" spacing="40px">
-        {menus
-          ? menus.map((menu) => <MenuItem key={menu.id} menu={menu} />)
-          : null}
-      </SimpleGrid>
-    </div>
+    <Container maxW="container.xl" my="10">
+      <MenuList menus={menus} />
+    </Container>
   );
 }
 
@@ -24,6 +19,7 @@ export const getStaticProps = async (ctx) => {
   return {
     props: {
       menus: data,
+      // validate: 1,
     },
   };
 };

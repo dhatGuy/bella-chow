@@ -15,6 +15,7 @@ import {
   useColorModeValue,
   Stack,
   AvatarBadge,
+  Heading,
 } from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 import { useRouter } from "next/router";
@@ -23,9 +24,11 @@ import NextLink from "next/link";
 import CartDrawer from "./CartDrawer";
 import { useCart } from "./context/CartContext";
 import { useAuth } from "./context/AuthContext";
+import { FaShoppingCart } from "react-icons/fa";
 
 export default function Simple() {
   const { cart } = useCart();
+  const { user } = useAuth();
   const { signOut } = useAuth();
   const router = useRouter();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -50,7 +53,11 @@ export default function Simple() {
           onClose={onCloseCart}
         />
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
-          <Box>Logo</Box>
+          <Heading>
+            <NextLink href="/" passHref>
+              <Link _hover={{ textDecor: "none" }}>Bella Chow</Link>
+            </NextLink>
+          </Heading>
           <IconButton
             size={"md"}
             icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
@@ -66,20 +73,29 @@ export default function Simple() {
                 spacing={4}
                 display={{ base: "none", md: "flex" }}
               >
-                <NextLink href={"/signup"} passHref>
-                  <Link>signup</Link>
-                </NextLink>
-                <NextLink href={"/login"} passHref>
-                  <Link>login</Link>
-                </NextLink>
-                <Avatar size={"sm"} onClick={onOpenCart}>
-                  <AvatarBadge boxSize="1.25em" bg="green.500">
+                {!user && (
+                  <>
+                    <NextLink href={"/signup"} passHref>
+                      <Link>signup</Link>
+                    </NextLink>
+                    <NextLink href={"/login"} passHref>
+                      <Link>login</Link>
+                    </NextLink>
+                  </>
+                )}
+                <Avatar
+                  size={"sm"}
+                  onClick={onOpenCart}
+                  icon={<FaShoppingCart w={6} h={10} />}
+                  bg="white"
+                >
+                  <AvatarBadge boxSize="1.5em" bg="green.500">
                     {cart?.cartDetails.length || 0}
                   </AvatarBadge>
                 </Avatar>
               </HStack>
             </HStack>
-            <Menu>
+            <Menu isLazy>
               <MenuButton
                 as={Button}
                 rounded={"full"}
@@ -95,7 +111,11 @@ export default function Simple() {
               </MenuButton>
               <MenuList>
                 <MenuItem>profile</MenuItem>
-                <MenuItem>orders</MenuItem>
+                <NextLink href="/orders" passHref>
+                  <MenuItem _hover={{ textDecor: "none" }} as={Link}>
+                    Orders
+                  </MenuItem>
+                </NextLink>
                 <MenuDivider />
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
               </MenuList>

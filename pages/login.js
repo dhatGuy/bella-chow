@@ -17,7 +17,7 @@ import { useRef } from "react";
 import { useAuth } from "../components/context/AuthContext";
 import NextLink from "next/link";
 
-export default function SimpleCard() {
+export default function Login() {
   const { signIn } = useAuth();
   const router = useRouter();
   const emailRef = useRef();

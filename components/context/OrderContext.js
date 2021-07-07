@@ -16,7 +16,6 @@ const OrderProvider = ({ children }) => {
         .from("order")
         .select(`*, orderDetails(*)`)
         .filter("user_id", "eq", user?.id);
-      console.log(data);
       setOrders(data);
     };
     user ? getOrders() : setOrders([]);

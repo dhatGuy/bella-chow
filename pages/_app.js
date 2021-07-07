@@ -4,6 +4,7 @@ import { ReactQueryDevtools } from "react-query/devtools";
 import { AuthProvider } from "../components/context/AuthContext";
 import { CartProvider } from "../components/context/CartContext";
 import { OrderProvider } from "../components/context/OrderContext";
+import Layout from "../components/Layout";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -20,7 +21,9 @@ function MyApp({ Component, pageProps }) {
       <AuthProvider>
         <CartProvider>
           <OrderProvider>
-            <Component {...pageProps} />
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
           </OrderProvider>
         </CartProvider>
       </AuthProvider>

@@ -15,8 +15,19 @@ const AuthProvider = ({ children }) => {
 
   const signIn = async (data) => {
     let res = await supabase.auth.signIn(data);
-    setUser(res.user);
-    return res;
+    const { data: profile, error } = await supabase
+      .from("profiles")
+      .select()
+      .eq("id", res.user.id)
+      .single();
+
+    const user = {
+      ...res.user,
+      ...profile,
+    };
+
+    setUser(user);
+    return user;
   };
 
   const signUp = async (data) => {
@@ -27,9 +38,20 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     // Check active sessions and sets the user
     const session = supabase.auth.session();
-
-    setUser(session?.user ?? null);
-    setLoading(false);
+    // const getProfile = async () => {
+    supabase
+      .from("profiles")
+      .select()
+      .eq("id", session?.user.id)
+      .single()
+      .then(({ data, error }) => {
+        const user = {
+          ...(session?.user ?? null),
+          ...data,
+        };
+        setUser(user ?? null);
+        setLoading(false);
+      });
 
     // Listen for changes on auth state (logged in, signed out, etc.)
     // const { data: listener } = supabase.auth.onAuthStateChange(
@@ -44,7 +66,6 @@ const AuthProvider = ({ children }) => {
     // };
   }, []);
 
-  // Will be passed down to Signup, Login and Dashboard components
   const value = {
     signUp,
     signIn,

@@ -18,7 +18,7 @@ import { supabase } from "../api";
 import { useAuth } from "../components/context/AuthContext";
 import NextLink from "next/link";
 
-export default function SimpleCard() {
+export default function Signup() {
   const { signUp, setUser } = useAuth();
   const emailRef = useRef();
   const passwordRef = useRef();
