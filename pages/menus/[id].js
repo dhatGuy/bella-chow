@@ -1,5 +1,5 @@
-import { supabase } from "../../api";
-import MenuDetails from "../../components/MenuDetails";
+import { supabase } from "api";
+import MenuDetails from "@components/MenuDetails";
 
 const Menu = ({ menu }) => {
   return <MenuDetails menu={menu} />;

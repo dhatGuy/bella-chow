@@ -1,6 +1,6 @@
 import { Badge, Box, Button, Image, Stack, Text } from "@chakra-ui/react";
 import { AddIcon, DeleteIcon } from "@chakra-ui/icons";
-import { useCart } from "./context/CartContext";
+import { useCart } from "@context/CartContext";
 import { useRouter } from "next/router";
 
 const MenuItem = ({ menu }) => {
@@ -16,7 +16,7 @@ const MenuItem = ({ menu }) => {
       borderWidth="1px"
       borderRadius="lg"
       overflow="hidden"
-      onClick={() => showDetails()}
+      // onClick={() => showDetails()}
     >
       <Box w="full">
         <Image w="full" h="200px" objectFit="cover" src={image} alt={name} />

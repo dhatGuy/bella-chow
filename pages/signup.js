@@ -14,8 +14,8 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useRef } from "react";
-import { supabase } from "../api";
-import { useAuth } from "../components/context/AuthContext";
+import { supabase } from "api";
+import { useAuth } from "@context/AuthContext";
 import NextLink from "next/link";
 
 export default function Signup() {
@@ -25,17 +25,10 @@ export default function Signup() {
   const usernameRef = useRef();
   const router = useRouter();
 
-  const createCart = async (userId) => {
-    const { data, error } = await supabase
-      .from("cart")
-      .insert([{ user_id: userId }]);
-    console.log(data ?? error);
-  };
-
   async function createProfile(userId) {
     const username = usernameRef.current.value;
     const { data, error } = await supabase
-      .from("profiles")
+      .from("users")
       .insert([{ username, id: userId }]);
 
     console.log(data || error);
@@ -49,7 +42,6 @@ export default function Signup() {
 
     const { user, error } = await signUp({ email, password });
     await createProfile(user.id);
-    await createCart(user.id);
     setUser(user);
 
     if (error) {

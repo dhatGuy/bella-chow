@@ -1,6 +1,6 @@
 import { useToast } from "@chakra-ui/react";
 import { createContext, useContext, useEffect, useState } from "react";
-import { supabase } from "../../api";
+import { supabase } from "../api";
 import { useAuth } from "./AuthContext";
 
 const CartContext = createContext();
@@ -29,21 +29,15 @@ const CartProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    const getCart = async () => {
-      const { data, error } = await supabase
-        .from("cart")
-        .select(
-          `
-        *,
-        cartDetails(*, menu(*))
-      `,
-          { count: "exact" }
-        )
-        .filter("user_id", "eq", user?.id)
-        .single();
-      setCart(data);
-    };
-    user ? getCart() : setCart(null);
+    // const getCart = async () => {
+    //   const { data, error } = await supabase
+    //     .from("cart")
+    //     .select(`*, cartDetails(*, menu(*))`)
+    //     .filter("user_id", "eq", user?.id);
+    //   // .single();
+    //   setCart(data[0]);
+    // };
+    // user ? getCart() : setCart(null);
   }, [user]);
 
   const addItem = async (menu, qty = 1) => {
@@ -51,8 +45,9 @@ const CartProvider = ({ children }) => {
       const { data: item, error } = await supabase
         .from("cartDetails")
         .select(`*, menu(*)`)
-        .filter("menu_id", "eq", menu.id)
-        .filter("cart_id", "eq", cart.id)
+        // .eq("cafe_id", cafe_id)
+        .eq("menu_id", menu.id)
+        .eq("cart_id", cart.id)
         .single();
 
       if (item) {
@@ -204,6 +199,7 @@ const CartProvider = ({ children }) => {
 
   const value = {
     cart,
+    setCart,
     addItem,
     removeItem,
     increaseQty,

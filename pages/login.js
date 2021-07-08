@@ -14,7 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useRef } from "react";
-import { useAuth } from "../components/context/AuthContext";
+import { useAuth } from "@context/AuthContext";
 import NextLink from "next/link";
 
 export default function Login() {

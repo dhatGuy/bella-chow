@@ -10,8 +10,8 @@ import {
   Center,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { useAuth } from "../../components/context/AuthContext";
-import { useOrder } from "../../components/context/OrderContext";
+import { useAuth } from "@context/AuthContext";
+import { useOrder } from "@context/OrderContext";
 
 const Order = () => {
   const { orders } = useOrder();

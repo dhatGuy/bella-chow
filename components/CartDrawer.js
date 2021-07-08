@@ -11,11 +11,11 @@ import {
   Flex,
   Text,
 } from "@chakra-ui/react";
-import Cart from "./Cart";
-import { useCart } from "./context/CartContext";
+import Cart from "@components/Cart";
+import { useCart } from "@context/CartContext";
 import { usePaystackPayment } from "react-paystack";
-import { useAuth } from "./context/AuthContext";
-import { useOrder } from "./context/OrderContext";
+import { useAuth } from "@context/AuthContext";
+import { useOrder } from "@context/OrderContext";
 import { useState } from "react";
 
 function CartDrawer({ isOpen, onClose }) {
@@ -57,7 +57,7 @@ function CartDrawer({ isOpen, onClose }) {
           </DrawerBody>
           <DrawerFooter borderTopWidth="1px">
             <Flex justify="space-between" align="center" w="100%">
-              <Text>Total: {cart?.totalAmount}</Text>
+              {/* <Text>Total: {cart?.totalAmount}</Text>
               <Box>
                 <Button
                   disabled={!cart?.cartDetails.length || isProcessing}
@@ -75,8 +75,8 @@ function CartDrawer({ isOpen, onClose }) {
                   loadingText="Processing"
                 >
                   Checkout
-                </Button>
-              </Box>
+                </Button> */}
+              {/* </Box> */}
             </Flex>
           </DrawerFooter>
         </DrawerContent>

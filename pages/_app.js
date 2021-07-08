@@ -1,10 +1,10 @@
 import { ChakraProvider } from "@chakra-ui/react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
-import { AuthProvider } from "../components/context/AuthContext";
-import { CartProvider } from "../components/context/CartContext";
-import { OrderProvider } from "../components/context/OrderContext";
-import Layout from "../components/Layout";
+import { AuthProvider } from "@context/AuthContext";
+import { CartProvider } from "@context/CartContext";
+import { OrderProvider } from "@context/OrderContext";
+import Layout from "@components/Layout";
 
 const queryClient = new QueryClient({
   defaultOptions: {

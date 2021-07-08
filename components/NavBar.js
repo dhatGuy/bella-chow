@@ -22,8 +22,8 @@ import { useRouter } from "next/router";
 import NextLink from "next/link";
 
 import CartDrawer from "./CartDrawer";
-import { useCart } from "./context/CartContext";
-import { useAuth } from "./context/AuthContext";
+import { useCart } from "@context/CartContext";
+import { useAuth } from "@context/AuthContext";
 import { FaShoppingCart } from "react-icons/fa";
 
 export default function Simple() {
@@ -83,7 +83,7 @@ export default function Simple() {
                     </NextLink>
                   </>
                 )}
-                <Avatar
+                {/* <Avatar
                   size={"sm"}
                   onClick={onOpenCart}
                   icon={<FaShoppingCart w={6} h={10} />}
@@ -92,7 +92,7 @@ export default function Simple() {
                   <AvatarBadge boxSize="1.5em" bg="green.500">
                     {cart?.cartDetails.length || 0}
                   </AvatarBadge>
-                </Avatar>
+                </Avatar> */}
               </HStack>
             </HStack>
             <Menu isLazy>

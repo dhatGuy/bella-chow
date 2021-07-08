@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { supabase } from "../../api";
+import { supabase } from "../api";
 import { useAuth } from "./AuthContext";
 import { useCart } from "./CartContext";
 
@@ -14,20 +14,21 @@ const OrderProvider = ({ children }) => {
     const getOrders = async () => {
       const { data, error } = await supabase
         .from("order")
-        .select(`*, orderDetails(*)`)
+        .select(`*, orderDetails(*), cafeterias(*)`)
         .filter("user_id", "eq", user?.id);
       setOrders(data);
     };
     user ? getOrders() : setOrders([]);
   }, [user]);
 
-  const createOrder = async (amount, ref) => {
+  const createOrder = async (amount, ref, cafe_id) => {
     const { data: order, error: orderError } = await supabase
       .from("order")
       .insert({
         amount,
         user_id: user.id,
         payment_ref: ref,
+        cafe_id,
       })
       .single();
     const orderItems = cart.cartDetails.map((item) => {

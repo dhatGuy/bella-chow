@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { supabase } from "../../api";
+import { supabase } from "api";
 
 const AuthContext = createContext();
 
@@ -16,7 +16,7 @@ const AuthProvider = ({ children }) => {
   const signIn = async (data) => {
     let res = await supabase.auth.signIn(data);
     const { data: profile, error } = await supabase
-      .from("profiles")
+      .from("users")
       .select()
       .eq("id", res.user.id)
       .single();
@@ -40,7 +40,7 @@ const AuthProvider = ({ children }) => {
     const session = supabase.auth.session();
     // const getProfile = async () => {
     supabase
-      .from("profiles")
+      .from("users")
       .select()
       .eq("id", session?.user.id)
       .single()

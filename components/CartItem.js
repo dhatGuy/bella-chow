@@ -1,5 +1,5 @@
 import { Box, Button, Text, Flex, Image, HStack } from "@chakra-ui/react";
-import { useCart } from "./context/CartContext";
+import { useCart } from "@context/CartContext";
 // import Image from "next/image";
 
 const CartItem = ({ item }) => {
