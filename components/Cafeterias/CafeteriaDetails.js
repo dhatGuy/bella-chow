@@ -4,19 +4,28 @@ import {
   Box,
   Flex,
   SimpleGrid,
-  VStack,
+  Stack,
   Grid,
   GridItem,
+  useDisclosure,
 } from "@chakra-ui/react";
+
+import { AddIcon } from "@chakra-ui/icons";
 import Cart from "@components/Cart";
 import MenuList from "@components/MenuList";
 import { useAuth } from "@context/AuthContext";
 import { useCart } from "@context/CartContext";
 import { supabase } from "api";
 import { useEffect } from "react";
+import CartDrawer from "@components/CartDrawer";
 const CafeteriaDetails = ({ cafe }) => {
   const { user } = useAuth();
-  const { cart, setCart } = useCart();
+  const { setCart } = useCart();
+  const {
+    isOpen: isOpenCart,
+    onOpen: onOpenCart,
+    onClose: onCloseCart,
+  } = useDisclosure();
   useEffect(() => {
     const getC = async () => {
       if (user) {
@@ -32,23 +41,68 @@ const CafeteriaDetails = ({ cafe }) => {
     getC();
   }, [cafe, setCart, user]);
   return (
-    <Box>
-      <Box position="relative">
-        <h1>{cafe.name}</h1>
-        <Image
-          src={cafe.image}
-          alt={cafe.name}
-          loading="lazy"
-          fit="fill"
-          w="100%"
-          h="200px"
-        />
-      </Box>
-      <Grid templateRows="1fr" templateColumns="repeat(3, 1fr)" gap={4}>
-        <GridItem colSpan={2}>
+    <Box position="relative">
+      <CartDrawer
+        isOpen={isOpenCart}
+        onOpen={onOpenCart}
+        onClose={onCloseCart}
+        cafe={cafe}
+      />
+      <Stack
+        position="relative"
+        bgColor="black"
+        height={"36"}
+        alignItems="center"
+        bgImg={`${cafe.image}`}
+        bgSize="cover"
+        backgroundRepeat="no-repeat"
+        bgRepeat="no-repeat"
+        justify="center"
+        bgPos={"center center"}
+        _before={{
+          content: '""',
+          position: "absolute",
+          top: "0px",
+          right: "0px",
+          bottom: "0px",
+          left: "0px",
+          backgroundColor: "rgba(0,0,0,0.25)",
+        }}
+      >
+        <Heading
+          as={"h1"}
+          textColor="white"
+          fontSize={{ base: "4xl", md: "7xl" }}
+          zIndex={2}
+        >
+          {cafe.name}
+        </Heading>
+      </Stack>
+      <AddIcon
+        onClick={onOpenCart}
+        position="fixed"
+        display={{ md: "none" }}
+        bottom={4}
+        right={4}
+        w={6}
+        h={6}
+      />
+      <Grid
+        templateRows="1fr"
+        templateColumns="repeat(3, 1fr)"
+        gap={4}
+        m={2}
+        justifyContent="center"
+      >
+        <GridItem
+          colSpan={[3, 3, 2]}
+          display="flex"
+          flexDirection="column"
+          justifyContent="center"
+        >
           <MenuList menus={cafe.menu} />
         </GridItem>
-        <GridItem>
+        <GridItem display={["none", "none", "none", "grid"]}>
           <Cart cafe={cafe} />
         </GridItem>
       </Grid>

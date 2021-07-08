@@ -13,7 +13,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useAuth } from "@context/AuthContext";
 import NextLink from "next/link";
 
@@ -22,8 +22,10 @@ export default function Login() {
   const router = useRouter();
   const emailRef = useRef();
   const passwordRef = useRef();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   async function handleSubmit(e) {
     e.preventDefault();
+    setIsSubmitting(true);
 
     // Get email and password input values
     const email = emailRef.current.value;
@@ -34,7 +36,9 @@ export default function Login() {
 
     if (error) {
       alert("error signing in");
+      setIsSubmitting(false);
     } else {
+      setIsSubmitting("false");
       // Redirect user to Dashboard
       router.push("/");
     }
@@ -87,6 +91,8 @@ export default function Login() {
                   _hover={{
                     bg: "blue.500",
                   }}
+                  isLoading={isSubmitting}
+                  loadingText="Submitting"
                 >
                   Sign in
                 </Button>

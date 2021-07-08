@@ -14,44 +14,27 @@ import {
   useDisclosure,
   useColorModeValue,
   Stack,
-  AvatarBadge,
   Heading,
 } from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 import { useRouter } from "next/router";
 import NextLink from "next/link";
-
-import CartDrawer from "./CartDrawer";
-import { useCart } from "@context/CartContext";
 import { useAuth } from "@context/AuthContext";
-import { FaShoppingCart } from "react-icons/fa";
 
 export default function Simple() {
-  const { cart } = useCart();
   const { user } = useAuth();
   const { signOut } = useAuth();
   const router = useRouter();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const {
-    isOpen: isOpenCart,
-    onOpen: onOpenCart,
-    onClose: onCloseCart,
-  } = useDisclosure();
 
   const handleLogout = async () => {
     await signOut();
-
     router.push("/login");
   };
 
   return (
     <>
       <Box bg={useColorModeValue("gray.100", "gray.900")} px={4}>
-        <CartDrawer
-          isOpen={isOpenCart}
-          onOpen={onOpenCart}
-          onClose={onCloseCart}
-        />
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
           <Heading>
             <NextLink href="/" passHref>
@@ -83,16 +66,13 @@ export default function Simple() {
                     </NextLink>
                   </>
                 )}
-                {/* <Avatar
-                  size={"sm"}
-                  onClick={onOpenCart}
-                  icon={<FaShoppingCart w={6} h={10} />}
-                  bg="white"
-                >
-                  <AvatarBadge boxSize="1.5em" bg="green.500">
-                    {cart?.cartDetails.length || 0}
-                  </AvatarBadge>
-                </Avatar> */}
+                {user && (
+                  <>
+                    <NextLink href={"/cafeterias"} passHref>
+                      <Link>Cafeterias</Link>
+                    </NextLink>
+                  </>
+                )}
               </HStack>
             </HStack>
             <Menu isLazy>
@@ -109,7 +89,7 @@ export default function Simple() {
                   }
                 />
               </MenuButton>
-              <MenuList>
+              <MenuList zIndex={3}>
                 <MenuItem>profile</MenuItem>
                 <NextLink href="/orders" passHref>
                   <MenuItem _hover={{ textDecor: "none" }} as={Link}>
@@ -126,17 +106,23 @@ export default function Simple() {
         {isOpen ? (
           <Box pb={4} display={{ md: "none" }}>
             <Stack as={"nav"} spacing={4}>
-              <NextLink href={"/signup"} passHref>
-                <Link>signup</Link>
-              </NextLink>
-              <NextLink href={"/login"} passHref>
-                <Link>login</Link>
-              </NextLink>
-              <Avatar size={"sm"} onClick={onOpenCart}>
-                <AvatarBadge boxSize="1.25em" bg="green.500">
-                  {cart?.cartDetails.length || 0}
-                </AvatarBadge>
-              </Avatar>
+              {!user && (
+                <>
+                  <NextLink href={"/signup"} passHref>
+                    <Link>signup</Link>
+                  </NextLink>
+                  <NextLink href={"/login"} passHref>
+                    <Link>login</Link>
+                  </NextLink>
+                </>
+              )}
+              {user && (
+                <>
+                  <NextLink href={"/cafeterias"} passHref>
+                    <Link>Cafeterias</Link>
+                  </NextLink>
+                </>
+              )}
             </Stack>
           </Box>
         ) : null}

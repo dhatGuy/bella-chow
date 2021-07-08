@@ -1,17 +1,18 @@
-import { Heading, Text } from "@chakra-ui/react";
+import { Heading, Text, Box } from "@chakra-ui/react";
 import { supabase } from "../../api";
 import CafeteriaList from "../../components/Cafeterias/CafeteriaList";
 const Cafeterias = ({ cafeterias }) => {
   return (
-    <div>
-      <Heading>Cafes</Heading>
+    <Box>
+      <Heading textAlign="center" my={4}>
+        Cafeterias
+      </Heading>
       <CafeteriaList cafes={cafeterias} />
-    </div>
+    </Box>
   );
 };
 export const getStaticProps = async (ctx) => {
   const { data, error } = await supabase.from("cafeterias");
-  // console.log(data || error);
   return {
     props: {
       cafeterias: data,

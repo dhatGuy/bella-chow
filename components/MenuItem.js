@@ -11,13 +11,7 @@ const MenuItem = ({ menu }) => {
   const showDetails = () => router.push("/menus/" + id);
 
   return (
-    <Box
-      maxW="sm"
-      borderWidth="1px"
-      borderRadius="lg"
-      overflow="hidden"
-      // onClick={() => showDetails()}
-    >
+    <Box maxW="sm" borderWidth="1px" borderRadius="lg" overflow="hidden">
       <Box w="full">
         <Image w="full" h="200px" objectFit="cover" src={image} alt={name} />
       </Box>

@@ -13,7 +13,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { supabase } from "api";
 import { useAuth } from "@context/AuthContext";
 import NextLink from "next/link";
@@ -24,6 +24,7 @@ export default function Signup() {
   const passwordRef = useRef();
   const usernameRef = useRef();
   const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   async function createProfile(userId) {
     const username = usernameRef.current.value;
@@ -34,6 +35,7 @@ export default function Signup() {
     console.log(data || error);
   }
   const handleSubmit = async (e) => {
+    setIsSubmitting(true);
     e.preventDefault();
 
     // Get email and password input values
@@ -41,13 +43,15 @@ export default function Signup() {
     const password = passwordRef.current.value;
 
     const { user, error } = await signUp({ email, password });
-    await createProfile(user.id);
-    setUser(user);
 
     if (error) {
-      alert("error signing in");
+      alert("error creating an account");
+      setIsSubmitting(false);
     } else {
+      await createProfile(user.id);
+      setUser(user);
       router.push("/");
+      setIsSubmitting(false);
     }
   };
   return (
@@ -62,8 +66,7 @@ export default function Signup() {
           <Stack align={"center"}>
             <Heading fontSize={"4xl"}>Create an account</Heading>
             <Text fontSize={"lg"} color={"gray.600"}>
-              to enjoy all of our cool <Link color={"blue.400"}>features</Link>{" "}
-              ✌️
+              to enjoy free delivery within the campus ✌️
             </Text>
           </Stack>
           <Box
@@ -103,6 +106,8 @@ export default function Signup() {
                   _hover={{
                     bg: "blue.500",
                   }}
+                  isLoading={isSubmitting}
+                  loadingText="Submitting"
                 >
                   Sign up
                 </Button>

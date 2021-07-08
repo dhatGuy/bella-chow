@@ -31,17 +31,15 @@ const Cart = ({ cafe }) => {
   return (
     <Box
       position="sticky"
-      top="7"
+      top="5"
       borderWidth="1px"
       borderColor="red.900"
       h="70vh"
-      mt="10"
-      overflow="scroll"
-      overflowX="hidden"
+      mt="5"
+      overflow="auto"
+      boxShadow="md"
     >
-      <Heading as="h4" size="lg">
-        Order from Manna Palace
-      </Heading>
+      <Text size="lg">Order from {cafe.name}</Text>
       <Box>
         {!cart?.cartDetails?.length ? (
           <Text>You have no item in your cart</Text>

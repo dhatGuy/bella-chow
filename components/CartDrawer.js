@@ -17,8 +17,9 @@ import { usePaystackPayment } from "react-paystack";
 import { useAuth } from "@context/AuthContext";
 import { useOrder } from "@context/OrderContext";
 import { useState } from "react";
+import CartItem from "@components/CartItem";
 
-function CartDrawer({ isOpen, onClose }) {
+function CartDrawer({ isOpen, onClose, cafe }) {
   const { user } = useAuth();
   const { clearCart, cart } = useCart();
   const { createOrder } = useOrder();
@@ -53,11 +54,20 @@ function CartDrawer({ isOpen, onClose }) {
           <DrawerCloseButton />
           <DrawerHeader borderBottomWidth="1px">Cart</DrawerHeader>
           <DrawerBody>
-            <Cart />
+            <Text>Order from {cafe.name}</Text>
+            <Box>
+              {!cart?.cartDetails?.length ? (
+                <Text>You have no item in your cart</Text>
+              ) : (
+                cart?.cartDetails.map((item) => (
+                  <CartItem item={item} key={item.id} />
+                ))
+              )}
+            </Box>
           </DrawerBody>
           <DrawerFooter borderTopWidth="1px">
             <Flex justify="space-between" align="center" w="100%">
-              {/* <Text>Total: {cart?.totalAmount}</Text>
+              <Text>Total: {cart?.totalAmount}</Text>
               <Box>
                 <Button
                   disabled={!cart?.cartDetails.length || isProcessing}
@@ -75,8 +85,8 @@ function CartDrawer({ isOpen, onClose }) {
                   loadingText="Processing"
                 >
                   Checkout
-                </Button> */}
-              {/* </Box> */}
+                </Button>
+              </Box>
             </Flex>
           </DrawerFooter>
         </DrawerContent>
