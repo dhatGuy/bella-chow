@@ -47,7 +47,7 @@ export default function Homepage() {
           an order away
         </Text>
         <Stack spacing={6} direction={"row"}>
-          <NextLink href="/signup" passHref>
+          <NextLink href="/cafeterias" passHref>
             <Button
               as={Link}
               rounded={"full"}
