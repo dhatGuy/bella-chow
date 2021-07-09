@@ -1,9 +1,11 @@
 import { AddIcon } from "@chakra-ui/icons";
 import {
   Box,
+  Circle,
   Grid,
   GridItem,
   Heading,
+  Icon,
   Stack,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -14,6 +16,7 @@ import { useAuth } from "@context/AuthContext";
 import { useCart } from "@context/CartContext";
 import { supabase } from "api";
 import { useEffect } from "react";
+import { IoCartOutline } from "react-icons/io5";
 
 const CafeteriaDetails = ({ cafe }) => {
   const { user } = useAuth();
@@ -88,15 +91,17 @@ const CafeteriaDetails = ({ cafe }) => {
           {cafe.name}
         </Heading>
       </Stack>
-      <AddIcon
-        onClick={onOpenCart}
+      <Circle
+        size="90px"
+        bg="orange"
         position="fixed"
-        display={{ md: "none" }}
+        display={{ base: "flex", md: "none" }}
         bottom={4}
         right={4}
-        w={6}
-        h={6}
-      />
+        color={"white"}
+      >
+        <Icon as={IoCartOutline} onClick={onOpenCart} w={10} h={10} />
+      </Circle>
       <Grid
         templateRows="1fr"
         templateColumns="repeat(3, 1fr)"
@@ -112,7 +117,7 @@ const CafeteriaDetails = ({ cafe }) => {
         >
           <MenuList menus={cafe.menu} />
         </GridItem>
-        <GridItem display={["none", "none", "none", "grid"]}>
+        <GridItem display={{ base: "none", md: "grid" }}>
           <Cart cafe={cafe} />
         </GridItem>
       </Grid>

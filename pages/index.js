@@ -8,11 +8,39 @@ import {
   Button,
   Container,
   Link,
+  Box,
+  SimpleGrid,
+  Icon,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import Lottie from "react-lottie";
 import anime from "lotties/food-delivery-process";
 import { useAuth } from "@context/AuthContext";
+import { GiFoodTruck, GiStorkDelivery } from "react-icons/gi";
+import { IoFastFoodOutline } from "react-icons/io5";
+
+const Feature = ({ title, text, icon }) => {
+  return (
+    <Stack align="center">
+      <Flex
+        w={16}
+        h={16}
+        align={"center"}
+        justify={"center"}
+        color={"white"}
+        rounded={"full"}
+        colorScheme={"orange"}
+        bg={"orange.400"}
+        _hover={{ bg: "orange.500" }}
+        mb={1}
+      >
+        {icon}
+      </Flex>
+      <Text fontWeight={600}>{title}</Text>
+      <Text color={"gray.600"}>{text}</Text>
+    </Stack>
+  );
+};
 
 export default function Homepage() {
   const { user } = useAuth();
@@ -56,7 +84,7 @@ export default function Homepage() {
               bg={"orange.400"}
               _hover={{ bg: "orange.500" }}
             >
-              Cafeterias
+              Cafeterias List
             </Button>
           </NextLink>
           {!user && (
@@ -70,6 +98,25 @@ export default function Homepage() {
         <Flex w={"full"}>
           <Lottie options={defaultOptions} height={400} width={400} />
         </Flex>
+        <Box p={4}>
+          <SimpleGrid columns={{ base: 1, md: 3 }} spacing={10}>
+            <Feature
+              icon={<Icon as={GiFoodTruck} w={10} h={10} />}
+              title={"Fast Delivery"}
+              text={"Delivery in 30mins. It's a promise!"}
+            />
+            <Feature
+              icon={<Icon as={GiStorkDelivery} w={10} h={10} />}
+              title={"Pick up"}
+              text={"Pickup delivery at your doorstep"}
+            />
+            <Feature
+              icon={<Icon as={IoFastFoodOutline} w={10} h={10} />}
+              title={"Dine in"}
+              text={"Enjoy your food fresh crispy and hot"}
+            />
+          </SimpleGrid>
+        </Box>
       </Stack>
     </Container>
   );
