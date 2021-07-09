@@ -1,23 +1,20 @@
+import { AddIcon } from "@chakra-ui/icons";
 import {
-  Heading,
-  Image,
   Box,
-  Flex,
-  SimpleGrid,
-  Stack,
   Grid,
   GridItem,
+  Heading,
+  Stack,
   useDisclosure,
 } from "@chakra-ui/react";
-
-import { AddIcon } from "@chakra-ui/icons";
 import Cart from "@components/Cart";
+import CartDrawer from "@components/CartDrawer";
 import MenuList from "@components/MenuList";
 import { useAuth } from "@context/AuthContext";
 import { useCart } from "@context/CartContext";
 import { supabase } from "api";
 import { useEffect } from "react";
-import CartDrawer from "@components/CartDrawer";
+
 const CafeteriaDetails = ({ cafe }) => {
   const { user } = useAuth();
   const { setCart } = useCart();
@@ -26,8 +23,9 @@ const CafeteriaDetails = ({ cafe }) => {
     onOpen: onOpenCart,
     onClose: onCloseCart,
   } = useDisclosure();
+
   useEffect(() => {
-    const getC = async () => {
+    const getCart = async () => {
       if (user) {
         const { data, error } = await supabase
           .from("cart")
@@ -35,10 +33,22 @@ const CafeteriaDetails = ({ cafe }) => {
           .eq("user_id", user?.id)
           .eq("cafe_id", cafe?.id)
           .single();
-        setCart(data);
+
+        if (data) {
+          setCart(data);
+        } else {
+          const { data, error } = await supabase
+            .from("cart")
+            .insert([{ user_id: user?.id, cafe_id: cafe?.id }])
+            .select(`*, cartDetails(*, menu(*))`)
+            .eq("user_id", user?.id)
+            .eq("cafe_id", cafe?.id)
+            .single();
+          setCart(data);
+        }
       }
     };
-    getC();
+    getCart();
   }, [cafe, setCart, user]);
   return (
     <Box position="relative">

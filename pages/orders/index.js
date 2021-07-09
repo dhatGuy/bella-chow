@@ -1,22 +1,17 @@
-import {
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  Text,
-  Link,
-  Center,
-} from "@chakra-ui/react";
+import { Table, Thead, Tbody, Tr, Th, Td, Text } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useAuth } from "@context/AuthContext";
-import { useOrder } from "@context/OrderContext";
+import { useOrder, getOrder, setOrder } from "@context/OrderContext";
+import { useEffect } from "react";
 
 const Order = () => {
-  const { orders } = useOrder();
+  const { orders, getOrders } = useOrder();
   const { user } = useAuth();
   const Router = useRouter();
+
+  useEffect(() => {
+    getOrders();
+  }, [getOrders]);
 
   return (
     <div>

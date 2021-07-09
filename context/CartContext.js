@@ -28,18 +28,6 @@ const CartProvider = ({ children }) => {
     return totalAmount;
   };
 
-  useEffect(() => {
-    // const getCart = async () => {
-    //   const { data, error } = await supabase
-    //     .from("cart")
-    //     .select(`*, cartDetails(*, menu(*))`)
-    //     .filter("user_id", "eq", user?.id);
-    //   // .single();
-    //   setCart(data[0]);
-    // };
-    // user ? getCart() : setCart(null);
-  }, [user]);
-
   const addItem = async (menu, qty = 1) => {
     try {
       const { data: item, error } = await supabase

@@ -10,16 +10,14 @@ const OrderProvider = ({ children }) => {
   const { clearCart, cart } = useCart();
   const [orders, setOrders] = useState([]);
 
-  useEffect(() => {
-    const getOrders = async () => {
-      const { data, error } = await supabase
-        .from("order")
-        .select(`*, orderDetails(*), cafeterias(*)`)
-        .filter("user_id", "eq", user?.id);
-      setOrders(data);
-    };
-    user ? getOrders() : setOrders([]);
-  }, [user]);
+  const getOrders = async () => {
+    const { data, error } = await supabase
+      .from("order")
+      .select(`*, orderDetails(*), cafeterias(*)`)
+      .filter("user_id", "eq", user?.id);
+
+    user ? setOrders(data) : setOrders([]);
+  };
 
   const createOrder = async (amount, ref, cafe_id) => {
     const { data: order, error: orderError } = await supabase
@@ -47,6 +45,8 @@ const OrderProvider = ({ children }) => {
   const value = {
     orders,
     createOrder,
+    getOrders,
+    setOrders,
   };
   return (
     <OrderContext.Provider value={value}>{children}</OrderContext.Provider>

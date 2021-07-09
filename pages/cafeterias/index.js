@@ -16,6 +16,7 @@ export const getStaticProps = async (ctx) => {
   return {
     props: {
       cafeterias: data,
+      revalidate: 3600,
     },
   };
 };
