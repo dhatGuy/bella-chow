@@ -25,18 +25,18 @@ export default function Signup() {
   const usernameRef = useRef();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState(null);
 
   async function createProfile(userId) {
     const username = usernameRef.current.value;
     const { data, error } = await supabase
       .from("users")
       .insert([{ username, id: userId }]);
-
-    console.log(data || error);
   }
   const handleSubmit = async (e) => {
-    setIsSubmitting(true);
     e.preventDefault();
+    setIsSubmitting(true);
+    setError(null);
 
     // Get email and password input values
     const email = emailRef.current.value;
@@ -45,7 +45,7 @@ export default function Signup() {
     const { user, error } = await signUp({ email, password });
 
     if (error) {
-      alert("error creating an account");
+      setError(error);
       setIsSubmitting(false);
     } else {
       await createProfile(user.id);
@@ -80,14 +80,19 @@ export default function Signup() {
                 <FormLabel>Email address</FormLabel>
                 <Input type="email" ref={emailRef} />
               </FormControl>
-              <FormControl id="password">
-                <FormLabel>Password</FormLabel>
-                <Input type="password" ref={passwordRef} />
-              </FormControl>
               <FormControl id="username">
                 <FormLabel>Username</FormLabel>
                 <Input type="text" ref={usernameRef} />
               </FormControl>
+              <FormControl id="password">
+                <FormLabel>Password</FormLabel>
+                <Input type="password" ref={passwordRef} />
+              </FormControl>
+              {error && (
+                <Text textColor="red" as="i">
+                  {error.message}
+                </Text>
+              )}
               <Stack spacing={10}>
                 <Stack
                   direction={{ base: "column", sm: "row" }}

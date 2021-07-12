@@ -23,8 +23,10 @@ export default function Login() {
   const emailRef = useRef();
   const passwordRef = useRef();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState(null);
   async function handleSubmit(e) {
     e.preventDefault();
+    setError(null);
     setIsSubmitting(true);
 
     // Get email and password input values
@@ -35,10 +37,10 @@ export default function Login() {
     const { error } = await signIn({ email, password });
 
     if (error) {
-      alert("error signing in");
+      setError(error);
       setIsSubmitting(false);
     } else {
-      setIsSubmitting("false");
+      setIsSubmitting(false);
       // Redirect user to Dashboard
       router.push("/");
     }
@@ -53,9 +55,6 @@ export default function Login() {
       <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
         <Stack align={"center"}>
           <Heading fontSize={"4xl"}>Sign in to your account</Heading>
-          <Text fontSize={"lg"} color={"gray.600"}>
-            to enjoy all of our cool <Link color={"blue.400"}>features</Link> ✌️
-          </Text>
         </Stack>
         <Box
           rounded={"lg"}
@@ -73,6 +72,11 @@ export default function Login() {
                 <FormLabel>Password</FormLabel>
                 <Input type="password" ref={passwordRef} />
               </FormControl>
+              {error && (
+                <Text textColor="red" as="i">
+                  {error.message}
+                </Text>
+              )}
               <Stack spacing={10}>
                 <Stack
                   direction={{ base: "column", sm: "row" }}

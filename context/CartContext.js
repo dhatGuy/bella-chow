@@ -23,17 +23,25 @@ const CartProvider = ({ children }) => {
       .from("cart")
       .update({ totalAmount })
       .match({ id: cart.id });
-    console.log(update || updateError);
 
     return totalAmount;
   };
 
   const addItem = async (menu, qty = 1) => {
+    if (!user) {
+      return toast({
+        title: "Add menu",
+        description: `You need to login`,
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+        position: "top-right",
+      });
+    }
     try {
       const { data: item, error } = await supabase
         .from("cartDetails")
         .select(`*, menu(*)`)
-        // .eq("cafe_id", cafe_id)
         .eq("menu_id", menu.id)
         .eq("cart_id", cart.id)
         .single();
@@ -94,12 +102,11 @@ const CartProvider = ({ children }) => {
         position: "top-right",
       });
     } catch (error) {
-      console.log(error);
       toast({
         title: "Add menu",
-        description: `An error occurred`,
+        description: user ? `An error occurred` : `You need to login`,
         status: "error",
-        duration: 9000,
+        duration: 2000,
         isClosable: true,
         position: "top-right",
       });

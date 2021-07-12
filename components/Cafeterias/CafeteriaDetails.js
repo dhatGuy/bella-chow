@@ -1,17 +1,23 @@
 import { AddIcon } from "@chakra-ui/icons";
 import {
   Box,
+  Button,
   Circle,
+  Flex,
   Grid,
   GridItem,
   Heading,
+  HStack,
   Icon,
   Stack,
+  Text,
   useDisclosure,
 } from "@chakra-ui/react";
 import Cart from "@components/Cart";
 import CartDrawer from "@components/CartDrawer";
 import MenuList from "@components/MenuList";
+import Rating from "@components/Rating";
+import ReviewModal from "@components/Reviews/ReviewModal";
 import { useAuth } from "@context/AuthContext";
 import { useCart } from "@context/CartContext";
 import { supabase } from "api";
@@ -25,6 +31,11 @@ const CafeteriaDetails = ({ cafe }) => {
     isOpen: isOpenCart,
     onOpen: onOpenCart,
     onClose: onCloseCart,
+  } = useDisclosure();
+  const {
+    isOpen: isOpenReview,
+    onOpen: onOpenReview,
+    onClose: onCloseReview,
   } = useDisclosure();
 
   useEffect(() => {
@@ -61,6 +72,7 @@ const CafeteriaDetails = ({ cafe }) => {
         onClose={onCloseCart}
         cafe={cafe}
       />
+      <ReviewModal isOpen={isOpenReview} onClose={onCloseReview} />
       <Stack
         position="relative"
         bgColor="black"
@@ -99,9 +111,24 @@ const CafeteriaDetails = ({ cafe }) => {
         bottom={4}
         right={4}
         color={"white"}
+        zIndex="3"
       >
         <Icon as={IoCartOutline} onClick={onOpenCart} w={10} h={10} />
       </Circle>
+      <Box boxShadow="lg" mb="10" pl={2} pb={2}>
+        <Heading>{cafe.name}</Heading>
+        <HStack>
+          <Rating rating={3.5} numReviews={30} />
+          <Text
+            cursor="pointer"
+            fontWeight="bold"
+            variant="unstyled"
+            onClick={onOpenReview}
+          >
+            See Reviews
+          </Text>
+        </HStack>
+      </Box>
       <Grid
         templateRows="1fr"
         templateColumns="repeat(3, 1fr)"
@@ -117,7 +144,7 @@ const CafeteriaDetails = ({ cafe }) => {
         >
           <MenuList menus={cafe.menu} />
         </GridItem>
-        <GridItem display={{ base: "none", md: "grid" }}>
+        <GridItem display={{ base: "none", md: "initial" }}>
           <Cart cafe={cafe} />
         </GridItem>
       </Grid>

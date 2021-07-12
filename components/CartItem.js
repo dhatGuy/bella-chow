@@ -1,4 +1,13 @@
-import { Box, Button, Text, Flex, Image, HStack } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Text,
+  Flex,
+  Image,
+  HStack,
+  Heading,
+  VStack,
+} from "@chakra-ui/react";
 import { useCart } from "@context/CartContext";
 // import Image from "next/image";
 
@@ -6,12 +15,12 @@ const CartItem = ({ item }) => {
   const { increaseQty, decreaseQty } = useCart();
   return (
     <Flex>
-      <Box>
-        <h3>{item.menu.name}</h3>
-        <div>
-          <p>Price: ${item.menu.price}</p>
-          <p>Total: ${item.total_price}</p>
-        </div>
+      <VStack flex="1" align="stretch" justify="space-between">
+        <Box>
+          <Text fontWeight="semibold">{item.menu.name}</Text>
+          <p>Price: N{item.menu.price.toFixed(2)}</p>
+          <p>Total: N{item.total_price.toFixed(2)}</p>
+        </Box>
         <HStack>
           <Button
             size="sm"
@@ -32,8 +41,16 @@ const CartItem = ({ item }) => {
             +
           </Button>
         </HStack>
+      </VStack>
+      <Box flexBasis="50%">
+        <Image
+          w="full"
+          h="130px"
+          objectFit="cover"
+          src={item.menu.image}
+          alt={item.menu.name}
+        />
       </Box>
-      <Image src={item.menu.image} alt={item.menu.name} />
     </Flex>
   );
 };

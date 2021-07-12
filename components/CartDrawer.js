@@ -10,6 +10,9 @@ import {
   Box,
   Flex,
   Text,
+  Icon,
+  StackDivider,
+  VStack,
 } from "@chakra-ui/react";
 import Cart from "@components/Cart";
 import { useCart } from "@context/CartContext";
@@ -52,10 +55,11 @@ function CartDrawer({ isOpen, onClose, cafe }) {
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
-          <DrawerHeader borderBottomWidth="1px">Cart</DrawerHeader>
+          <DrawerHeader borderBottomWidth="1px">
+            Order from {cafe.name}
+          </DrawerHeader>
           <DrawerBody>
-            <Text>Order from {cafe.name}</Text>
-            <Box>
+            {/* <Box>
               {!cart?.cartDetails?.length ? (
                 <Text>You have no item in your cart</Text>
               ) : (
@@ -63,11 +67,29 @@ function CartDrawer({ isOpen, onClose, cafe }) {
                   <CartItem item={item} key={item.id} />
                 ))
               )}
-            </Box>
+            </Box> */}
+            <VStack
+              direction="column"
+              overflow="auto"
+              spacing="2"
+              align="stretch"
+              divider={<StackDivider borderColor="gray.200" />}
+            >
+              {!cart?.cartDetails?.length ? (
+                <>
+                  <Icon as={FiShoppingCart} w={20} h={20} />
+                  <Text>You have no item in your cart</Text>
+                </>
+              ) : (
+                cart?.cartDetails.map((item) => (
+                  <CartItem item={item} key={item.id} />
+                ))
+              )}
+            </VStack>
           </DrawerBody>
           <DrawerFooter borderTopWidth="1px">
             <Flex justify="space-between" align="center" w="100%">
-              <Text>Total: {cart?.totalAmount}</Text>
+              <Text>Total:N {cart?.totalAmount.toFixed(2)}</Text>
               <Box>
                 <Button
                   disabled={!cart?.cartDetails.length || isProcessing}

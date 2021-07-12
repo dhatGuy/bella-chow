@@ -1,10 +1,21 @@
-import { Box, Heading, Text, Button, Flex } from "@chakra-ui/react";
+import {
+  Box,
+  Heading,
+  Text,
+  Button,
+  Flex,
+  Grid,
+  Icon,
+  VStack,
+  StackDivider,
+} from "@chakra-ui/react";
 import CartItem from "./CartItem";
 import { useCart } from "@context/CartContext";
 import { useState } from "react";
 import { useOrder } from "@context/OrderContext";
 import { useAuth } from "@context/AuthContext";
 import { usePaystackPayment } from "react-paystack";
+import { FiShoppingCart } from "react-icons/fi";
 
 const Cart = ({ cafe }) => {
   const { user } = useAuth();
@@ -29,48 +40,65 @@ const Cart = ({ cafe }) => {
     setIsProcessing(true);
   };
   return (
-    <Box
-      position="sticky"
-      top="5"
-      borderWidth="1px"
-      borderColor="red.900"
-      h="70vh"
-      mt="5"
-      overflow="auto"
-      boxShadow="md"
-    >
-      <Text size="lg">Order from {cafe.name}</Text>
-      <Box>
-        {!cart?.cartDetails?.length ? (
-          <Text>You have no item in your cart</Text>
-        ) : (
-          cart?.cartDetails.map((item) => (
-            <CartItem item={item} key={item.id} />
-          ))
-        )}
-      </Box>
-      <Flex justify="space-between" align="center" w="100%">
-        <Text>Total: N{cart?.totalAmount}</Text>
-        <Box>
-          <Button
-            disabled={!cart?.cartDetails.length || isProcessing}
-            variant="outline"
-            mr={3}
-            onClick={() => clearCart()}
-          >
-            Clear
-          </Button>
-          <Button
-            colorScheme="blue"
-            onClick={initiatePayment}
-            disabled={!cart?.cartDetails.length || isProcessing}
-            isLoading={isProcessing}
-            loadingText="Processing"
-          >
-            Checkout
-          </Button>
-        </Box>
-      </Flex>
+    <Box position="sticky" top="5" h="70vh" mt="5">
+      <Grid
+        templateRows="auto 30rem auto"
+        position="relative"
+        overflow="auto"
+        boxShadow="lg"
+        p="2"
+      >
+        <Text
+          size="lg"
+          fontSize={"4xl"}
+          mb="2"
+          borderBottom="2px"
+          borderBottomColor="gray.300"
+        >
+          Order from {cafe.name}
+        </Text>
+
+        <VStack
+          direction="column"
+          overflow="auto"
+          spacing="2"
+          align="stretch"
+          divider={<StackDivider borderColor="gray.200" />}
+        >
+          {!cart?.cartDetails?.length ? (
+            <>
+              <Icon as={FiShoppingCart} w={20} h={20} />
+              <Text>You have no item in your cart</Text>
+            </>
+          ) : (
+            cart?.cartDetails.map((item) => (
+              <CartItem item={item} key={item.id} />
+            ))
+          )}
+        </VStack>
+        <Flex justify="space-between" align="center" w="100%">
+          <Text>Total: N{cart?.totalAmount || 0}</Text>
+          <Box mt="4">
+            <Button
+              disabled={!cart?.cartDetails.length || isProcessing}
+              variant="outline"
+              mr={3}
+              onClick={() => clearCart()}
+            >
+              Clear
+            </Button>
+            <Button
+              colorScheme="blue"
+              onClick={initiatePayment}
+              disabled={!cart?.cartDetails.length || isProcessing}
+              isLoading={isProcessing}
+              loadingText="Processing"
+            >
+              Checkout
+            </Button>
+          </Box>
+        </Flex>
+      </Grid>
     </Box>
   );
 };

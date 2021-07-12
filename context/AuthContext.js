@@ -4,7 +4,7 @@ import { supabase } from "api";
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState();
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const signOut = async () => {
@@ -15,19 +15,21 @@ const AuthProvider = ({ children }) => {
 
   const signIn = async (data) => {
     let res = await supabase.auth.signIn(data);
-    const { data: profile, error } = await supabase
-      .from("users")
-      .select()
-      .eq("id", res.user.id)
-      .single();
+    if (!res.error) {
+      const { data: profile, error } = await supabase
+        .from("users")
+        .select()
+        .eq("id", res.user.id)
+        .single();
 
-    const user = {
-      ...res.user,
-      ...profile,
-    };
+      const user = {
+        ...res.data.user,
+        ...profile,
+      };
 
-    setUser(user);
-    return user;
+      setUser(user);
+    }
+    return res;
   };
 
   const signUp = async (data) => {
@@ -39,19 +41,26 @@ const AuthProvider = ({ children }) => {
     // Check active sessions and sets the user
     const session = supabase.auth.session();
     // const getProfile = async () => {
-    supabase
-      .from("users")
-      .select()
-      .eq("id", session?.user.id)
-      .single()
-      .then(({ data, error }) => {
-        const user = {
-          ...(session?.user ?? null),
-          ...data,
-        };
-        setUser(user ?? null);
-        setLoading(false);
-      });
+    if (session) {
+      supabase
+        .from("users")
+        .select()
+        .eq("id", session?.user.id)
+        .single()
+        .then(({ data, error }) => {
+          if (data) {
+            const user = {
+              ...(session?.user ?? null),
+              ...data,
+            };
+            setUser(user ?? null);
+            setLoading(false);
+          } else {
+            setUser(null);
+            setLoading(false);
+          }
+        });
+    }
 
     // Listen for changes on auth state (logged in, signed out, etc.)
     // const { data: listener } = supabase.auth.onAuthStateChange(
