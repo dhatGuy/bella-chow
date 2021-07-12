@@ -21,12 +21,13 @@ import ReviewModal from "@components/Reviews/ReviewModal";
 import { useAuth } from "@context/AuthContext";
 import { useCart } from "@context/CartContext";
 import { supabase } from "api";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { IoCartOutline } from "react-icons/io5";
 
 const CafeteriaDetails = ({ cafe }) => {
   const { user } = useAuth();
   const { setCart } = useCart();
+  const [avg_rating, setAvg_rating] = useState(0);
   const {
     isOpen: isOpenCart,
     onOpen: onOpenCart,
@@ -37,6 +38,14 @@ const CafeteriaDetails = ({ cafe }) => {
     onOpen: onOpenReview,
     onClose: onCloseReview,
   } = useDisclosure();
+
+  useEffect(() => {
+    const total = cafe.reviews.reduce(
+      (total, review) => total + review.rating,
+      0
+    );
+    setAvg_rating(total / cafe.reviews.length);
+  }, [cafe]);
 
   useEffect(() => {
     const getCart = async () => {
@@ -54,7 +63,7 @@ const CafeteriaDetails = ({ cafe }) => {
           const { data, error } = await supabase
             .from("cart")
             .insert([{ user_id: user?.id, cafe_id: cafe?.id }])
-            .select(`*, cartDetails(*, menu(*))`)
+            .select(`*, cartDetails(*, menu(*)), reviews(*)`)
             .eq("user_id", user?.id)
             .eq("cafe_id", cafe?.id)
             .single();
@@ -72,7 +81,7 @@ const CafeteriaDetails = ({ cafe }) => {
         onClose={onCloseCart}
         cafe={cafe}
       />
-      <ReviewModal isOpen={isOpenReview} onClose={onCloseReview} />
+      <ReviewModal isOpen={isOpenReview} onClose={onCloseReview} cafe={cafe} />
       <Stack
         position="relative"
         bgColor="black"
@@ -97,6 +106,7 @@ const CafeteriaDetails = ({ cafe }) => {
         <Heading
           as={"h1"}
           textColor="white"
+          letterSpacing="widest"
           fontSize={{ base: "4xl", md: "7xl" }}
           zIndex={2}
         >
@@ -118,7 +128,7 @@ const CafeteriaDetails = ({ cafe }) => {
       <Box boxShadow="lg" mb="10" pl={2} pb={2}>
         <Heading>{cafe.name}</Heading>
         <HStack>
-          <Rating rating={3.5} numReviews={30} />
+          <Rating rating={avg_rating} numReviews={cafe.reviews.length} />
           <Text
             cursor="pointer"
             fontWeight="bold"

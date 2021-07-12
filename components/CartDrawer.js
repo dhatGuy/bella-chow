@@ -21,6 +21,7 @@ import { useAuth } from "@context/AuthContext";
 import { useOrder } from "@context/OrderContext";
 import { useState } from "react";
 import CartItem from "@components/CartItem";
+import { FiShoppingCart } from "react-icons/fi";
 
 function CartDrawer({ isOpen, onClose, cafe }) {
   const { user } = useAuth();
@@ -59,15 +60,6 @@ function CartDrawer({ isOpen, onClose, cafe }) {
             Order from {cafe.name}
           </DrawerHeader>
           <DrawerBody>
-            {/* <Box>
-              {!cart?.cartDetails?.length ? (
-                <Text>You have no item in your cart</Text>
-              ) : (
-                cart?.cartDetails.map((item) => (
-                  <CartItem item={item} key={item.id} />
-                ))
-              )}
-            </Box> */}
             <VStack
               direction="column"
               overflow="auto"

@@ -29,7 +29,7 @@ export const getStaticProps = async (ctx) => {
   const cafeId = ctx.params.id;
   const { data: cafeteria, error } = await supabase
     .from("cafeterias")
-    .select("*, menu(*)")
+    .select("*, menu(*), reviews(*)")
     .eq("id", cafeId)
     .single();
 
