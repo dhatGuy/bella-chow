@@ -69,7 +69,7 @@ export default function ReviewModal({ isOpen, onClose, cafe }) {
               ))
             )}
           </Box>
-          <AddReview cafe={cafe} userReview={userReview} />
+          {user && <AddReview cafe={cafe} userReview={userReview} />}
         </ModalContent>
       </Modal>
     </>
