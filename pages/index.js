@@ -14,7 +14,7 @@ import {
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import Lottie from "react-lottie";
-import anime from "lotties/food-delivery-process";
+import anime from "assets/food-choose.json";
 import { useAuth } from "@context/AuthContext";
 import { GiFoodTruck, GiStorkDelivery } from "react-icons/gi";
 import { IoFastFoodOutline } from "react-icons/io5";
