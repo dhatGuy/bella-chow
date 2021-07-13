@@ -16,9 +16,12 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { supabase } from "api";
+import { useAuth } from "@context/AuthContext";
 
 export default function ReviewModal({ isOpen, onClose, cafe }) {
   const [reviews, setReviews] = useState([]);
+  const [userReview, setUserReview] = useState(null);
+  const { user } = useAuth();
   useEffect(() => {
     const getReviews = async () => {
       const { data, error } = await supabase
@@ -26,12 +29,12 @@ export default function ReviewModal({ isOpen, onClose, cafe }) {
         .select(`*, users(username), cafeterias(name)`)
         .eq("cafe_id", cafe.id);
       if (!error) {
+        setUserReview(data.filter((review) => review.user_id === user?.id)[0]);
         setReviews(data);
       }
-      console.log(data || error);
     };
     getReviews();
-  }, [cafe]);
+  }, [cafe, user]);
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose} size="lg">
@@ -56,6 +59,7 @@ export default function ReviewModal({ isOpen, onClose, cafe }) {
               reviews.map((review) => (
                 <>
                   <Review
+                    key={review.id}
                     username={review.users.username}
                     rating={review.rating}
                     content={review.content}
@@ -65,15 +69,7 @@ export default function ReviewModal({ isOpen, onClose, cafe }) {
               ))
             )}
           </Box>
-          {/* </ModalBody> */}
-          <AddReview cafe={cafe} />
-
-          <ModalFooter>
-            {/* <Button colorScheme="blue" mr={3} onClick={onClose}>
-              Close
-            </Button>
-            <Button variant="ghost">Secondary Action</Button> */}
-          </ModalFooter>
+          <AddReview cafe={cafe} userReview={userReview} />
         </ModalContent>
       </Modal>
     </>

@@ -11,11 +11,11 @@ import {
 } from "@chakra-ui/react";
 import { useAuth } from "@context/AuthContext";
 import { supabase } from "api";
-import { useRef, useState } from "react";
+import { useState } from "react";
 
-const AddReview = ({ cafe }) => {
-  const [rating, setRating] = useState(0);
-  const [content, setContent] = useState("");
+const AddReview = ({ cafe, userReview }) => {
+  const [rating, setRating] = useState(userReview?.rating || 0);
+  const [content, setContent] = useState(userReview?.content || "");
   const { user } = useAuth();
   const [error, setError] = useState(null);
 
@@ -28,9 +28,8 @@ const AddReview = ({ cafe }) => {
     }
     const { data, error } = await supabase
       .from("reviews")
-      .insert([{ content, rating, cafe_id: cafe.id, user_id: user.id }]);
+      .upsert([{ content, rating, cafe_id: cafe.id, user_id: user.id }]);
 
-    console.log(data || error);
     setRating("");
     setContent("");
   };
