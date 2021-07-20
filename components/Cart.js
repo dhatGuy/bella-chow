@@ -62,7 +62,9 @@ const Cart = ({ cafe }) => {
           direction="column"
           overflow="auto"
           spacing="2"
-          align="stretch"
+          align="center"
+          justify="center"
+          h="100%"
           divider={<StackDivider borderColor="gray.200" />}
         >
           {!cart?.cartDetails?.length ? (
@@ -77,7 +79,7 @@ const Cart = ({ cafe }) => {
           )}
         </VStack>
         <Flex justify="space-between" align="center" w="100%">
-          <Text>Total: N{cart?.totalAmount || 0}</Text>
+          <Text fontWeight="bold">Total: ₦{cart?.totalAmount || 0}</Text>
           <Box mt="4">
             <Button
               disabled={!cart?.cartDetails.length || isProcessing}

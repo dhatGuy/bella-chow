@@ -1,5 +1,5 @@
 import { Badge, Box, Button, Image, Stack, Text } from "@chakra-ui/react";
-import { AddIcon, DeleteIcon } from "@chakra-ui/icons";
+import { AddIcon } from "@chakra-ui/icons";
 import { useCart } from "@context/CartContext";
 import { useRouter } from "next/router";
 
@@ -45,6 +45,7 @@ const MenuItem = ({ menu }) => {
             onClick={() => addItem(menu)}
             variant="outline"
             leftIcon={<AddIcon />}
+            disabled={!available}
           >
             Add to cart
           </Button>

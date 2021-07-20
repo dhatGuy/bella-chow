@@ -117,7 +117,7 @@ const CafeteriaDetails = ({ cafe }) => {
         size="90px"
         bg="orange"
         position="fixed"
-        display={{ base: "flex", md: "none" }}
+        display={{ base: "flex", lg: "none" }}
         bottom={4}
         right={4}
         color={"white"}
@@ -147,14 +147,17 @@ const CafeteriaDetails = ({ cafe }) => {
         justifyContent="center"
       >
         <GridItem
-          colSpan={[3, 3, 2]}
+          colSpan={{
+            base: 3,
+            lg: 2,
+          }}
           display="flex"
           flexDirection="column"
           justifyContent="center"
         >
           <MenuList menus={cafe.menu} />
         </GridItem>
-        <GridItem display={{ base: "none", md: "initial" }}>
+        <GridItem display={{ base: "none", lg: "initial" }}>
           <Cart cafe={cafe} />
         </GridItem>
       </Grid>

@@ -64,7 +64,9 @@ function CartDrawer({ isOpen, onClose, cafe }) {
               direction="column"
               overflow="auto"
               spacing="2"
-              align="stretch"
+              align="center"
+              justify="center"
+              h="100%"
               divider={<StackDivider borderColor="gray.200" />}
             >
               {!cart?.cartDetails?.length ? (
