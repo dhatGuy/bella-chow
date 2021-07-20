@@ -62,16 +62,15 @@ const Cart = ({ cafe }) => {
           direction="column"
           overflow="auto"
           spacing="2"
-          align="center"
-          justify="center"
+          align="stretch"
           h="100%"
           divider={<StackDivider borderColor="gray.200" />}
         >
           {!cart?.cartDetails?.length ? (
-            <>
+            <VStack align="center" h="100%" justify="center">
               <Icon as={FiShoppingCart} w={20} h={20} />
               <Text>You have no item in your cart</Text>
-            </>
+            </VStack>
           ) : (
             cart?.cartDetails.map((item) => (
               <CartItem item={item} key={item.id} />
