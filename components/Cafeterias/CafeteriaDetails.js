@@ -13,9 +13,9 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
-import Cart from "@components/Cart";
-import CartDrawer from "@components/CartDrawer";
-import MenuList from "@components/MenuList";
+import Cart from "@components/Cart/Cart";
+import CartDrawer from "@components/Cart/CartDrawer";
+import MenuList from "@components/Menu/MenuList";
 import Rating from "@components/Rating";
 import ReviewModal from "@components/Reviews/ReviewModal";
 import { useAuth } from "@context/AuthContext";

@@ -14,13 +14,12 @@ import {
   StackDivider,
   VStack,
 } from "@chakra-ui/react";
-import Cart from "@components/Cart";
 import { useCart } from "@context/CartContext";
 import { usePaystackPayment } from "react-paystack";
 import { useAuth } from "@context/AuthContext";
 import { useOrder } from "@context/OrderContext";
 import { useState } from "react";
-import CartItem from "@components/CartItem";
+import CartItem from "@components/Cart/CartItem";
 import { FiShoppingCart } from "react-icons/fi";
 
 function CartDrawer({ isOpen, onClose, cafe }) {
@@ -83,7 +82,9 @@ function CartDrawer({ isOpen, onClose, cafe }) {
           </DrawerBody>
           <DrawerFooter borderTopWidth="1px">
             <Flex justify="space-between" align="center" w="100%">
-              <Text>Total:N {cart?.totalAmount.toFixed(2)}</Text>
+              <Text fontWeight="bold">
+                Total:₦ {cart?.totalAmount.toFixed(2)}
+              </Text>
               <Box>
                 <Button
                   disabled={!cart?.cartDetails.length || isProcessing}
