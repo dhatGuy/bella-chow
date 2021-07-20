@@ -35,7 +35,7 @@ function CartDrawer({ isOpen, onClose, cafe }) {
   };
 
   const onSuccess = async (res) => {
-    await createOrder(cart.totalAmount, res.reference);
+    await createOrder(cart.totalAmount, res.reference, cafe.id);
     setIsProcessing(false);
   };
   const onClosePayment = () => setIsProcessing(false);
