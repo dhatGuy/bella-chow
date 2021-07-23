@@ -13,28 +13,32 @@ import {
   Grid,
   Box,
   Text,
+  Spinner,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { supabase } from "api";
 import { useAuth } from "@context/AuthContext";
+import { useQuery } from "react-query";
 
 export default function ReviewModal({ isOpen, onClose, cafe }) {
-  const [reviews, setReviews] = useState([]);
   const [userReview, setUserReview] = useState(null);
   const { user } = useAuth();
-  useEffect(() => {
-    const getReviews = async () => {
-      const { data, error } = await supabase
-        .from("reviews")
-        .select(`*, users(username), cafeterias(name)`)
-        .eq("cafe_id", cafe.id);
-      if (!error) {
-        setUserReview(data.filter((review) => review.user_id === user?.id)[0]);
-        setReviews(data);
-      }
-    };
-    getReviews();
-  }, [cafe, user]);
+  const { data: reviews, isLoading } = useQuery("reviews", getReviews);
+
+  async function getReviews() {
+    const { data, error } = await supabase
+      .from("reviews")
+      .select(`*, users(username), cafeterias(name)`)
+      .eq("cafe_id", cafe.id);
+
+    if (!error) {
+      setUserReview(data.filter((review) => review.user_id === user?.id)[0]);
+      return data;
+    }
+  }
+  if (isLoading) {
+    return <Box></Box>;
+  }
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose} size="lg">
@@ -57,15 +61,13 @@ export default function ReviewModal({ isOpen, onClose, cafe }) {
               </>
             ) : (
               reviews.map((review) => (
-                <>
-                  <Review
-                    key={review.id}
-                    username={review.users.username}
-                    rating={review.rating}
-                    content={review.content}
-                    date={review.date}
-                  />
-                </>
+                <Review
+                  key={review.id}
+                  username={review.users.username}
+                  rating={review.rating}
+                  content={review.content}
+                  date={review.date}
+                />
               ))
             )}
           </Box>

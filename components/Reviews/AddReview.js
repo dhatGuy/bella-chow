@@ -7,17 +7,33 @@ import {
   Input,
   Select,
   Text,
+  Textarea,
   VStack,
 } from "@chakra-ui/react";
 import { useAuth } from "@context/AuthContext";
 import { supabase } from "api";
 import { useState } from "react";
+import { useMutation, useQueryClient } from "react-query";
 
 const AddReview = ({ cafe, userReview }) => {
   const [rating, setRating] = useState(userReview?.rating || 0);
   const [content, setContent] = useState(userReview?.content || "");
   const { user } = useAuth();
   const [error, setError] = useState(null);
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation(
+    async () => {
+      const { data, error } = await supabase
+        .from("reviews")
+        .upsert([{ content, rating, cafe_id: cafe.id, user_id: user.id }]);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("reviews");
+      },
+    }
+  );
 
   const onSave = async (e) => {
     e.preventDefault();
@@ -26,12 +42,7 @@ const AddReview = ({ cafe, userReview }) => {
       setError("All fields required");
       return;
     }
-    const { data, error } = await supabase
-      .from("reviews")
-      .upsert([{ content, rating, cafe_id: cafe.id, user_id: user.id }]);
-
-    setRating("");
-    setContent("");
+    mutation.mutate();
   };
   return (
     <Box p={2}>
@@ -55,7 +66,7 @@ const AddReview = ({ cafe, userReview }) => {
 
           <FormControl mt={4}>
             <FormLabel>Content</FormLabel>
-            <Input
+            <Textarea
               placeholder="Say your mind"
               value={content}
               onChange={(e) => setContent(e.target.value)}
@@ -66,7 +77,13 @@ const AddReview = ({ cafe, userReview }) => {
               {error}
             </Text>
           )}
-          <Button mt="2" colorScheme="blue" type="submit">
+          <Button
+            mt="2"
+            colorScheme="blue"
+            type="submit"
+            isLoading={mutation.isLoading}
+            loadingText="Saving..."
+          >
             Save
           </Button>
         </VStack>
