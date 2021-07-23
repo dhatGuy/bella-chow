@@ -25,16 +25,7 @@ const Order = ({ data }) => {
   const { data: order } = useQuery("order", fetchOrder, {
     initialData: data,
   });
-  const mutation = useMutation(
-    (status) => {
-      return "hello";
-    },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries("order");
-      },
-    }
-  );
+
   return (
     <Box>
       <h1>Order #{order.id}</h1>
