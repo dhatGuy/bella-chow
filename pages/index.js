@@ -29,7 +29,6 @@ const Feature = ({ title, text, icon }) => {
         justify={"center"}
         color={"white"}
         rounded={"full"}
-        colorScheme={"orange"}
         bg={"orange.400"}
         _hover={{ bg: "orange.500" }}
         mb={1}
@@ -80,7 +79,6 @@ export default function Homepage() {
               as={Link}
               rounded={"full"}
               px={6}
-              colorScheme={"orange"}
               bg={"orange.400"}
               _hover={{ bg: "orange.500" }}
             >

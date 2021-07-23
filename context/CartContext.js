@@ -12,7 +12,7 @@ const CartProvider = ({ children }) => {
 
   const cartTotal = async () => {
     const { data, error } = await supabase
-      .from("cartDetails")
+      .from("cartItems")
       .select()
       .eq("cart_id", cart?.id);
     const totalAmount = data.reduce(
@@ -40,7 +40,7 @@ const CartProvider = ({ children }) => {
     }
     try {
       const { data: item, error } = await supabase
-        .from("cartDetails")
+        .from("cartItems")
         .select(`*, menu(*)`)
         .eq("menu_id", menu.id)
         .eq("cart_id", cart.id)
@@ -54,7 +54,7 @@ const CartProvider = ({ children }) => {
         };
 
         const { data, error } = await supabase
-          .from("cartDetails")
+          .from("cartItems")
           .update(updateItem)
           .match({ id: updateItem.id })
           .select(`*, menu(*)`)
@@ -62,15 +62,15 @@ const CartProvider = ({ children }) => {
           .filter("cart_id", "eq", cart.id)
           .single();
 
-        const newCart = cart.cartDetails.map((item) =>
+        const newCart = cart.cartItems.map((item) =>
           item.id === data.id ? data : item
         );
 
         const totalAmount = await cartTotal();
-        setCart({ ...cart, totalAmount, cartDetails: newCart });
+        setCart({ ...cart, totalAmount, cartItems: newCart });
       } else {
         const { data, error } = await supabase
-          .from("cartDetails")
+          .from("cartItems")
           .insert([
             {
               menu_id: menu.id,
@@ -89,7 +89,7 @@ const CartProvider = ({ children }) => {
           setCart({
             ...cart,
             totalAmount,
-            cartDetails: [...cart.cartDetails, data],
+            cartItems: [...cart.cartItems, data],
           });
       }
 
@@ -115,14 +115,14 @@ const CartProvider = ({ children }) => {
 
   const removeItem = async (id) => {
     const { data, error } = await supabase
-      .from("cartDetails")
+      .from("cartItems")
       .delete()
       .eq("id", id);
   };
 
   const increaseQty = async (menuToIncrease, qty = 1) => {
     const { data, error } = await supabase
-      .from("cartDetails")
+      .from("cartItems")
       .select(`*, menu(*)`)
       .filter("menu_id", "eq", menuToIncrease.id)
       .filter("cart_id", "eq", cart.id)
@@ -135,7 +135,7 @@ const CartProvider = ({ children }) => {
     };
 
     const { data: updateData, updateError } = await supabase
-      .from("cartDetails")
+      .from("cartItems")
       .update(updateItem)
       .match({ id: updateItem.id })
       .select(`*, menu(*)`)
@@ -144,18 +144,18 @@ const CartProvider = ({ children }) => {
       .single();
 
     if (!updateError) {
-      const newCart = cart.cartDetails.map((item) =>
+      const newCart = cart.cartItems.map((item) =>
         item.id === updateData.id ? updateData : item
       );
 
       const totalAmount = await cartTotal();
-      setCart({ ...cart, totalAmount, cartDetails: newCart });
+      setCart({ ...cart, totalAmount, cartItems: newCart });
     }
   };
 
   const decreaseQty = async (menuToIncrease, qty = 1) => {
     const { data, error } = await supabase
-      .from("cartDetails")
+      .from("cartItems")
       .select(`*, menu(*)`)
       .filter("menu_id", "eq", menuToIncrease.id)
       .filter("cart_id", "eq", cart.id)
@@ -168,7 +168,7 @@ const CartProvider = ({ children }) => {
     };
 
     const { data: updateData, updateError } = await supabase
-      .from("cartDetails")
+      .from("cartItems")
       .update(updateItem)
       .match({ id: updateItem.id })
       .select(`*, menu(*)`)
@@ -177,19 +177,19 @@ const CartProvider = ({ children }) => {
       .single();
 
     if (!updateError) {
-      const newCart = cart.cartDetails.map((item) =>
+      const newCart = cart.cartItems.map((item) =>
         item.id === updateData.id ? updateData : item
       );
 
       const totalAmount = await cartTotal();
-      setCart({ ...cart, totalAmount, cartDetails: newCart });
+      setCart({ ...cart, totalAmount, cartItems: newCart });
     }
   };
 
   const clearCart = async () => {
-    await supabase.from("cartDetails").delete().match({ cart_id: cart?.id });
+    await supabase.from("cartItems").delete().match({ cart_id: cart?.id });
     const totalAmount = await cartTotal();
-    setCart({ ...cart, totalAmount, cartDetails: [] });
+    setCart({ ...cart, totalAmount, cartItems: [] });
   };
 
   const value = {

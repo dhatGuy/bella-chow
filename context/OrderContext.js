@@ -9,11 +9,12 @@ const OrderProvider = ({ children }) => {
   const { user } = useAuth();
   const { clearCart, cart } = useCart();
   const [orders, setOrders] = useState([]);
+  const [cafeOrders, setCafeOrders] = useState([]);
 
   const getOrders = async () => {
     const { data, error } = await supabase
       .from("order")
-      .select(`*, orderDetails(*), cafeterias(*)`)
+      .select(`*, orderItems(*), cafeterias(*)`)
       .filter("user_id", "eq", user?.id);
 
     user ? setOrders(data) : setOrders([]);
@@ -29,7 +30,7 @@ const OrderProvider = ({ children }) => {
         cafe_id,
       })
       .single();
-    const orderItems = cart.cartDetails.map((item) => {
+    const orderItems = cart.cartItems.map((item) => {
       return {
         order_id: order.id,
         total_price: item.total_price,
@@ -38,7 +39,7 @@ const OrderProvider = ({ children }) => {
       };
     });
     const { data, error } = await supabase
-      .from("orderDetails")
+      .from("orderItems")
       .insert(orderItems);
     !error && (await clearCart());
   };

@@ -67,13 +67,13 @@ function CartDrawer({ isOpen, onClose, cafe }) {
               h="100%"
               divider={<StackDivider borderColor="gray.200" />}
             >
-              {!cart?.cartDetails?.length ? (
+              {!cart?.cartItems?.length ? (
                 <VStack align="center" h="100%" justify="center">
                   <Icon as={FiShoppingCart} w={20} h={20} />
                   <Text>You have no item in your cart</Text>
                 </VStack>
               ) : (
-                cart?.cartDetails.map((item) => (
+                cart?.cartItems.map((item) => (
                   <CartItem item={item} key={item.id} />
                 ))
               )}
@@ -86,7 +86,7 @@ function CartDrawer({ isOpen, onClose, cafe }) {
               </Text>
               <Box>
                 <Button
-                  disabled={!cart?.cartDetails.length || isProcessing}
+                  disabled={!cart?.cartItems.length || isProcessing}
                   variant="outline"
                   mr={3}
                   onClick={() => clearCart()}
@@ -96,7 +96,7 @@ function CartDrawer({ isOpen, onClose, cafe }) {
                 <Button
                   colorScheme="blue"
                   onClick={initiatePayment}
-                  disabled={!cart?.cartDetails.length || isProcessing}
+                  disabled={!cart?.cartItems.length || isProcessing}
                   isLoading={isProcessing}
                   loadingText="Processing"
                 >

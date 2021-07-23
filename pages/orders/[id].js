@@ -1,5 +1,5 @@
-const OrderDetails = () => {
+const orderItems = () => {
   return <div>Hello</div>;
 };
 
-export default OrderDetails;
+export default orderItems;

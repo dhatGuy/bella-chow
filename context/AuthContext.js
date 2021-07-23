@@ -44,7 +44,7 @@ const AuthProvider = ({ children }) => {
     if (session) {
       supabase
         .from("users")
-        .select()
+        .select(`*, cafe:cafeterias!owned_by(*)`)
         .eq("id", session?.user.id)
         .single()
         .then(({ data, error }) => {
