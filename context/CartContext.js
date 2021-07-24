@@ -118,6 +118,10 @@ const CartProvider = ({ children }) => {
       .from("cartItems")
       .delete()
       .eq("id", id);
+    setCart({
+      ...cart,
+      cartItems: cart.cartItems.filter((item) => item.id !== id),
+    });
   };
 
   const increaseQty = async (menuToIncrease, qty = 1) => {

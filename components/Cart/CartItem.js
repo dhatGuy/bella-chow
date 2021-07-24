@@ -9,10 +9,10 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { useCart } from "@context/CartContext";
-// import Image from "next/image";
+import { RiDeleteBin5Line } from "react-icons/ri";
 
 const CartItem = ({ item }) => {
-  const { increaseQty, decreaseQty } = useCart();
+  const { increaseQty, decreaseQty, removeItem } = useCart();
   return (
     <Flex>
       <VStack flex="1" align="stretch" justify="space-between">
@@ -50,6 +50,14 @@ const CartItem = ({ item }) => {
           src={item.menu.image}
           alt={item.menu.name}
         />
+        <Button
+          size="sm"
+          variant="solid"
+          colorScheme="red"
+          onClick={() => removeItem(item.id)}
+        >
+          <RiDeleteBin5Line />
+        </Button>
       </Box>
     </Flex>
   );
