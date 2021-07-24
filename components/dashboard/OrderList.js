@@ -18,7 +18,6 @@ import {
 import { useAuth } from "@context/AuthContext";
 import { supabase } from "api";
 import router from "next/router";
-import { useEffect, useState } from "react";
 import Moment from "react-moment";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 
@@ -78,8 +77,8 @@ const OrderList = () => {
     return <Box>Loading...</Box>;
   }
   return (
-    <Box overflowX="auto">
-      <Table variant="simple">
+    <Box overflow="auto">
+      <Table>
         <TableCaption placement="top">Order List</TableCaption>
         <Thead>
           <Tr>
@@ -87,7 +86,7 @@ const OrderList = () => {
             <Th>Amount</Th>
             <Th>Date</Th>
             <Th>Status</Th>
-            <Th></Th>
+            <Th>Options</Th>
           </Tr>
         </Thead>
         <Tbody>

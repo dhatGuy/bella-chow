@@ -73,7 +73,7 @@ const Menus = () => {
           </NextLink>
           </BreadcrumbItem>
         </Breadcrumb> */}
-      <Heading h2 textAlign="center">
+      <Heading as="h2" textAlign="center">
         Menus
       </Heading>
 

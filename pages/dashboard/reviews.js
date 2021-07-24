@@ -26,7 +26,7 @@ const Reviews = () => {
 
   return (
     <Container maxW="xl">
-      <Heading h2 textAlign="center">
+      <Heading as="h2" textAlign="center">
         Reviews
       </Heading>
       {reviews.map((review) => (

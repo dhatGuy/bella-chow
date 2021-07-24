@@ -42,7 +42,7 @@ const Order = ({ data }) => {
 
   return (
     <Box>
-      <Heading h1>Order Details</Heading>
+      <Heading as="h1">Order Details</Heading>
       <Box boxShadow="md">
         <Text>Order id: #{order.id}</Text>
         <Text>Ordered by: {order.user.username}</Text>
@@ -56,7 +56,7 @@ const Order = ({ data }) => {
       <Box>
         <Table>
           <TableCaption placement="top">
-            <Heading h2>Items</Heading>
+            <Heading as="h2">Items</Heading>
           </TableCaption>
           <Thead>
             <Tr>
