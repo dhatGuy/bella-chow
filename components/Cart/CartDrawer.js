@@ -30,7 +30,7 @@ function CartDrawer({ isOpen, onClose, cafe }) {
 
   const config = {
     email: user?.email,
-    amount: cart?.totalAmount * 100,
+    amount: (cart?.totalAmount * 100).toFixed(2),
     publicKey: process.env.NEXT_PUBLIC_PAYSTACK_KEY,
   };
 

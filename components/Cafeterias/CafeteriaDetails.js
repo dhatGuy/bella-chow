@@ -63,7 +63,7 @@ const CafeteriaDetails = ({ cafe }) => {
           const { data, error } = await supabase
             .from("cart")
             .insert([{ user_id: user?.id, cafe_id: cafe?.id }])
-            .select(`*, cartItems(*, menu(*)), reviews(*)`)
+            .select(`*, cartItems(*, menu(*))`)
             .eq("user_id", user?.id)
             .eq("cafe_id", cafe?.id)
             .single();
