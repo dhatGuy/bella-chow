@@ -6,13 +6,15 @@ const AdminLayout = ({ children }) => {
   return (
     <Layout>
       <Flex
-        h={[null, null, "90vh"]}
+        h={[null, null, "100%"]}
         maxW="2000px"
         flexDir={["column", "column", "row"]}
         overflow="hidden"
       >
         <Sidebar />
-        <>{children}</>
+        <Box my="2" w="100%">
+          {children}
+        </Box>
       </Flex>
     </Layout>
   );

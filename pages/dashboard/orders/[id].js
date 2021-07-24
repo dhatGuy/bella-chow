@@ -1,6 +1,20 @@
-import { Box, Heading, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Heading,
+  Image,
+  Table,
+  TableCaption,
+  Tag,
+  Td,
+  Text,
+  Th,
+  Thead,
+  Tr,
+} from "@chakra-ui/react";
 import { supabase } from "api";
 import { useRouter } from "next/router";
+import Moment from "react-moment";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 
 const Order = ({ data }) => {
@@ -28,22 +42,59 @@ const Order = ({ data }) => {
 
   return (
     <Box>
-      <h1>Order #{order.id}</h1>
-      <Text>{order.user.username}</Text>
-      <Text>{order.date}</Text>
-      <Text>{order.amount}</Text>
-      <Text>{order.status}</Text>
-      <Text>{order.payment_ref}</Text>
+      <Heading h1>Order Details</Heading>
+      <Box boxShadow="md">
+        <Text>Order id: #{order.id}</Text>
+        <Text>Ordered by: {order.user.username}</Text>
+        <Text>
+          Placed on: <Moment format="ddd LL">{order.date}</Moment>
+        </Text>
+        <Text>Amount: {order.amount}</Text>
+        <Text>Payment Ref: {order.payment_ref}</Text>
+        <Tag>{order.status}</Tag>
+      </Box>
       <Box>
-        <Heading>items</Heading>
-        {order.orderItems.map((item) => (
-          <Box key={item.id}>
-            <Text>{item.menu.name}</Text>
-            <Text>{item.menu.price}</Text>
-            <Text>{item.qty}</Text>
-            <Text>{item.total_price}</Text>
-          </Box>
-        ))}
+        <Table>
+          <TableCaption placement="top">
+            <Heading h2>Items</Heading>
+          </TableCaption>
+          <Thead>
+            <Tr>
+              <Th>Product Info</Th>
+              <Th isNumeric>Quantity</Th>
+              <Th isNumeric>Price</Th>
+            </Tr>
+          </Thead>
+
+          {order.orderItems.map((item) => (
+            <Tr key={item.id}>
+              <Td>
+                <Flex
+                  flexDir={["column", "column", "row"]}
+                  // justify="space-between"
+                  align={{ base: "stretch" }}
+                >
+                  <Image
+                    mr="2"
+                    objectFit="cover"
+                    w={["100%", "250px"]}
+                    h="150px"
+                    alt={item.menu.name}
+                    src={item.menu.image}
+                  />
+                  <Box>
+                    <Text fontWeight="bold" fontSize="xl">
+                      {item.menu.name}
+                    </Text>
+                    <Text>{item.menu.price}</Text>
+                  </Box>
+                </Flex>
+              </Td>
+              <Td isNumeric>{item.qty}</Td>
+              <Td isNumeric>₦{item.total_price}</Td>
+            </Tr>
+          ))}
+        </Table>
       </Box>
     </Box>
   );

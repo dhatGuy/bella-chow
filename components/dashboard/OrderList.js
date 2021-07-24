@@ -78,7 +78,7 @@ const OrderList = () => {
     return <Box>Loading...</Box>;
   }
   return (
-    <Box>
+    <Box overflowX="auto">
       <Table variant="simple">
         <TableCaption placement="top">Order List</TableCaption>
         <Thead>

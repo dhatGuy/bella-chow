@@ -1,4 +1,5 @@
-import { Box, Text } from "@chakra-ui/react";
+import { Box, Container, Heading, Text } from "@chakra-ui/react";
+import Review from "@components/Reviews/Review";
 import { useAuth } from "@context/AuthContext";
 import { supabase } from "api";
 import { useEffect } from "react";
@@ -14,24 +15,31 @@ const Reviews = () => {
       .eq("cafe_id", user.cafe[0].id);
     return data;
   };
-  const { data: reviews, isLoading } = useQuery(["reviews", user], getReviews);
-  if (isLoading) {
+  const {
+    data: reviews,
+    isLoading,
+    error,
+  } = useQuery(["reviews", user], getReviews);
+  if (isLoading || error) {
     return <Box>Loading...</Box>;
   }
 
   return (
-    <Box>
+    <Container maxW="xl">
+      <Heading h2 textAlign="center">
+        Reviews
+      </Heading>
       {reviews.map((review) => (
-        <div key={review.id}>
-          <h3>{review.rating}</h3>
-          <p>{review.content}</p>
-          <p>{review.user.username}</p>
-          <Text>
-            <Moment>{review.date}</Moment>
-          </Text>
-        </div>
+        <Box key={review.id} boxShadow="lg" p="3">
+          <Review
+            username={review.user.username}
+            rating={review.rating}
+            content={review.content}
+            date={review.date}
+          />
+        </Box>
       ))}
-    </Box>
+    </Container>
   );
 };
 

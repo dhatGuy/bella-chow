@@ -1,5 +1,6 @@
 import { Box, HStack, Stack, Text, VStack } from "@chakra-ui/react";
 import Rating from "@components/Rating";
+import Moment from "react-moment";
 
 const Review = ({ username, date, content, rating }) => {
   return (
@@ -7,7 +8,9 @@ const Review = ({ username, date, content, rating }) => {
       <HStack justify="space-between">
         <Box>
           <Text fontWeight="bold">@{username}</Text>
-          <Text>{date}</Text>
+          <Text>
+            <Moment format="ddd LL">{date}</Moment>
+          </Text>
         </Box>
         <Rating rating={rating} />
       </HStack>
