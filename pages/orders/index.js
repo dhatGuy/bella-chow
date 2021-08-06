@@ -1,9 +1,20 @@
-import { Table, Thead, Tbody, Tr, Th, Td, Text, Box } from "@chakra-ui/react";
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  Text,
+  Box,
+  TableCaption,
+} from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useAuth } from "@context/AuthContext";
 import { useOrder, getOrder, setOrder } from "@context/OrderContext";
 import { useEffect } from "react";
 import Moment from "react-moment";
+import WithAuth from "@components/WithAuth";
 
 const Order = () => {
   const { orders, getOrders } = useOrder();
@@ -15,14 +26,10 @@ const Order = () => {
   }, [getOrders]);
 
   return (
-    <Box overflowX="auto">
+    <Box overflow="auto">
       <>
-        <Text textAlign="right" fontWeight="semibold" mb="20px">
-          Hello ✌{user?.email}
-        </Text>
-
-        <Text fontWeight="semibold">Orders</Text>
-        <Table size="sm" w="100%">
+        <Table>
+          <TableCaption placement="top">Order History</TableCaption>
           <Thead>
             <Tr>
               <Th>Reference</Th>
@@ -58,4 +65,4 @@ const Order = () => {
   );
 };
 
-export default Order;
+export default WithAuth(Order);

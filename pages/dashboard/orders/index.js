@@ -1,4 +1,5 @@
 import OrderList from "@components/dashboard/OrderList";
+import WithCafeAuth from "@components/WithCafeAuth";
 
 const Orders = () => {
   return (
@@ -8,4 +9,4 @@ const Orders = () => {
   );
 };
 
-export default Orders;
+export default WithCafeAuth(Orders);

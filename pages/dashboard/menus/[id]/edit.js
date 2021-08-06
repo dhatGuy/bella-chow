@@ -7,7 +7,10 @@ import {
   Image,
   Input,
   Switch,
+  Textarea,
+  VStack,
 } from "@chakra-ui/react";
+import WithCafeAuth from "@components/WithCafeAuth";
 import { supabase } from "api";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -74,73 +77,75 @@ const Edit = ({ data }) => {
     return <Box>Loading...</Box>;
   }
   return (
-    <Box>
-      <Heading h1>Edit Menu</Heading>
+    <Box pl="2">
+      <Heading as="h1">Edit Menu</Heading>
       <form onSubmit={onSave}>
-        <FormControl>
-          <FormLabel>product name</FormLabel>
-          <Input
-            w="50%"
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-        </FormControl>
-        <FormControl>
-          <FormLabel>product description</FormLabel>
-          <Input
-            w="50%"
-            type="text"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-        </FormControl>
-        <FormControl>
-          <FormLabel>product price</FormLabel>
-          <Input
-            w="50%"
-            type="number"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-          />
-        </FormControl>
-        <Box>
-          <Image src={menu.image} w="36" h="36" alt={name} />
-        </Box>
-        <FormControl>
-          <FormLabel>product image</FormLabel>
-          <Input
-            w="50%"
-            type="file"
-            accept=".png, .jpg, .jpeg"
-            onChange={(e) => setImage(e.target.files[0])}
-          />
-        </FormControl>
-        <FormControl display="flex" alignItems="center">
-          <FormLabel htmlFor="available" mb="0">
-            Available
-          </FormLabel>
-          <Switch
-            id="available"
-            isChecked={available}
-            onChange={() => setAvailable(!available)}
-          />
-        </FormControl>
-        <FormControl>
-          <Button
-            type="submit"
-            isLoading={mutation.isLoading}
-            loadingText="Saving..."
-          >
-            Save
-          </Button>
-        </FormControl>
+        <VStack>
+          <FormControl>
+            <FormLabel>Product name</FormLabel>
+            <Input
+              w={["100%", "50%"]}
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Product description</FormLabel>
+            <Textarea
+              w={["100%", "50%"]}
+              type="text"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Product price</FormLabel>
+            <Input
+              w={["100%", "50%"]}
+              type="number"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+            />
+          </FormControl>
+          <Box w="100%">
+            <Image src={menu.image} w="36" h="36" alt={name} />
+          </Box>
+          <FormControl>
+            <FormLabel>product image</FormLabel>
+            <Input
+              w={["100%", "50%"]}
+              type="file"
+              accept=".png, .jpg, .jpeg"
+              onChange={(e) => setImage(e.target.files[0])}
+            />
+          </FormControl>
+          <FormControl display="flex" alignItems="center">
+            <FormLabel htmlFor="available" mb="0">
+              Available
+            </FormLabel>
+            <Switch
+              id="available"
+              isChecked={available}
+              onChange={() => setAvailable(!available)}
+            />
+          </FormControl>
+          <FormControl>
+            <Button
+              type="submit"
+              isLoading={mutation.isLoading}
+              loadingText="Saving..."
+            >
+              Save
+            </Button>
+          </FormControl>
+        </VStack>
       </form>
     </Box>
   );
 };
 
-export default Edit;
+export default WithCafeAuth(Edit);
 
 export const getServerSideProps = async (ctx) => {
   const { data, error } = await supabase

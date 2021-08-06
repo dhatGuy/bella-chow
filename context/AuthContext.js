@@ -38,6 +38,7 @@ const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    setLoading(true);
     // Check active sessions and sets the user
     const session = supabase.auth.session();
     // const getProfile = async () => {
@@ -48,31 +49,17 @@ const AuthProvider = ({ children }) => {
         .eq("id", session?.user.id)
         .single()
         .then(({ data, error }) => {
-          if (data) {
-            const user = {
-              ...(session?.user ?? null),
-              ...data,
-            };
-            setUser(user ?? null);
-            setLoading(false);
-          } else {
-            setUser(null);
-            setLoading(false);
-          }
+          const user = {
+            ...(session?.user ?? null),
+            ...data,
+          };
+          setUser(user ?? null);
+          setLoading(false);
         });
+    } else {
+      setUser(null);
+      setLoading(false);
     }
-
-    // Listen for changes on auth state (logged in, signed out, etc.)
-    // const { data: listener } = supabase.auth.onAuthStateChange(
-    //   async (event, session) => {
-    //     setUser(session?.user ?? null);
-    //     setLoading(false);
-    //   }
-    // );
-
-    // return () => {
-    //   listener?.unsubscribe();
-    // };
   }, []);
 
   const value = {
@@ -81,6 +68,7 @@ const AuthProvider = ({ children }) => {
     signOut,
     user,
     setUser,
+    loading,
   };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

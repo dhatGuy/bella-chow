@@ -22,8 +22,7 @@ import NextLink from "next/link";
 import { useAuth } from "@context/AuthContext";
 
 export default function Simple() {
-  const { user } = useAuth();
-  const { signOut } = useAuth();
+  const { user, signOut } = useAuth();
   const router = useRouter();
   const { isOpen, onOpen, onClose } = useDisclosure();
 

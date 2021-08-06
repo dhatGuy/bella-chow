@@ -24,6 +24,7 @@ export default function Login() {
   const passwordRef = useRef();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
+
   async function handleSubmit(e) {
     e.preventDefault();
     setError(null);
@@ -41,8 +42,7 @@ export default function Login() {
       setIsSubmitting(false);
     } else {
       setIsSubmitting(false);
-      // Redirect user to Dashboard
-      router.push("/");
+      router.push(router.query.from || "/");
     }
   }
   return (

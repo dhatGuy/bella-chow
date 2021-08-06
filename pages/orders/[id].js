@@ -12,6 +12,7 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
+import WithAuth from "@components/WithAuth";
 import { supabase } from "api";
 import { useRouter } from "next/router";
 import Moment from "react-moment";
@@ -97,7 +98,7 @@ const Order = ({ data }) => {
   );
 };
 
-export default Order;
+export default WithAuth(Order);
 
 export const getServerSideProps = async (ctx) => {
   const id = ctx.query.id;

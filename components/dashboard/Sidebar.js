@@ -1,8 +1,10 @@
-import { Avatar, Flex, Icon, Link, Text } from "@chakra-ui/react";
+import { Avatar, Flex, Heading, Icon, Link, Text } from "@chakra-ui/react";
 import { FiBox, FiDollarSign, FiHome, FiPieChart } from "react-icons/fi";
 import NextLink from "next/link";
+import { useAuth } from "@context/AuthContext";
 
 const Sidebar = () => {
+  const { user } = useAuth();
   return (
     <Flex
       w={["100%", "100%", "10%", "15%", "15%"]}
@@ -16,21 +18,22 @@ const Sidebar = () => {
         h={[null, null, "100vh"]}
         justifyContent="space-between"
       >
-        <Flex flexDir="column" as="nav">
+        <Flex flexDir="column" as="nav" h="100%">
           {/* <Heading
-              mt={50}
-              mb={[25, 50, 100]}
-              fontSize={["4xl", "4xl", "2xl", "3xl", "4xl"]}
-              alignSelf="center"
-              letterSpacing="tight"
-            >
-              Rise.
-            </Heading> */}
+            mt={50}
+            mb={[25, 50, 100]}
+            fontSize={["4xl", "4xl", "2xl", "3xl", "4xl"]}
+            alignSelf="center"
+            letterSpacing="tight"
+          >
+            Rise.
+          </Heading> */}
           <Flex
             flexDir={["row", "row", "column", "column", "column"]}
             align={["center", "center", "center", "flex-start", "flex-start"]}
             wrap={["wrap", "wrap", "nowrap", "nowrap", "nowrap"]}
-            justifyContent="center"
+            justifyContent="space-evenly"
+            h="100%"
           >
             <Flex className="sidebar-items" mr={[2, 6, 0, 0, 0]}>
               <NextLink href="/dashboard" passHref>
@@ -95,8 +98,8 @@ const Sidebar = () => {
           </Flex>
         </Flex>
         <Flex flexDir="column" alignItems="center" mb={10} mt={5}>
-          <Avatar my={2} src="avatar-1.jpg" />
-          <Text textAlign="center">Calvin West</Text>
+          <Avatar my={2} src="" name={user?.username} />
+          <Text textAlign="center">{user?.username}</Text>
         </Flex>
       </Flex>
     </Flex>

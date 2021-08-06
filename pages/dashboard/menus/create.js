@@ -3,10 +3,13 @@ import {
   Button,
   FormControl,
   FormLabel,
+  Heading,
   Image,
   Input,
   Switch,
+  VStack,
 } from "@chakra-ui/react";
+import WithCafeAuth from "@components/WithCafeAuth";
 import { useAuth } from "@context/AuthContext";
 import { supabase } from "api";
 import { useRouter } from "next/router";
@@ -66,72 +69,77 @@ const Create = () => {
     mutation.mutate();
   };
   return (
-    <Box>
-      <h1>Edit Menu</h1>
+    <Box pl="2">
+      <Heading as="h1">Create Menu</Heading>
       <form onSubmit={onCreate}>
-        <FormControl>
-          <FormLabel>product name</FormLabel>
-          <Input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-        </FormControl>
-        <FormControl>
-          <FormLabel>product description</FormLabel>
-          <Input
-            type="text"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-        </FormControl>
-        <FormControl>
-          <FormLabel>product price</FormLabel>
-          <Input
-            type="number"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-          />
-        </FormControl>
-        <Box>
-          <Image
-            src={image && `${URL.createObjectURL(image)}`}
-            fallbackSrc="https://via.placeholder.com/150"
-            w="36"
-            h="36"
-            alt={name}
-          />
-        </Box>
-        <FormControl>
-          <FormLabel>product image</FormLabel>
-          <Input
-            type="file"
-            accept=".png, .jpg, .jpeg"
-            onChange={(e) => setImage(e.target.files[0])}
-          />
-        </FormControl>
-        <FormControl display="flex" alignItems="center">
-          <FormLabel htmlFor="available" mb="0">
-            Available
-          </FormLabel>
-          <Switch
-            id="available"
-            isChecked={available}
-            onChange={() => setAvailable(!available)}
-          />
-        </FormControl>
-        <FormControl>
-          <Button
-            type="submit"
-            isLoading={mutation.isLoading}
-            loadingText="Saving..."
-          >
-            Save
-          </Button>
-        </FormControl>
+        <VStack>
+          <FormControl>
+            <FormLabel>Product name</FormLabel>
+            <Input
+              type="text"
+              w={["100%", "50%"]}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Product description</FormLabel>
+            <Input
+              type="text"
+              w={["100%", "50%"]}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Product price</FormLabel>
+            <Input
+              type="number"
+              w={["100%", "50%"]}
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+            />
+          </FormControl>
+          <Box w="100%">
+            <Image
+              src={image && `${URL.createObjectURL(image)}`}
+              fallbackSrc="https://via.placeholder.com/150"
+              w="36"
+              h="36"
+              alt={name}
+            />
+          </Box>
+          <FormControl>
+            <FormLabel>Product image</FormLabel>
+            <Input
+              type="file"
+              accept=".png, .jpg, .jpeg"
+              onChange={(e) => setImage(e.target.files[0])}
+            />
+          </FormControl>
+          <FormControl display="flex" alignItems="center">
+            <FormLabel htmlFor="available" mb="0">
+              Available
+            </FormLabel>
+            <Switch
+              id="available"
+              isChecked={available}
+              onChange={() => setAvailable(!available)}
+            />
+          </FormControl>
+          <FormControl>
+            <Button
+              type="submit"
+              isLoading={mutation.isLoading}
+              loadingText="Saving..."
+            >
+              Save
+            </Button>
+          </FormControl>
+        </VStack>
       </form>
     </Box>
   );
 };
 
-export default Create;
+export default WithCafeAuth(Create);

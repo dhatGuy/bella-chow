@@ -2,6 +2,7 @@ import { ChevronDownIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
+  Flex,
   Menu,
   MenuButton,
   MenuItem,
@@ -23,7 +24,7 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 
 export const OrderStatus = ({ changeStatus }) => {
   return (
-    <Menu>
+    <Menu isLazy>
       <MenuButton onClick={(e) => e.stopPropagation()} as={Button}>
         ...
       </MenuButton>
@@ -77,7 +78,7 @@ const OrderList = () => {
     return <Box>Loading...</Box>;
   }
   return (
-    <Box overflow="auto">
+    <Flex overflow="auto">
       <Table>
         <TableCaption placement="top">Order List</TableCaption>
         <Thead>
@@ -112,7 +113,7 @@ const OrderList = () => {
           ))}
         </Tbody>
       </Table>
-    </Box>
+    </Flex>
   );
 };
 

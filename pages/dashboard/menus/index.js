@@ -14,6 +14,7 @@ import { supabase } from "api";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useToast } from "@chakra-ui/react";
 import NextLink from "next/link";
+import WithCafeAuth from "@components/WithCafeAuth";
 
 const Menus = () => {
   const { user } = useAuth();
@@ -94,4 +95,4 @@ const Menus = () => {
   );
 };
 
-export default Menus;
+export default WithCafeAuth(Menus);

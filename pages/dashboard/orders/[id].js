@@ -12,6 +12,7 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
+import WithCafeAuth from "@components/WithCafeAuth";
 import { supabase } from "api";
 import { useRouter } from "next/router";
 import Moment from "react-moment";
@@ -100,7 +101,7 @@ const Order = ({ data }) => {
   );
 };
 
-export default Order;
+export default WithCafeAuth(Order);
 
 export const getServerSideProps = async (ctx) => {
   const id = ctx.query.id;

@@ -1,5 +1,6 @@
 import { Box, Container, Heading, Text } from "@chakra-ui/react";
 import Review from "@components/Reviews/Review";
+import WithCafeAuth from "@components/WithCafeAuth";
 import { useAuth } from "@context/AuthContext";
 import { supabase } from "api";
 import { useEffect } from "react";
@@ -43,4 +44,4 @@ const Reviews = () => {
   );
 };
 
-export default Reviews;
+export default WithCafeAuth(Reviews);
