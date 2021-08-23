@@ -1,25 +1,25 @@
+import { CloseIcon, HamburgerIcon } from "@chakra-ui/icons";
 import {
-  Box,
-  Flex,
   Avatar,
-  HStack,
-  Link,
-  IconButton,
+  Box,
   Button,
+  Flex,
+  Heading,
+  HStack,
+  IconButton,
+  Link,
   Menu,
   MenuButton,
-  MenuList,
-  MenuItem,
   MenuDivider,
-  useDisclosure,
-  useColorModeValue,
+  MenuItem,
+  MenuList,
   Stack,
-  Heading,
+  useColorModeValue,
+  useDisclosure,
 } from "@chakra-ui/react";
-import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
-import { useRouter } from "next/router";
-import NextLink from "next/link";
 import { useAuth } from "@context/AuthContext";
+import NextLink from "next/link";
+import { useRouter } from "next/router";
 
 export default function Simple() {
   const { user, signOut } = useAuth();
@@ -50,10 +50,10 @@ export default function Simple() {
                 {!user && (
                   <>
                     <NextLink href={"/signup"} passHref>
-                      <Link>signup</Link>
+                      <Link>Signup</Link>
                     </NextLink>
                     <NextLink href={"/login"} passHref>
-                      <Link>login</Link>
+                      <Link>Login</Link>
                     </NextLink>
                   </>
                 )}
@@ -84,7 +84,7 @@ export default function Simple() {
                   <Avatar size={"sm"} src={""} name={user.username} />
                 </MenuButton>
                 <MenuList zIndex={3}>
-                  <MenuItem>profile</MenuItem>
+                  <MenuItem>Profile</MenuItem>
                   <NextLink href="/orders" passHref>
                     <MenuItem _hover={{ textDecor: "none" }} as={Link}>
                       Orders
@@ -111,10 +111,10 @@ export default function Simple() {
               {!user && (
                 <>
                   <NextLink href={"/signup"} passHref>
-                    <Link>signup</Link>
+                    <Link>Signup</Link>
                   </NextLink>
                   <NextLink href={"/login"} passHref>
-                    <Link>login</Link>
+                    <Link>Sogin</Link>
                   </NextLink>
                 </>
               )}

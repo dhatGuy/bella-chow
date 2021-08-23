@@ -1,4 +1,4 @@
-import { Heading, Text, Box } from "@chakra-ui/react";
+import { Box, Heading } from "@chakra-ui/react";
 import { supabase } from "../../api";
 import CafeteriaList from "../../components/Cafeterias/CafeteriaList";
 const Cafeterias = ({ cafeterias }) => {
@@ -17,7 +17,7 @@ export const getStaticProps = async (ctx) => {
     props: {
       cafeterias: data,
     },
-    revalidate: 3600,
+    revalidate: 10,
   };
 };
 

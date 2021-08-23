@@ -1,5 +1,5 @@
-import { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "api";
+import { createContext, useContext, useEffect, useState } from "react";
 
 const AuthContext = createContext();
 
@@ -77,7 +77,7 @@ const useAuth = () => {
   const context = useContext(AuthContext);
 
   if (context === undefined) {
-    throw new Error("useAuth must be used within UserProvider");
+    throw new Error("useAuth must be used within AuthProvider");
   }
   return context;
 };
