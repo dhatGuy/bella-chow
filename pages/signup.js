@@ -1,22 +1,21 @@
 import {
-  Flex,
   Box,
+  Button,
+  Flex,
   FormControl,
   FormLabel,
-  Input,
-  Checkbox,
-  Stack,
-  Link,
-  Button,
   Heading,
+  Input,
+  Link,
+  Stack,
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { useAuth } from "@context/AuthContext";
+import { supabase } from "api";
+import NextLink from "next/link";
 import { useRouter } from "next/router";
 import { useRef, useState } from "react";
-import { supabase } from "api";
-import { useAuth } from "@context/AuthContext";
-import NextLink from "next/link";
 
 export default function Signup() {
   const { signUp, setUser } = useAuth();
@@ -54,6 +53,7 @@ export default function Signup() {
       setIsSubmitting(false);
     }
   };
+
   return (
     <Flex
       minH={"100vh"}
@@ -100,9 +100,8 @@ export default function Signup() {
                   justify={"space-between"}
                 >
                   <NextLink href={"/login"} passHref>
-                    <Link color={"blue.400"}>login</Link>
+                    <Link color={"blue.400"}>Login</Link>
                   </NextLink>
-                  <Link color={"blue.400"}>Forgot password?</Link>
                 </Stack>
                 <Button
                   type="submit"
@@ -114,7 +113,7 @@ export default function Signup() {
                   isLoading={isSubmitting}
                   loadingText="Submitting"
                 >
-                  Sign up
+                  Sign-up
                 </Button>
               </Stack>
             </Stack>

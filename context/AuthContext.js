@@ -33,8 +33,11 @@ const AuthProvider = ({ children }) => {
   };
 
   const signUp = async (data) => {
-    const res = await supabase.auth.signUp(data);
-    return res;
+    return await supabase.auth.signUp(data);
+  };
+
+  const forgotPassword = async (email) => {
+    return await supabase.auth.api.resetPasswordForEmail(email);
   };
 
   useEffect(() => {
@@ -69,6 +72,7 @@ const AuthProvider = ({ children }) => {
     user,
     setUser,
     loading,
+    forgotPassword,
   };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

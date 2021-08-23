@@ -1,24 +1,23 @@
 import {
-  Flex,
   Box,
+  Button,
+  Flex,
   FormControl,
   FormLabel,
-  Input,
-  Checkbox,
-  Stack,
-  Link,
-  Button,
   Heading,
+  Input,
+  Link,
+  Stack,
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { useRouter } from "next/router";
-import { useRef, useState } from "react";
 import { useAuth } from "@context/AuthContext";
 import NextLink from "next/link";
+import { useRouter } from "next/router";
+import { useRef, useState } from "react";
 
 export default function Login() {
-  const { signIn } = useAuth();
+  const { signIn, forgotPassword } = useAuth();
   const router = useRouter();
   const emailRef = useRef();
   const passwordRef = useRef();
@@ -45,6 +44,11 @@ export default function Login() {
       router.push(router.query.from || "/");
     }
   }
+
+  const resetPassword = async () => {
+    const { data, error } = await forgotPassword(emailRef.current.value);
+    console.log(data || error);
+  };
   return (
     <Flex
       minH={"100vh"}
@@ -86,7 +90,9 @@ export default function Login() {
                   <NextLink href={"/signup"} passHref>
                     <Link color={"blue.400"}>signup</Link>
                   </NextLink>
-                  <Link color={"blue.400"}>Forgot password?</Link>
+                  <Link color={"blue.400"} onClick={resetPassword}>
+                    Forgot password?
+                  </Link>
                 </Stack>
                 <Button
                   type="submit"
