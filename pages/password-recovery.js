@@ -20,13 +20,13 @@ export const Password = () => {
   const confirmPasswordRef = useRef();
   const passwordRef = useRef();
   const [error, setError] = useState(null);
-  const [submitting, setSubmitting] = useState(false);
+  const [resetting, setResetting] = useState(false);
   const router = useRouter();
   const toast = useToast();
 
   const updatePassword = async (e) => {
     e.preventDefault();
-    setSubmitting(true);
+    setResetting(true);
     const password = passwordRef.current.value;
     const confirmPassword = confirmPasswordRef.current.value;
 
@@ -42,7 +42,7 @@ export const Password = () => {
       });
       if (error) {
         setError(error.message);
-        setSubmitting(false);
+        setResetting(false);
       } else {
         toast({
           position: "top-right",
@@ -52,10 +52,11 @@ export const Password = () => {
           duration: 4000,
         });
         router.push("/");
+        setResetting(false);
       }
     } catch (error) {
       setError(error.message || error);
-      setSubmitting(false);
+      setResetting(false);
     }
   };
   return (
@@ -98,9 +99,9 @@ export const Password = () => {
                     bg: "blue.500",
                   }}
                   type="submit"
-                  isLoading={submitting}
+                  isLoading={resetting}
                 >
-                  Sign in
+                  resetPassword
                 </Button>
               </Stack>
             </Stack>
