@@ -37,6 +37,11 @@ export const Password = () => {
         return;
       }
 
+      if (password.length <= 6) {
+        setError("Password must be greater than 5 characters");
+        return;
+      }
+
       const { user, error } = await supabase.auth.update({
         password,
       });
@@ -101,7 +106,7 @@ export const Password = () => {
                   type="submit"
                   isLoading={resetting}
                 >
-                  resetPassword
+                  reset password
                 </Button>
               </Stack>
             </Stack>

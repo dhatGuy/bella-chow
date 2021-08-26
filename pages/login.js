@@ -56,7 +56,6 @@ export default function Login() {
       status: "success",
       duration: 5000,
     });
-    console.log(data || error);
   };
   return (
     <Flex
@@ -97,7 +96,7 @@ export default function Login() {
                   justify={"space-between"}
                 >
                   <NextLink href={"/signup"} passHref>
-                    <Link color={"blue.400"}>signup</Link>
+                    <Link color={"blue.400"}>Sign-Up</Link>
                   </NextLink>
                   <Link color={"blue.400"} onClick={resetPassword}>
                     Forgot password?

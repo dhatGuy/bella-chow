@@ -84,7 +84,11 @@ export default function Simple() {
                   <Avatar size={"sm"} src={""} name={user.username} />
                 </MenuButton>
                 <MenuList zIndex={3}>
-                  <MenuItem>Profile</MenuItem>
+                  <NextLink href="/my-account" passHref>
+                    <MenuItem _hover={{ textDecor: "none" }} as={Link}>
+                      Profile
+                    </MenuItem>
+                  </NextLink>
                   <NextLink href="/orders" passHref>
                     <MenuItem _hover={{ textDecor: "none" }} as={Link}>
                       Orders
