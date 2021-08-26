@@ -114,7 +114,7 @@ export default function Simple() {
                     <Link>Signup</Link>
                   </NextLink>
                   <NextLink href={"/login"} passHref>
-                    <Link>Sogin</Link>
+                    <Link>Login</Link>
                   </NextLink>
                 </>
               )}
