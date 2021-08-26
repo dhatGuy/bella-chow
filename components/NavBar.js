@@ -37,7 +37,7 @@ export default function Simple() {
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
           <Heading order={2}>
             <NextLink href="/" passHref>
-              <Link _hover={{ textDecor: "none" }}>Bella Chow</Link>
+              <Link _hover={{ textDecor: "none" }}>RUN CAFE</Link>
             </NextLink>
           </Heading>
           <Flex alignItems={"center"} order={2}>

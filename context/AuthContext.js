@@ -37,7 +37,9 @@ const AuthProvider = ({ children }) => {
   };
 
   const forgotPassword = async (email) => {
-    return await supabase.auth.api.resetPasswordForEmail(email);
+    return await supabase.auth.api.resetPasswordForEmail(email, {
+      redirectTo: "https://food-ordering-app-bice.vercel.app/password-recovery",
+    });
   };
 
   useEffect(() => {

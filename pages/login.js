@@ -10,6 +10,7 @@ import {
   Stack,
   Text,
   useColorModeValue,
+  useToast,
 } from "@chakra-ui/react";
 import { useAuth } from "@context/AuthContext";
 import NextLink from "next/link";
@@ -23,6 +24,7 @@ export default function Login() {
   const passwordRef = useRef();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
+  const toast = useToast();
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -47,6 +49,13 @@ export default function Login() {
 
   const resetPassword = async () => {
     const { data, error } = await forgotPassword(emailRef.current.value);
+    toast({
+      position: "top-right",
+      title: "Password Reset",
+      description: "Check your mail",
+      status: "success",
+      duration: 5000,
+    });
     console.log(data || error);
   };
   return (
