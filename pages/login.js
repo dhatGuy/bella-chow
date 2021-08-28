@@ -10,21 +10,22 @@ import {
   Stack,
   Text,
   useColorModeValue,
-  useToast,
+  useDisclosure,
 } from "@chakra-ui/react";
+import ResetPassword from "@components/ResetPassword";
 import { useAuth } from "@context/AuthContext";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 
 export default function Login() {
-  const { signIn, forgotPassword } = useAuth();
+  const { signIn } = useAuth();
   const router = useRouter();
   const emailRef = useRef();
   const passwordRef = useRef();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
-  const toast = useToast();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -47,16 +48,6 @@ export default function Login() {
     }
   }
 
-  const resetPassword = async () => {
-    const { data, error } = await forgotPassword(emailRef.current.value);
-    toast({
-      position: "top-right",
-      title: "Password Reset",
-      description: "Check your mail",
-      status: "success",
-      duration: 5000,
-    });
-  };
   return (
     <Flex
       minH={"100vh"}
@@ -98,7 +89,7 @@ export default function Login() {
                   <NextLink href={"/signup"} passHref>
                     <Link color={"blue.400"}>Sign-Up</Link>
                   </NextLink>
-                  <Link color={"blue.400"} onClick={resetPassword}>
+                  <Link color={"blue.400"} onClick={onOpen}>
                     Forgot password?
                   </Link>
                 </Stack>
@@ -119,6 +110,7 @@ export default function Login() {
           </form>
         </Box>
       </Stack>
+      <ResetPassword isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
     </Flex>
   );
 }

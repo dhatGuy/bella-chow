@@ -49,6 +49,15 @@ const Account = () => {
           duration: 5000,
         });
       },
+      onError: () => {
+        toast({
+          position: "top-right",
+          title: "Profile update",
+          description: "An error occurred",
+          status: "error",
+          duration: 5000,
+        });
+      },
     }
   );
 
@@ -79,7 +88,7 @@ const Account = () => {
       phone,
     });
   };
-  // return <div></div>;
+
   return (
     <Box bg={useColorModeValue("gray.50", "inherit")} p={10}>
       <Heading py={5} textAlign="center" as="h1">
