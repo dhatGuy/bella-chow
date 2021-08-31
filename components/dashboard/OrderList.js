@@ -1,4 +1,3 @@
-import { ChevronDownIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -11,16 +10,15 @@ import {
   TableCaption,
   Tbody,
   Td,
-  Tfoot,
   Th,
   Thead,
   Tr,
 } from "@chakra-ui/react";
-import { useAuth } from "@context/AuthContext";
 import { supabase } from "api";
+import useCafeOrders from "hooks/useCafeOrders";
 import router from "next/router";
 import Moment from "react-moment";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 
 export const OrderStatus = ({ changeStatus }) => {
   return (
@@ -41,21 +39,8 @@ export const OrderStatus = ({ changeStatus }) => {
 };
 
 const OrderList = () => {
-  const { user } = useAuth();
   const queryClient = useQueryClient();
-  const fetchOrders = async () => {
-    if (user) {
-      const { data, error } = await supabase
-        .from("order")
-        .select()
-        .filter("cafe_id", "eq", user?.cafe[0].id);
-      if (error) {
-        throw new Error(error);
-      }
-      return data;
-    }
-  };
-  const { data: orders, isLoading } = useQuery(["orders", user], fetchOrders);
+  const { data: orders, isLoading } = useCafeOrders();
   const mutation = useMutation(
     async ({ id, status }) => {
       const { data, error } = await supabase

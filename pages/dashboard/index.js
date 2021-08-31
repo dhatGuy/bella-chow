@@ -1,8 +1,6 @@
-import Sidebar from "@components/dashboard/Sidebar";
 import Main from "@components/dashboard/Main";
-import Rightbar from "@components/dashboard/Rightbar";
-import { useState } from "react";
 import WithCafeAuth from "@components/WithCafeAuth";
+import { useState } from "react";
 // import MyChart from "../components/MyChart";
 
 function Dashboard() {

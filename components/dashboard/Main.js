@@ -1,9 +1,9 @@
 import {
   Avatar,
+  AvatarGroup,
   Divider,
   Flex,
   Heading,
-  IconButton,
   Table,
   Tbody,
   Td,
@@ -12,9 +12,20 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
-import { FiCalendar, FiChevronDown, FiChevronUp } from "react-icons/fi";
+import { useAuth } from "@context/AuthContext";
+import useCafeOrders from "hooks/useCafeOrders";
+import Moment from "react-moment";
 
 const Main = ({ display, changeDisplay }) => {
+  const { user } = useAuth();
+  const { data, isLoading, error } = useCafeOrders();
+
+  const totalBalance = data
+    ?.reduce((total, order) => total + order.amount, 0)
+    .toFixed(2);
+  if (isLoading) {
+    return <Text>Loading...</Text>;
+  }
   return (
     <Flex
       // w={["100%", "100%", "60%", "60%", "55%"]}
@@ -27,105 +38,75 @@ const Main = ({ display, changeDisplay }) => {
       <Heading fontWeight="normal" mb={4} letterSpacing="tight">
         Welcome back,{" "}
         <Flex display="inline-flex" fontWeight="bold">
-          Calvin
+          Admin
         </Flex>
       </Heading>
       <Text color="gray" fontSize="sm">
         My Balance
       </Text>
       <Text fontWeight="bold" fontSize="2xl">
-        $5,750.20
+        ₦{totalBalance}
       </Text>
-      {/* <MyChart /> */}
       <Flex justifyContent="space-between" mt={8}>
         <Flex align="flex-end">
           <Heading as="h2" size="lg" letterSpacing="tight">
-            Transactions
+            Recent orders
           </Heading>
-          <Text fontSize="small" color="gray" ml={4}>
+          {/* <Text fontSize="small" color="gray" ml={4}>
             Apr 2021
-          </Text>
+          </Text> */}
         </Flex>
-        <IconButton icon={<FiCalendar />} />
       </Flex>
       <Flex flexDir="column">
         <Flex overflow="auto">
           <Table variant="unstyled" mt={4}>
             <Thead>
               <Tr color="gray">
-                <Th>Name of transaction</Th>
-                <Th>Category</Th>
-                <Th isNumeric>Cashback</Th>
-                <Th isNumeric>Amount</Th>
+                <Th>Order ID</Th>
+                <Th>Customer</Th>
+                <Th>Menus</Th>
+                <Th isNumeric>Total Price</Th>
               </Tr>
             </Thead>
             <Tbody>
-              <Tr>
-                <Td>
-                  <Flex align="center">
-                    <Avatar size="sm" mr={2} src="amazon.jpeg" />
-                    <Flex flexDir="column">
-                      <Heading size="sm" letterSpacing="tight">
-                        Amazon
-                      </Heading>
-                      <Text fontSize="sm" color="gray">
-                        Apr 24, 2021 at 1:40pm
-                      </Text>
-                    </Flex>
-                  </Flex>
-                </Td>
-                <Td>Electronic Devices</Td>
-                <Td isNumeric>+$2</Td>
-                <Td isNumeric>
-                  <Text fontWeight="bold" display="inline-table">
-                    -$242
-                  </Text>
-                  .00
-                </Td>
-              </Tr>
-
-              {display == "show" && (
-                <>
-                  <Tr>
-                    <Td>
-                      <Flex align="center">
-                        <Avatar size="sm" mr={2} src="amazon.jpeg" />
-                        <Flex flexDir="column">
-                          <Heading size="sm" letterSpacing="tight">
-                            Amazon
-                          </Heading>
-                          <Text fontSize="sm" color="gray">
-                            Apr 12, 2021 at 9:40pm
-                          </Text>
-                        </Flex>
+              {data?.map((order) => (
+                <Tr key={order.id}>
+                  <Td>
+                    <Flex align="center">
+                      <Avatar size="sm" mr={2} name={order.username} />
+                      <Flex flexDir="column">
+                        <Heading size="sm" letterSpacing="tight">
+                          {order.id}
+                        </Heading>
+                        <Text fontSize="sm" color="gray">
+                          <Moment format="ddd LL">{order.date}</Moment>
+                        </Text>
                       </Flex>
-                    </Td>
-                    <Td>Electronic Devices</Td>
-                    <Td isNumeric>+$2</Td>
-                    <Td isNumeric>
-                      <Text fontWeight="bold" display="inline-table">
-                        -$242
-                      </Text>
-                      .00
-                    </Td>
-                  </Tr>
-                </>
-              )}
+                    </Flex>
+                  </Td>
+                  <Td>{order.user.username}</Td>
+                  <Td>
+                    <AvatarGroup size="md" max={2}>
+                      {order.menu?.map((menu) => (
+                        <Avatar
+                          key={menu.id}
+                          name={menu.name}
+                          src={menu.image}
+                        />
+                      ))}
+                    </AvatarGroup>
+                  </Td>
+                  <Td isNumeric>
+                    <Text fontWeight="bold" display="inline-table">
+                      ₦{order.amount}
+                    </Text>
+                  </Td>
+                </Tr>
+              ))}
             </Tbody>
           </Table>
         </Flex>
         <Flex align="center">
-          <Divider />
-          <IconButton
-            icon={display == "show" ? <FiChevronUp /> : <FiChevronDown />}
-            onClick={() => {
-              if (display == "show") {
-                changeDisplay("none");
-              } else {
-                changeDisplay("show");
-              }
-            }}
-          />
           <Divider />
         </Flex>
       </Flex>
