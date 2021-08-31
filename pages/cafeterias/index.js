@@ -12,7 +12,9 @@ const Cafeterias = ({ cafeterias }) => {
   );
 };
 export const getStaticProps = async (ctx) => {
-  const { data, error } = await supabase.from("cafeterias");
+  const { data, error } = await supabase
+    .from("cafeterias")
+    .select("*, reviews(*)");
   return {
     props: {
       cafeterias: data,

@@ -1,6 +1,16 @@
-import { Link, Box, Heading, Stack } from "@chakra-ui/react";
+import { Box, Heading, Link, Stack } from "@chakra-ui/react";
+import Rating from "@components/Rating";
 import NextLink from "next/link";
+import { useEffect, useState } from "react";
 const Cafeteria = ({ cafe }) => {
+  const [avgRating, setAvgRating] = useState(0);
+  useEffect(() => {
+    const total = cafe.reviews.reduce(
+      (total, review) => total + review.rating,
+      0
+    );
+    setAvgRating(total / cafe.reviews.length);
+  }, [cafe]);
   return (
     <NextLink href={`/cafeterias/${cafe.id}`} passHref>
       <Link _hover={{ textDecor: "none" }}>
@@ -29,6 +39,9 @@ const Cafeteria = ({ cafe }) => {
           <Heading as={"h1"} textColor="white" zIndex={2}>
             {cafe.name}
           </Heading>
+          <Box bgColor={"white"} p={2}>
+            <Rating rating={avgRating} numReviews={cafe.reviews.length} />
+          </Box>
         </Stack>
       </Link>
     </NextLink>
