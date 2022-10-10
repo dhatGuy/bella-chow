@@ -12,9 +12,9 @@ import {
   useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
-import { supabase } from "api";
 import { useRouter } from "next/router";
 import { useRef, useState } from "react";
+import { supabase } from "~lib/api";
 
 export const Password = () => {
   const confirmPasswordRef = useRef();

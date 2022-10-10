@@ -12,22 +12,21 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
-import WithCafeAuth from "@components/WithCafeAuth";
-import { supabase } from "api";
+import WithAuth from "@components/WithAuth";
+import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import Moment from "react-moment";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { supabase } from "~lib/api";
 
 const Order = ({ data }) => {
   const router = useRouter();
-  const queryClient = useQueryClient();
 
   const fetchOrder = async () => {
     const { data, error } = await supabase
       .from("order")
       .select(
         `
-        *, user:users(username), orderItems(*, menu(*))
+        *, orderItems(*, menu(*))
       `
       )
       .eq("id", router.query.id)
@@ -46,7 +45,6 @@ const Order = ({ data }) => {
       <Heading as="h1">Order Details</Heading>
       <Box boxShadow="md">
         <Text>Order id: #{order.id}</Text>
-        <Text>Ordered by: {order.user.username}</Text>
         <Text>
           Placed on: <Moment format="ddd LL">{order.date}</Moment>
         </Text>
@@ -72,7 +70,6 @@ const Order = ({ data }) => {
               <Td>
                 <Flex
                   flexDir={["column", "column", "row"]}
-                  // justify="space-between"
                   align={{ base: "stretch" }}
                 >
                   <Image
@@ -101,7 +98,7 @@ const Order = ({ data }) => {
   );
 };
 
-export default WithCafeAuth(Order);
+export default WithAuth(Order);
 
 export const getServerSideProps = async (ctx) => {
   const id = ctx.query.id;
@@ -109,7 +106,7 @@ export const getServerSideProps = async (ctx) => {
     .from("order")
     .select(
       `
-        *, user:users(username), orderItems(*, menu(*))
+        *, orderItems(*, menu(*))
       `
     )
     .eq("id", id)

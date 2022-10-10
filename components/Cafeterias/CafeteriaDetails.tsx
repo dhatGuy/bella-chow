@@ -1,9 +1,6 @@
-import { AddIcon } from "@chakra-ui/icons";
 import {
   Box,
-  Button,
   Circle,
-  Flex,
   Grid,
   GridItem,
   Heading,
@@ -20,9 +17,9 @@ import Rating from "@components/Rating";
 import ReviewModal from "@components/Reviews/ReviewModal";
 import { useAuth } from "@context/AuthContext";
 import { useCart } from "@context/CartContext";
-import { supabase } from "api";
 import { useEffect, useState } from "react";
 import { IoCartOutline } from "react-icons/io5";
+import { supabase } from "~lib/api";
 
 const CafeteriaDetails = ({ cafe }) => {
   const { user } = useAuth();

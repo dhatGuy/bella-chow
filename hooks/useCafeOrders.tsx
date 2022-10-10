@@ -1,6 +1,6 @@
 import { useAuth } from "@context/AuthContext";
-import { supabase } from "api";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "~lib/api";
 
 const useCafeOrders = () => {
   const { user } = useAuth();

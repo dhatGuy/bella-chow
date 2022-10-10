@@ -12,10 +12,10 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { useAuth } from "@context/AuthContext";
-import { supabase } from "api";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import { useRef, useState } from "react";
+import { supabase } from "~lib/api";
 
 export default function Signup() {
   const { signUp, setUser } = useAuth();

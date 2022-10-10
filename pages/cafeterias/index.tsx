@@ -1,5 +1,5 @@
 import { Box, Heading } from "@chakra-ui/react";
-import { supabase } from "../../api";
+import { supabase } from "~lib/api";
 import CafeteriaList from "../../components/Cafeterias/CafeteriaList";
 const Cafeterias = ({ cafeterias }) => {
   return (

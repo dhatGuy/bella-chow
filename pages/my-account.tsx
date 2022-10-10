@@ -15,9 +15,9 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useAuth } from "@context/AuthContext";
-import { supabase } from "api";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { supabase } from "~lib/api";
 
 const Account = () => {
   const [firstname, setFirstname] = useState("");

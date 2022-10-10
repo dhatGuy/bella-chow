@@ -1,9 +1,9 @@
 import { useToast } from "@chakra-ui/react";
-import { createContext, useContext, useEffect, useState } from "react";
-import { supabase } from "../api";
+import { createContext, useContext, useState } from "react";
+import { supabase } from "~lib/api";
 import { useAuth } from "./AuthContext";
 
-const CartContext = createContext();
+const CartContext = createContext(null);
 
 const CartProvider = ({ children }) => {
   const [cart, setCart] = useState(null);

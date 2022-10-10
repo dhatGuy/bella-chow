@@ -1,9 +1,9 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import { supabase } from "../api";
+import { createContext, useContext, useState } from "react";
+import { supabase } from "~lib/api";
 import { useAuth } from "./AuthContext";
 import { useCart } from "./CartContext";
 
-const OrderContext = createContext();
+const OrderContext = createContext(null);
 
 const OrderProvider = ({ children }) => {
   const { user } = useAuth();

@@ -4,12 +4,13 @@ import Layout from "@components/Layout";
 import { AuthProvider } from "@context/AuthContext";
 import { CartProvider } from "@context/CartContext";
 import { OrderProvider } from "@context/OrderContext";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { AppProps } from "next/app";
 import Router from "next/router";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 import { useEffect } from "react";
-import { QueryClient, QueryClientProvider } from "react-query";
-import { ReactQueryDevtools } from "react-query/devtools";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -19,10 +20,10 @@ const queryClient = new QueryClient({
   },
 });
 
-function MyApp({ Component, pageProps, router }) {
+function MyApp({ Component, pageProps, router }: AppProps) {
   useEffect(() => {
     const delay = 500; // in milliseconds
-    let timer;
+    let timer: string | number | NodeJS.Timeout | undefined;
     const load = () => {
       timer = setTimeout(function () {
         NProgress.start();
@@ -38,33 +39,22 @@ function MyApp({ Component, pageProps, router }) {
     Router.events.on("routeChangeError", () => NProgress.done());
     NProgress.configure({ showSpinner: false });
   }, []);
-  if (router.pathname.startsWith("/dashboard")) {
-    return (
-      <QueryClientProvider client={queryClient}>
-        <ChakraProvider>
-          <AuthProvider>
-            <CartProvider>
-              <OrderProvider>
-                <AdminLayout>
-                  <Component {...pageProps} />
-                </AdminLayout>
-              </OrderProvider>
-            </CartProvider>
-          </AuthProvider>
-          <ReactQueryDevtools initialIsOpen={false} />
-        </ChakraProvider>
-      </QueryClientProvider>
-    );
-  }
+
   return (
     <QueryClientProvider client={queryClient}>
       <ChakraProvider>
         <AuthProvider>
           <CartProvider>
             <OrderProvider>
-              <Layout>
-                <Component {...pageProps} />
-              </Layout>
+              {router.pathname.startsWith("/dashboard") ? (
+                <AdminLayout>
+                  <Component {...pageProps} />
+                </AdminLayout>
+              ) : (
+                <Layout>
+                  <Component {...pageProps} />
+                </Layout>
+              )}
             </OrderProvider>
           </CartProvider>
         </AuthProvider>

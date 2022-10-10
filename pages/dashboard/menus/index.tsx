@@ -1,20 +1,10 @@
-import {
-  Box,
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  Button,
-  Heading,
-  Link,
-  SimpleGrid,
-} from "@chakra-ui/react";
+import { Box, Heading, Link, SimpleGrid, useToast } from "@chakra-ui/react";
 import MenuItem from "@components/dashboard/Menu/MenuItem";
-import { useAuth } from "@context/AuthContext";
-import { supabase } from "api";
-import { useMutation, useQuery, useQueryClient } from "react-query";
-import { useToast } from "@chakra-ui/react";
-import NextLink from "next/link";
 import WithCafeAuth from "@components/WithCafeAuth";
+import { useAuth } from "@context/AuthContext";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import NextLink from "next/link";
+import { supabase } from "~lib/api";
 
 const Menus = () => {
   const { user } = useAuth();

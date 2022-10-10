@@ -2,23 +2,19 @@ import AddReview from "./AddReview";
 import Review from "./Review";
 
 import {
-  Button,
+  Box,
+  Grid,
   Modal,
-  ModalOverlay,
+  ModalCloseButton,
   ModalContent,
   ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
-  Grid,
-  Box,
+  ModalOverlay,
   Text,
-  Spinner,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { supabase } from "api";
 import { useAuth } from "@context/AuthContext";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { supabase } from "~lib/api";
 
 export default function ReviewModal({ isOpen, onClose, cafe }) {
   const [userReview, setUserReview] = useState(null);

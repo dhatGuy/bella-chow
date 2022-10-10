@@ -1,5 +1,5 @@
 import CafeteriaDetails from "@components/Cafeterias/CafeteriaDetails";
-import { supabase } from "api";
+import { supabase } from "~lib/api";
 const Cafe = ({ cafeteria }) => {
   return (
     <div>

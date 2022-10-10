@@ -14,11 +14,11 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
-import { supabase } from "api";
+import { useMutation, useQueryClient } from "@tanstack/@tanstack/react-query";
 import useCafeOrders from "hooks/useCafeOrders";
 import router from "next/router";
 import Moment from "react-moment";
-import { useMutation, useQueryClient } from "react-query";
+import { supabase } from "~lib/api";
 
 export const OrderStatus = ({ changeStatus }) => {
   return (

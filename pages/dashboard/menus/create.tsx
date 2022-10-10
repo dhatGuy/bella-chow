@@ -7,94 +7,86 @@ import {
   Image,
   Input,
   Switch,
-  Textarea,
   VStack,
 } from "@chakra-ui/react";
 import WithCafeAuth from "@components/WithCafeAuth";
-import { supabase } from "api";
+import { useAuth } from "@context/AuthContext";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { supabase } from "~lib/api";
 
-const Edit = ({ data }) => {
+const Create = () => {
+  const { user } = useAuth();
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { data: menu, isLoading } = useQuery(["menu", router.query], getMenu, {
-    initialData: data,
-  });
 
-  const [name, setName] = useState(menu.name || "");
-  const [price, setPrice] = useState(menu.price || "");
-  const [description, setDescription] = useState(menu.description || "");
+  const [name, setName] = useState("");
+  const [price, setPrice] = useState("");
+  const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
-  const [available, setAvailable] = useState(menu.available || false);
+  const [available, setAvailable] = useState(false);
 
-  async function getMenu() {
-    const { data, error } = await supabase
-      .from("menu")
-      .select()
-      .eq("id", router.query.id)
-      .single();
-    return data;
-  }
   // upload image
   const handleUpload = async () => {
-    const { data: upload, error: uploadError } = await supabase.storage
+    const fileExt = image.name.split(".").pop();
+
+    const { data, error } = await supabase.storage
       .from("food-app")
-      .update(`menus/${name}.png`, image, {
-        cacheControl: 1,
-        upsert: true,
-      });
+      .upload(`menus/${name}.${fileExt}`, image);
 
     const { publicURL } = supabase.storage
       .from("food-app")
-      .getPublicUrl(`menus/${name}.png`);
+      .getPublicUrl(`menus/${name}.${fileExt}`);
     return publicURL;
   };
   const mutation = useMutation(
     async () => {
-      let imgUrl;
-      if (image) {
-        imgUrl = await handleUpload();
-      }
-      const { data, error } = await supabase
-        .from("menu")
-        .update({ name, description, image: imgUrl, price, available })
-        .match({ id: router.query.id });
+      let imgUrl = await handleUpload();
+
+      const { data, error } = await supabase.from("menu").insert({
+        name,
+        description,
+        image: imgUrl,
+        price,
+        available,
+        cafe_id: user.cafe[0].id,
+      });
     },
     {
       onSuccess: () => {
         queryClient.invalidateQueries("menu");
+        router.push("/dashboard/menus");
       },
     }
   );
 
-  const onSave = async (e) => {
+  const onCreate = async (e) => {
     e.preventDefault();
+    if (!name || !description || !price || !image) {
+      return alert("All fields required");
+    }
     mutation.mutate();
   };
-  if (isLoading) {
-    return <Box>Loading...</Box>;
-  }
   return (
     <Box pl="2">
-      <Heading as="h1">Edit Menu</Heading>
-      <form onSubmit={onSave}>
+      <Heading as="h1">Create Menu</Heading>
+      <form onSubmit={onCreate}>
         <VStack>
           <FormControl>
             <FormLabel>Product name</FormLabel>
             <Input
-              w={["100%", "50%"]}
               type="text"
+              w={["100%", "50%"]}
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
           </FormControl>
           <FormControl>
             <FormLabel>Product description</FormLabel>
-            <Textarea
-              w={["100%", "50%"]}
+            <Input
               type="text"
+              w={["100%", "50%"]}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
@@ -102,19 +94,24 @@ const Edit = ({ data }) => {
           <FormControl>
             <FormLabel>Product price</FormLabel>
             <Input
-              w={["100%", "50%"]}
               type="number"
+              w={["100%", "50%"]}
               value={price}
               onChange={(e) => setPrice(e.target.value)}
             />
           </FormControl>
           <Box w="100%">
-            <Image src={menu.image} w="36" h="36" alt={name} />
+            <Image
+              src={image && `${URL.createObjectURL(image)}`}
+              fallbackSrc="https://via.placeholder.com/150"
+              w="36"
+              h="36"
+              alt={name}
+            />
           </Box>
           <FormControl>
-            <FormLabel>product image</FormLabel>
+            <FormLabel>Product image</FormLabel>
             <Input
-              w={["100%", "50%"]}
               type="file"
               accept=".png, .jpg, .jpeg"
               onChange={(e) => setImage(e.target.files[0])}
@@ -145,18 +142,4 @@ const Edit = ({ data }) => {
   );
 };
 
-export default WithCafeAuth(Edit);
-
-export const getServerSideProps = async (ctx) => {
-  const { data, error } = await supabase
-    .from("menu")
-    .select()
-    .eq("id", ctx.query.id)
-    .single();
-
-  return {
-    props: {
-      data,
-    },
-  };
-};
+export default WithCafeAuth(Create);
