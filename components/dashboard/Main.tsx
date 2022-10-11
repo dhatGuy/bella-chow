@@ -12,9 +12,9 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
-import { useAuth } from "@context/AuthContext";
 import useCafeOrders from "hooks/useCafeOrders";
 import Moment from "react-moment";
+import { useAuth } from "~context/AuthContext";
 
 const Main = ({ display, changeDisplay }) => {
   const { user } = useAuth();

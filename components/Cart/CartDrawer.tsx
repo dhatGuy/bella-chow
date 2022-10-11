@@ -1,26 +1,26 @@
 import {
+  Box,
+  Button,
   Drawer,
   DrawerBody,
+  DrawerCloseButton,
+  DrawerContent,
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
-  DrawerContent,
-  DrawerCloseButton,
-  Button,
-  Box,
   Flex,
-  Text,
   Icon,
   StackDivider,
+  Text,
   VStack,
 } from "@chakra-ui/react";
-import { useCart } from "@context/CartContext";
-import { usePaystackPayment } from "react-paystack";
-import { useAuth } from "@context/AuthContext";
-import { useOrder } from "@context/OrderContext";
 import { useState } from "react";
-import CartItem from "@components/Cart/CartItem";
 import { FiShoppingCart } from "react-icons/fi";
+import { usePaystackPayment } from "react-paystack";
+import CartItem from "~components/Cart/CartItem";
+import { useAuth } from "~context/AuthContext";
+import { useCart } from "~context/CartContext";
+import { useOrder } from "~context/OrderContext";
 
 function CartDrawer({ isOpen, onClose, cafe }) {
   const { user } = useAuth();

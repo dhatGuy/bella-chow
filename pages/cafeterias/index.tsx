@@ -1,7 +1,13 @@
 import { Box, Heading } from "@chakra-ui/react";
+import CafeteriaList from "~components/Cafeterias/CafeteriaList";
 import { supabase } from "~lib/api";
-import CafeteriaList from "../../components/Cafeterias/CafeteriaList";
-const Cafeterias = ({ cafeterias }) => {
+import { CafeteriaWithReviews } from "~types/types";
+
+interface CafeteriasProps {
+  cafeterias: CafeteriaWithReviews[];
+}
+
+const Cafeterias = ({ cafeterias }: CafeteriasProps) => {
   return (
     <Box>
       <Heading textAlign="center" my={4}>
@@ -11,9 +17,9 @@ const Cafeterias = ({ cafeterias }) => {
     </Box>
   );
 };
-export const getStaticProps = async (ctx) => {
-  const { data, error } = await supabase
-    .from("cafeterias")
+export const getStaticProps = async () => {
+  const { data } = await supabase
+    .from<CafeteriaWithReviews>("cafeterias")
     .select("*, reviews(*)");
   return {
     props: {

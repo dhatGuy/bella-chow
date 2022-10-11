@@ -11,15 +11,15 @@ import {
   ModalOverlay,
   Text,
 } from "@chakra-ui/react";
-import { useAuth } from "@context/AuthContext";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { useAuth } from "~context/AuthContext";
 import { supabase } from "~lib/api";
 
 export default function ReviewModal({ isOpen, onClose, cafe }) {
   const [userReview, setUserReview] = useState(null);
   const { user } = useAuth();
-  const { data: reviews, isLoading } = useQuery("reviews", getReviews);
+  const { data: reviews, isLoading } = useQuery(["reviews"], getReviews);
 
   async function getReviews() {
     const { data, error } = await supabase

@@ -1,5 +1,5 @@
 import { Box, Flex } from "@chakra-ui/react";
-import Sidebar from "@components/dashboard/Sidebar";
+import Sidebar from "~components/dashboard/Sidebar";
 import Layout from "./Layout";
 
 const AdminLayout = ({ children }) => {

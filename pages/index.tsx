@@ -1,23 +1,21 @@
-import Head from "next/head";
-
 import {
-  Flex,
-  Heading,
-  Stack,
-  Text,
+  Box,
   Button,
   Container,
-  Link,
-  Box,
-  SimpleGrid,
+  Flex,
+  Heading,
   Icon,
+  Link,
+  SimpleGrid,
+  Stack,
+  Text,
 } from "@chakra-ui/react";
-import NextLink from "next/link";
-import Lottie from "react-lottie";
 import anime from "assets/food-choose.json";
-import { useAuth } from "@context/AuthContext";
+import NextLink from "next/link";
 import { GiFoodTruck, GiStorkDelivery } from "react-icons/gi";
 import { IoFastFoodOutline } from "react-icons/io5";
+import Lottie from "react-lottie";
+import useUser from "~hooks/auth/useUser";
 
 const Feature = ({ title, text, icon }) => {
   return (
@@ -42,7 +40,7 @@ const Feature = ({ title, text, icon }) => {
 };
 
 export default function Homepage() {
-  const { user } = useAuth();
+  const { isLoading, isError } = useUser();
   const defaultOptions = {
     loop: true,
     autoplay: true,
@@ -85,7 +83,7 @@ export default function Homepage() {
               Cafeterias List
             </Button>
           </NextLink>
-          {!user && (
+          {isError && (
             <NextLink href="/login" passHref>
               <Button as={Link} rounded={"full"} px={6}>
                 Login

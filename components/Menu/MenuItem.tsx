@@ -1,7 +1,7 @@
-import { Badge, Box, Button, Image, Stack, Text } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
-import { useCart } from "@context/CartContext";
+import { Badge, Box, Button, Image, Stack, Text } from "@chakra-ui/react";
 import { useRouter } from "next/router";
+import { useCart } from "~context/CartContext";
 
 const MenuItem = ({ menu }) => {
   const { image, description, name, price, available, id } = menu;

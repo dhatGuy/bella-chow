@@ -25,7 +25,8 @@
     "react-icons": "^4.2.0",
     "react-lottie": "^1.2.3",
     "react-moment": "^1.1.1",
-    "react-paystack": "^4.0.1"
+    "react-paystack": "^4.0.1",
+    "valtio": "^1.7.2"
   },
   "devDependencies": {
     "@types/node": "^18.8.3",

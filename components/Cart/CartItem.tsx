@@ -1,15 +1,14 @@
 import {
   Box,
   Button,
-  Text,
   Flex,
-  Image,
   HStack,
-  Heading,
+  Image,
+  Text,
   VStack,
 } from "@chakra-ui/react";
-import { useCart } from "@context/CartContext";
 import { RiDeleteBin5Line } from "react-icons/ri";
+import { useCart } from "~context/CartContext";
 
 const CartItem = ({ item }) => {
   const { increaseQty, decreaseQty, removeItem } = useCart();

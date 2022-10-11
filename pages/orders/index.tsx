@@ -1,20 +1,19 @@
 import {
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  Text,
   Box,
+  Table,
   TableCaption,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { useAuth } from "@context/AuthContext";
-import { useOrder, getOrder, setOrder } from "@context/OrderContext";
 import { useEffect } from "react";
 import Moment from "react-moment";
-import WithAuth from "@components/WithAuth";
+import WithAuth from "~components/WithAuth";
+import { useAuth } from "~context/AuthContext";
+import { useOrder } from "~context/OrderContext";
 
 const Order = () => {
   const { orders, getOrders } = useOrder();

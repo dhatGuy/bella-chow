@@ -9,9 +9,9 @@ import {
   Textarea,
   VStack,
 } from "@chakra-ui/react";
-import { useAuth } from "@context/AuthContext";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
+import { useAuth } from "~context/AuthContext";
 import { supabase } from "~lib/api";
 
 const AddReview = ({ cafe, userReview }) => {

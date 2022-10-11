@@ -12,40 +12,37 @@ import {
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
-import ResetPassword from "@components/ResetPassword";
-import { useAuth } from "@context/AuthContext";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
-import { useRef, useState } from "react";
+import { useRef } from "react";
+import ResetPassword from "~components/ResetPassword";
+import useLogin from "~hooks/auth/useLogin";
 
 export default function Login() {
-  const { signIn } = useAuth();
   const router = useRouter();
   const emailRef = useRef();
   const passwordRef = useRef();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const loginMutation = useLogin();
 
   async function handleSubmit(e) {
     e.preventDefault();
-    setError(null);
-    setIsSubmitting(true);
 
     // Get email and password input values
     const email = emailRef.current.value;
     const password = passwordRef.current.value;
 
-    // Calls `signIn` function from the context
-    const { error } = await signIn({ email, password });
-
-    if (error) {
-      setError(error);
-      setIsSubmitting(false);
-    } else {
-      setIsSubmitting(false);
-      router.push(router.query.from || "/");
-    }
+    loginMutation.mutate(
+      {
+        email,
+        password,
+      },
+      {
+        onSuccess: () => {
+          router.push((router.query.from as string) || "/");
+        },
+      }
+    );
   }
 
   return (
@@ -75,9 +72,9 @@ export default function Login() {
                 <FormLabel>Password</FormLabel>
                 <Input type="password" ref={passwordRef} />
               </FormControl>
-              {error && (
+              {loginMutation.isError && (
                 <Text textColor="red" as="i">
-                  {error.message}
+                  {loginMutation.error.message}
                 </Text>
               )}
               <Stack spacing={10}>
@@ -100,7 +97,7 @@ export default function Login() {
                   _hover={{
                     bg: "blue.500",
                   }}
-                  isLoading={isSubmitting}
+                  isLoading={loginMutation.isLoading}
                   loadingText="Submitting"
                 >
                   Sign in

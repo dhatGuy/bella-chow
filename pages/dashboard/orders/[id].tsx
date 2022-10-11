@@ -12,10 +12,10 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
-import WithCafeAuth from "@components/WithCafeAuth";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import Moment from "react-moment";
+import WithCafeAuth from "~components/WithCafeAuth";
 import { supabase } from "~lib/api";
 
 const Order = ({ data }) => {

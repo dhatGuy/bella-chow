@@ -10,19 +10,24 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
-import Cart from "@components/Cart/Cart";
-import CartDrawer from "@components/Cart/CartDrawer";
-import MenuList from "@components/Menu/MenuList";
-import Rating from "@components/Rating";
-import ReviewModal from "@components/Reviews/ReviewModal";
-import { useAuth } from "@context/AuthContext";
-import { useCart } from "@context/CartContext";
 import { useEffect, useState } from "react";
 import { IoCartOutline } from "react-icons/io5";
+import Cart from "~components/Cart/Cart";
+import CartDrawer from "~components/Cart/CartDrawer";
+import MenuList from "~components/Menu/MenuList";
+import Rating from "~components/Rating";
+import ReviewModal from "~components/Reviews/ReviewModal";
+import { useCart } from "~context/CartContext";
+import useUser from "~hooks/auth/useUser";
 import { supabase } from "~lib/api";
+import { CafeteriaWithReviews } from "~types/types";
 
-const CafeteriaDetails = ({ cafe }) => {
-  const { user } = useAuth();
+interface CafeteriaDetailsProps {
+  cafe: CafeteriaWithReviews;
+}
+
+const CafeteriaDetails = ({ cafe }: CafeteriaDetailsProps) => {
+  const { data: user } = useUser();
   const { setCart } = useCart();
   const [avg_rating, setAvg_rating] = useState(0);
   const {

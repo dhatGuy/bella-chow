@@ -1,7 +1,7 @@
 import {
   Button,
   FormControl,
-  FormHelperText,
+  FormErrorMessage,
   FormLabel,
   Input,
   Modal,
@@ -13,30 +13,31 @@ import {
   ModalOverlay,
   useToast,
 } from "@chakra-ui/react";
-import { useAuth } from "@context/AuthContext";
-import React, { useRef, useState } from "react";
+import { useRef } from "react";
+import useResetPassword from "~hooks/auth/useResetPassword";
 
 export default function ResetPassword({ isOpen, onClose }) {
-  const { forgotPassword } = useAuth();
+  const resetPasswordMutation = useResetPassword();
   const emailRef = useRef();
   const toast = useToast();
-  const [error, setError] = useState("");
 
   const onReset = async () => {
-    setError("");
-    const { data, error } = await forgotPassword(emailRef.current.value);
-    if (error) {
-      setError(error.message);
-      return;
-    }
-    toast({
-      position: "top-right",
-      title: "Password Reset",
-      description: "Check your mail",
-      status: "success",
-      duration: 5000,
-    });
-    onClose();
+    const email = emailRef.current?.value;
+    resetPasswordMutation.mutate(
+      { email },
+      {
+        onSuccess: () => {
+          toast({
+            position: "top-right",
+            title: "Password Reset",
+            description: "Check your mail",
+            status: "success",
+            duration: 5000,
+          });
+          onClose();
+        },
+      }
+    );
   };
   return (
     <>
@@ -46,11 +47,13 @@ export default function ResetPassword({ isOpen, onClose }) {
           <ModalHeader>Reset password</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <FormControl id="email">
+            <FormControl isInvalid={resetPasswordMutation.isError}>
               <FormLabel>Email address</FormLabel>
               <Input type="email" ref={emailRef} />
-              {error && (
-                <FormHelperText color="red.500">{error}</FormHelperText>
+              {resetPasswordMutation.isError && (
+                <FormErrorMessage color="red.500">
+                  {resetPasswordMutation.error.message}
+                </FormErrorMessage>
               )}
             </FormControl>
           </ModalBody>
@@ -61,6 +64,7 @@ export default function ResetPassword({ isOpen, onClose }) {
             </Button>
             <Button
               colorScheme="blue"
+              isLoading={resetPasswordMutation.isLoading}
               // disabled={!emailRef.current.value.length}
               onClick={onReset}
             >

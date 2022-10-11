@@ -14,9 +14,9 @@ import {
   useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
-import { useAuth } from "@context/AuthContext";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
+import { useAuth } from "~context/AuthContext";
 import { supabase } from "~lib/api";
 
 const Account = () => {

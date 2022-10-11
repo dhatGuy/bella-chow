@@ -1,7 +1,7 @@
-import { useRouter } from "next/router";
-import React, { useEffect } from "react";
-import { useAuth } from "@context/AuthContext";
 import { Center, Spinner } from "@chakra-ui/react";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { useAuth } from "~context/AuthContext";
 
 const WithAuth = (Component) => {
   const MyComponent = (props) => {

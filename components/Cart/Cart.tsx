@@ -1,21 +1,20 @@
 import {
   Box,
-  Heading,
-  Text,
   Button,
   Flex,
   Grid,
   Icon,
-  VStack,
   StackDivider,
+  Text,
+  VStack,
 } from "@chakra-ui/react";
-import CartItem from "./CartItem";
-import { useCart } from "@context/CartContext";
 import { useState } from "react";
-import { useOrder } from "@context/OrderContext";
-import { useAuth } from "@context/AuthContext";
-import { usePaystackPayment } from "react-paystack";
 import { FiShoppingCart } from "react-icons/fi";
+import { usePaystackPayment } from "react-paystack";
+import { useAuth } from "~context/AuthContext";
+import { useCart } from "~context/CartContext";
+import { useOrder } from "~context/OrderContext";
+import CartItem from "./CartItem";
 
 const Cart = ({ cafe }) => {
   const { user } = useAuth();

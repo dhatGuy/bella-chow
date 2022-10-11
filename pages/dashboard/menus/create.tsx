@@ -9,11 +9,11 @@ import {
   Switch,
   VStack,
 } from "@chakra-ui/react";
-import WithCafeAuth from "@components/WithCafeAuth";
-import { useAuth } from "@context/AuthContext";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import WithCafeAuth from "~components/WithCafeAuth";
+import { useAuth } from "~context/AuthContext";
 import { supabase } from "~lib/api";
 
 const Create = () => {

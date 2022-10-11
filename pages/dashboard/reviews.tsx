@@ -1,8 +1,8 @@
 import { Box, Container, Heading } from "@chakra-ui/react";
-import Review from "@components/Reviews/Review";
-import WithCafeAuth from "@components/WithCafeAuth";
-import { useAuth } from "@context/AuthContext";
 import { useQuery } from "@tanstack/react-query";
+import Review from "~components/Reviews/Review";
+import WithCafeAuth from "~components/WithCafeAuth";
+import { useAuth } from "~context/AuthContext";
 import { supabase } from "~lib/api";
 
 const Reviews = () => {

@@ -1,6 +1,6 @@
-import Main from "@components/dashboard/Main";
-import WithCafeAuth from "@components/WithCafeAuth";
 import { useState } from "react";
+import Main from "~components/dashboard/Main";
+import WithCafeAuth from "~components/WithCafeAuth";
 // import MyChart from "../components/MyChart";
 
 function Dashboard() {

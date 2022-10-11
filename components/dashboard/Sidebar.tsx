@@ -1,7 +1,7 @@
-import { Avatar, Flex, Heading, Icon, Link, Text } from "@chakra-ui/react";
-import { FiBox, FiDollarSign, FiHome, FiPieChart } from "react-icons/fi";
+import { Avatar, Flex, Icon, Link, Text } from "@chakra-ui/react";
 import NextLink from "next/link";
-import { useAuth } from "@context/AuthContext";
+import { FiBox, FiDollarSign, FiHome, FiPieChart } from "react-icons/fi";
+import { useAuth } from "~context/AuthContext";
 
 const Sidebar = () => {
   const { user } = useAuth();

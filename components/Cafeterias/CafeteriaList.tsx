@@ -1,7 +1,12 @@
+import { Stack } from "@chakra-ui/react";
+import { CafeteriaWithReviews } from "~types/types";
 import Cafeteria from "./Cafeteria";
-import { VStack, Stack } from "@chakra-ui/react";
 
-const CafeteriaList = ({ cafes }) => {
+interface CafeteriaListProps {
+  cafes: CafeteriaWithReviews[];
+}
+
+const CafeteriaList = ({ cafes }: CafeteriaListProps) => {
   return (
     <Stack
       spacing={"5"}

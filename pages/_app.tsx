@@ -1,9 +1,4 @@
 import { ChakraProvider } from "@chakra-ui/react";
-import AdminLayout from "@components/AdminLayout";
-import Layout from "@components/Layout";
-import { AuthProvider } from "@context/AuthContext";
-import { CartProvider } from "@context/CartContext";
-import { OrderProvider } from "@context/OrderContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { AppProps } from "next/app";
@@ -11,6 +6,11 @@ import Router from "next/router";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 import { useEffect } from "react";
+import AdminLayout from "~components/AdminLayout";
+import Layout from "~components/Layout";
+import { AuthProvider } from "~context/AuthContext";
+import { CartProvider } from "~context/CartContext";
+import { OrderProvider } from "~context/OrderContext";
 
 const queryClient = new QueryClient({
   defaultOptions: {

@@ -1,5 +1,5 @@
-import OrderList from "@components/dashboard/OrderList";
-import WithCafeAuth from "@components/WithCafeAuth";
+import OrderList from "~components/dashboard/OrderList";
+import WithCafeAuth from "~components/WithCafeAuth";
 
 const Orders = () => {
   return (

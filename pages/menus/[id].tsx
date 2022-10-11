@@ -1,4 +1,4 @@
-import MenuDetails from "@components/Menu/MenuDetails";
+import MenuDetails from "~components/Menu/MenuDetails";
 import { supabase } from "~lib/api";
 
 const Menu = ({ menu }) => {

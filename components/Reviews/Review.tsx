@@ -1,6 +1,6 @@
-import { Box, HStack, Stack, Text, VStack } from "@chakra-ui/react";
-import Rating from "@components/Rating";
+import { Box, HStack, Text, VStack } from "@chakra-ui/react";
 import Moment from "react-moment";
+import Rating from "~components/Rating";
 
 const Review = ({ username, date, content, rating }) => {
   return (
