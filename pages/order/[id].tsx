@@ -17,16 +17,17 @@ import { useRouter } from "next/router";
 import Moment from "react-moment";
 import WithAuth from "~components/WithAuth";
 import { supabase } from "~lib/api";
+import { OrderWithItemsAndMenu } from "~types/types";
 
-const Order = ({ data }) => {
+const Order = ({ data }: { data: OrderWithItemsAndMenu }) => {
   const router = useRouter();
 
   const fetchOrder = async () => {
     const { data, error } = await supabase
-      .from("order")
+      .from<OrderWithItemsAndMenu>("order")
       .select(
         `
-        *, orderItems(*, menu(*))
+        *, items:order_item(*, menu(*))
       `
       )
       .eq("id", router.query.id)
@@ -36,7 +37,7 @@ const Order = ({ data }) => {
     }
     return data;
   };
-  const { data: order } = useQuery("order", fetchOrder, {
+  const { data: order } = useQuery(["order", data.id], fetchOrder, {
     initialData: data,
   });
 
@@ -44,13 +45,13 @@ const Order = ({ data }) => {
     <Box>
       <Heading as="h1">Order Details</Heading>
       <Box boxShadow="md">
-        <Text>Order id: #{order.id}</Text>
+        <Text>Order id: #{order?.id}</Text>
         <Text>
-          Placed on: <Moment format="ddd LL">{order.date}</Moment>
+          Placed on: <Moment format="ddd LL">{order?.date}</Moment>
         </Text>
-        <Text>Amount: {order.amount}</Text>
-        <Text>Payment Ref: {order.payment_ref}</Text>
-        <Tag>{order.status}</Tag>
+        <Text>Amount: {order?.amount}</Text>
+        <Text>Payment Ref: {order?.payment_ref}</Text>
+        <Tag>{order?.status}</Tag>
       </Box>
       <Box>
         <Table>
@@ -65,7 +66,7 @@ const Order = ({ data }) => {
             </Tr>
           </Thead>
 
-          {order.orderItems.map((item) => (
+          {order?.items.map((item) => (
             <Tr key={item.id}>
               <Td>
                 <Flex
@@ -103,10 +104,10 @@ export default WithAuth(Order);
 export const getServerSideProps = async (ctx) => {
   const id = ctx.query.id;
   const { data } = await supabase
-    .from("order")
+    .from<OrderWithItemsAndMenu>("order")
     .select(
       `
-        *, orderItems(*, menu(*))
+        *, items:order_item(*, menu(*))
       `
     )
     .eq("id", id)

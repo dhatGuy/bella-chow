@@ -7,6 +7,7 @@ export type Menu = definitions["menu"];
 export type CartItem = definitions["cart_item"];
 export type Review = definitions["review"];
 export type Cart = definitions["cart"];
+export type OrderItem = definitions["order_item"];
 
 export type CafeteriaWithReviews = Cafeteria & {
   reviews: Review[];
@@ -28,6 +29,19 @@ export type CartWithCartItems = Cart & {
 export type CartItemWithMenu = CartItem & {
   menu: Menu;
 };
+
 export type CartWithItemAndMenu = Cart & {
   cartItems: CartItemWithMenu[];
+};
+
+export type OrderItemWithMenu = OrderItem & {
+  menu: Menu;
+};
+
+export type OrderWithOrderItems = Order & {
+  orderItems: OrderItem[];
+};
+
+export type OrderWithItemsAndMenu = Order & {
+  items: OrderItemWithMenu[];
 };

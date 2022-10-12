@@ -8,21 +8,13 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
+import Router from "next/router";
 import Moment from "react-moment";
 import WithAuth from "~components/WithAuth";
-import { useAuth } from "~context/AuthContext";
-import { useOrder } from "~context/OrderContext";
+import useGetOrders from "~hooks/order/useGetOrders";
 
 const Order = () => {
-  const { orders, getOrders } = useOrder();
-  const { user } = useAuth();
-  const Router = useRouter();
-
-  useEffect(() => {
-    getOrders();
-  }, [getOrders]);
+  const { data: order } = useGetOrders();
 
   return (
     <Box overflow="auto">
@@ -38,11 +30,11 @@ const Order = () => {
             </Tr>
           </Thead>
           <Tbody>
-            {orders ? (
-              orders.map((order) => {
+            {order?.length ? (
+              order?.map((order) => {
                 return (
                   <Tr
-                    onClick={() => Router.push(`orders/${order.id}`)}
+                    onClick={() => Router.push(`order/${order.id}`)}
                     key={order.id}
                   >
                     <Td>{order.payment_ref}</Td>

@@ -13,17 +13,16 @@ const clearCart = async (cartId: number) => {
     throw new Error(res.error.message);
   }
 
-  console.log(res);
   await calculateCartTotal(cartId);
   return res.data;
 };
 
-export default function useClearCart() {
+export default function useClearCart(cafeId: number) {
   const queryClient = useQueryClient();
 
   return useMutation((cartId: number) => clearCart(cartId), {
     onSuccess: () => {
-      queryClient.invalidateQueries(["cart"]);
+      queryClient.invalidateQueries(["cart", cafeId]);
     },
   });
 }

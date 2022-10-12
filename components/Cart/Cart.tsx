@@ -12,10 +12,10 @@ import { useState } from "react";
 import { FiShoppingCart } from "react-icons/fi";
 import { usePaystackPayment } from "react-paystack";
 import { PaystackProps } from "react-paystack/dist/types";
-import { useOrder } from "~context/OrderContext";
 import useUser from "~hooks/auth/useUser";
 import useClearCart from "~hooks/cart/useClearCart";
 import useGetCart from "~hooks/cart/useGetCart";
+import useCreateOrder from "~hooks/order/useCreateOrder";
 import { Cafeteria } from "~types/types";
 import CartItem from "./CartItem";
 
@@ -25,24 +25,28 @@ interface CartProps {
 
 const Cart = ({ cafe }: CartProps) => {
   const { data: user } = useUser();
-  const clearCartMutation = useClearCart();
-  const { createOrder } = useOrder();
+  const clearCartMutation = useClearCart(cafe.id);
+  const createOrderMutation = useCreateOrder(cafe.id);
   const [isProcessing, setIsProcessing] = useState(false);
   const { data: cart } = useGetCart(cafe.id);
 
   const config: PaystackProps = {
     // TODO: add email key to user
     email: user?.email,
-    amount: (cart?.totalAmount * 100).toFixed(2),
-    publicKey: process.env.NEXT_PUBLIC_PAYSTACK_KEY,
+    amount: Number((cart?.totalAmount * 100).toFixed(2)),
+    publicKey: process.env.NEXT_PUBLIC_PAYSTACK_KEY as string,
   };
+  const initializePayment = usePaystackPayment(config);
 
-  const onSuccess = async (res) => {
-    await createOrder(cart.totalAmount, res.reference, cafe.id);
+  const onSuccess = (res) => {
+    createOrderMutation.mutate({
+      amount: cart.totalAmount,
+      paymentRef: res.reference,
+      userId: user.id,
+    });
     setIsProcessing(false);
   };
   const onClosePayment = () => setIsProcessing(false);
-  const initializePayment = usePaystackPayment(config);
   const initiatePayment = () => {
     initializePayment(onSuccess, onClosePayment);
     setIsProcessing(true);
@@ -92,7 +96,7 @@ const Cart = ({ cafe }: CartProps) => {
               disabled={!cart?.cartItems.length || isProcessing}
               variant="outline"
               mr={3}
-              onClick={() => clearCartMutation.mutateAsync(cart!.id)}
+              onClick={() => clearCartMutation.mutate(cart!.id)}
             >
               Clear
             </Button>

@@ -31,6 +31,7 @@ const useCreateUser = () => {
         {
           data: {
             username,
+            email,
           },
         }
       );

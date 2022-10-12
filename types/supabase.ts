@@ -944,7 +944,7 @@ export interface definitions {
     /** Format: timestamp with time zone */
     updated_at?: string;
     /** Format: text */
-    username?: string;
+    username: string;
     /** Format: text */
     avatar_url?: string;
     /** Format: character varying */
@@ -963,7 +963,7 @@ export interface definitions {
     /** Format: text */
     gender?: string;
     /** Format: character varying */
-    email?: string;
+    email: string;
   };
   review: {
     /** Format: integer */
