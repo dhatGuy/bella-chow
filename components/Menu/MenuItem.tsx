@@ -1,14 +1,33 @@
 import { AddIcon } from "@chakra-ui/icons";
-import { Badge, Box, Button, Image, Stack, Text } from "@chakra-ui/react";
-import { useRouter } from "next/router";
-import { useCart } from "~context/CartContext";
+import {
+  Badge,
+  Box,
+  Button,
+  Image,
+  Stack,
+  Text,
+  useToast,
+} from "@chakra-ui/react";
+import Router from "next/router";
+import useUser from "~hooks/auth/useUser";
+import useAddToCart from "~hooks/cart/useAddToCart";
+import { Menu } from "~types/types";
 
-const MenuItem = ({ menu }) => {
-  const { image, description, name, price, available, id } = menu;
-  const { addItem } = useCart();
-  const router = useRouter();
+interface MenuItemProps {
+  menu: Menu;
+}
 
-  const showDetails = () => router.push("/menus/" + id);
+const MenuItem = ({ menu }: MenuItemProps) => {
+  const { image, description, name, price, available, id, cafe_id } = menu;
+  const { data: user } = useUser();
+  const addToCartMutation = useAddToCart(cafe_id as number);
+  const toast = useToast();
+
+  const showDetails = () => Router.push("/menus/" + id);
+
+  const addToCart = async () => {
+    addToCartMutation.mutate({ menu });
+  };
 
   return (
     <Box maxW="sm" borderWidth="1px" borderRadius="lg" overflow="hidden">
@@ -16,7 +35,7 @@ const MenuItem = ({ menu }) => {
         <Image w="full" h="200px" objectFit="cover" src={image} alt={name} />
       </Box>
 
-      <Stack d="flex" spacing={6} p={6} justify="space-between">
+      <Stack display="flex" spacing={6} p={6} justify="space-between">
         <Box>
           <Badge
             borderRadius="full"
@@ -38,11 +57,17 @@ const MenuItem = ({ menu }) => {
             {description}
           </Text>
         </Box>
-        <Box d="flex" mt="2" alignItems="center" justifyContent="space-between">
+        <Box
+          display="flex"
+          mt="2"
+          alignItems="center"
+          justifyContent="space-between"
+        >
           <Text>₦{price}</Text>
           <Button
             colorScheme="blue"
-            onClick={() => addItem(menu)}
+            onClick={addToCart}
+            isLoading={addToCartMutation.isLoading}
             variant="outline"
             leftIcon={<AddIcon />}
             disabled={!available}

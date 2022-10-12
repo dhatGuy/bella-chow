@@ -10,8 +10,6 @@ const forgotPassword = async (email: string) => {
     throw error;
   }
 
-  console.log(data);
-
   return data;
 };
 

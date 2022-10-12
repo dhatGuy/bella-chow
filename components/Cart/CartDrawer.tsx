@@ -18,17 +18,20 @@ import { useState } from "react";
 import { FiShoppingCart } from "react-icons/fi";
 import { usePaystackPayment } from "react-paystack";
 import CartItem from "~components/Cart/CartItem";
-import { useAuth } from "~context/AuthContext";
 import { useCart } from "~context/CartContext";
 import { useOrder } from "~context/OrderContext";
+import useUser from "~hooks/auth/useUser";
+import useGetCart from "~hooks/cart/useGetCart";
 
 function CartDrawer({ isOpen, onClose, cafe }) {
-  const { user } = useAuth();
-  const { clearCart, cart } = useCart();
+  const { data: user } = useUser();
+  const { clearCart } = useCart();
   const { createOrder } = useOrder();
   const [isProcessing, setIsProcessing] = useState(false);
+  const { data: cart } = useGetCart(cafe.id);
 
   const config = {
+    // TODO: add email key to user
     email: user?.email,
     amount: (cart?.totalAmount * 100).toFixed(2),
     publicKey: process.env.NEXT_PUBLIC_PAYSTACK_KEY,

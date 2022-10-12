@@ -8,7 +8,7 @@ const useCafeOrders = () => {
     if (user) {
       const { data, error } = await supabase
         .from("order")
-        .select(`*, menu(*), user:users(*)`)
+        .select(`*, menu(*), user:user(*)`)
         .filter("cafe_id", "eq", user?.cafe[0].id);
       if (error) {
         throw new Error(error);

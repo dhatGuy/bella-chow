@@ -19,11 +19,12 @@ const Cafeterias = ({ cafeterias }: CafeteriasProps) => {
 };
 export const getStaticProps = async () => {
   const { data } = await supabase
-    .from<CafeteriaWithReviews>("cafeterias")
-    .select("*, reviews(*)");
+    .from<CafeteriaWithReviews>("cafeteria")
+    .select(`*, reviews:review(*)`);
+
   return {
     props: {
-      cafeterias: data,
+      cafeterias: data || [],
     },
     revalidate: 10,
   };

@@ -1,7 +1,12 @@
-import MenuItem from "./MenuItem";
 import { SimpleGrid } from "@chakra-ui/react";
+import { Menu } from "~types/types";
+import MenuItem from "./MenuItem";
 
-const MenuList = ({ menus }) => {
+interface MenuListProps {
+  menus: Menu[];
+}
+
+const MenuList = ({ menus }: MenuListProps) => {
   return (
     <SimpleGrid minChildWidth="250px" spacing="40px" justifyItems="center">
       {menus.map((menu) => (

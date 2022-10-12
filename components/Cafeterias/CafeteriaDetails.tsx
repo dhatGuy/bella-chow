@@ -17,18 +17,13 @@ import CartDrawer from "~components/Cart/CartDrawer";
 import MenuList from "~components/Menu/MenuList";
 import Rating from "~components/Rating";
 import ReviewModal from "~components/Reviews/ReviewModal";
-import { useCart } from "~context/CartContext";
-import useUser from "~hooks/auth/useUser";
-import { supabase } from "~lib/api";
-import { CafeteriaWithReviews } from "~types/types";
+import { CafeteriaWithMenuAndReviews } from "~types/types";
 
 interface CafeteriaDetailsProps {
-  cafe: CafeteriaWithReviews;
+  cafe: CafeteriaWithMenuAndReviews;
 }
 
 const CafeteriaDetails = ({ cafe }: CafeteriaDetailsProps) => {
-  const { data: user } = useUser();
-  const { setCart } = useCart();
   const [avg_rating, setAvg_rating] = useState(0);
   const {
     isOpen: isOpenCart,
@@ -49,41 +44,14 @@ const CafeteriaDetails = ({ cafe }: CafeteriaDetailsProps) => {
     setAvg_rating(total / cafe.reviews.length);
   }, [cafe]);
 
-  useEffect(() => {
-    const getCart = async () => {
-      if (user) {
-        const { data, error } = await supabase
-          .from("cart")
-          .select(`*, cartItems(*, menu(*))`)
-          .eq("user_id", user?.id)
-          .eq("cafe_id", cafe?.id)
-          .single();
-
-        if (data) {
-          setCart(data);
-        } else {
-          const { data, error } = await supabase
-            .from("cart")
-            .insert([{ user_id: user?.id, cafe_id: cafe?.id }])
-            .select(`*, cartItems(*, menu(*))`)
-            .eq("user_id", user?.id)
-            .eq("cafe_id", cafe?.id)
-            .single();
-          setCart(data);
-        }
-      }
-    };
-    getCart();
-  }, [cafe, setCart, user]);
   return (
     <Box position="relative">
-      <CartDrawer
-        isOpen={isOpenCart}
-        onOpen={onOpenCart}
-        onClose={onCloseCart}
-        cafe={cafe}
+      <CartDrawer isOpen={isOpenCart} onClose={onCloseCart} cafe={cafe} />
+      <ReviewModal
+        isOpen={isOpenReview}
+        onClose={onCloseReview}
+        cafeId={cafe.id}
       />
-      <ReviewModal isOpen={isOpenReview} onClose={onCloseReview} cafe={cafe} />
       <Stack
         position="relative"
         bgColor="black"
@@ -157,7 +125,7 @@ const CafeteriaDetails = ({ cafe }: CafeteriaDetailsProps) => {
           flexDirection="column"
           justifyContent="center"
         >
-          <MenuList menus={cafe.menu} />
+          <MenuList menus={cafe.menus} />
         </GridItem>
         <GridItem display={{ base: "none", lg: "initial" }}>
           <Cart cafe={cafe} />

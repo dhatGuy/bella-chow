@@ -8,34 +8,53 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { RiDeleteBin5Line } from "react-icons/ri";
-import { useCart } from "~context/CartContext";
+import useRemoveFromCart from "~hooks/cart/useRemoveFromCart";
+import useUpdateCartQty from "~hooks/cart/useUpdateCartQty";
+import { CartItemWithMenu } from "~types/types";
 
-const CartItem = ({ item }) => {
-  const { increaseQty, decreaseQty, removeItem } = useCart();
+interface CartItemProps {
+  cartItem: CartItemWithMenu;
+  cafeId: number;
+}
+
+const CartItem = ({ cartItem, cafeId }: CartItemProps) => {
+  const removeFromCartMutation = useRemoveFromCart(cafeId);
+  const updateCartQtyMutation = useUpdateCartQty(cafeId);
+
   return (
     <Flex>
       <VStack flex="1" align="stretch" justify="space-between">
         <Box>
-          <Text fontWeight="semibold">{item.menu.name}</Text>
-          <p>Price: N{item.menu.price.toFixed(2)}</p>
-          <p>Total: N{item.total_price.toFixed(2)}</p>
+          <Text fontWeight="semibold">{cartItem.menu.name}</Text>
+          <p>Price: N{cartItem.menu.price.toFixed(2)}</p>
+          <p>Total: N{cartItem.total_price.toFixed(2)}</p>
         </Box>
         <HStack>
           <Button
             size="sm"
             variant="solid"
             colorScheme="teal"
-            disabled={item.qty === 1}
-            onClick={() => decreaseQty(item.menu)}
+            disabled={cartItem.qty === 1}
+            onClick={() =>
+              updateCartQtyMutation.mutate({
+                menuToUpdate: cartItem.menu,
+                action: "-",
+              })
+            }
           >
             -
           </Button>
-          <Text>{item.qty}</Text>
+          <Text>{cartItem.qty}</Text>
           <Button
             size="sm"
             variant="solid"
             colorScheme="teal"
-            onClick={() => increaseQty(item.menu)}
+            onClick={() =>
+              updateCartQtyMutation.mutate({
+                menuToUpdate: cartItem.menu,
+                action: "+",
+              })
+            }
           >
             +
           </Button>
@@ -46,14 +65,14 @@ const CartItem = ({ item }) => {
           w="full"
           h="130px"
           objectFit="cover"
-          src={item.menu.image}
-          alt={item.menu.name}
+          src={cartItem.menu.image}
+          alt={cartItem.menu.name}
         />
         <Button
           size="sm"
           variant="solid"
           colorScheme="red"
-          onClick={() => removeItem(item.id)}
+          onClick={() => removeFromCartMutation.mutate(cartItem.id)}
         >
           <RiDeleteBin5Line />
         </Button>

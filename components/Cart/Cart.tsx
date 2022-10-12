@@ -11,18 +11,27 @@ import {
 import { useState } from "react";
 import { FiShoppingCart } from "react-icons/fi";
 import { usePaystackPayment } from "react-paystack";
-import { useAuth } from "~context/AuthContext";
-import { useCart } from "~context/CartContext";
+import { PaystackProps } from "react-paystack/dist/types";
 import { useOrder } from "~context/OrderContext";
+import useUser from "~hooks/auth/useUser";
+import useClearCart from "~hooks/cart/useClearCart";
+import useGetCart from "~hooks/cart/useGetCart";
+import { Cafeteria } from "~types/types";
 import CartItem from "./CartItem";
 
-const Cart = ({ cafe }) => {
-  const { user } = useAuth();
-  const { clearCart, cart } = useCart();
+interface CartProps {
+  cafe: Cafeteria;
+}
+
+const Cart = ({ cafe }: CartProps) => {
+  const { data: user } = useUser();
+  const clearCartMutation = useClearCart();
   const { createOrder } = useOrder();
   const [isProcessing, setIsProcessing] = useState(false);
+  const { data: cart } = useGetCart(cafe.id);
 
-  const config = {
+  const config: PaystackProps = {
+    // TODO: add email key to user
     email: user?.email,
     amount: (cart?.totalAmount * 100).toFixed(2),
     publicKey: process.env.NEXT_PUBLIC_PAYSTACK_KEY,
@@ -72,7 +81,7 @@ const Cart = ({ cafe }) => {
             </VStack>
           ) : (
             cart?.cartItems.map((item) => (
-              <CartItem item={item} key={item.id} />
+              <CartItem cartItem={item} cafeId={cafe.id} key={item.id} />
             ))
           )}
         </VStack>
@@ -83,7 +92,7 @@ const Cart = ({ cafe }) => {
               disabled={!cart?.cartItems.length || isProcessing}
               variant="outline"
               mr={3}
-              onClick={() => clearCart()}
+              onClick={() => clearCartMutation.mutateAsync(cart!.id)}
             >
               Clear
             </Button>

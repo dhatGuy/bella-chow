@@ -14,7 +14,7 @@ const useCreateUser = () => {
   const createUser = async ({ email, password, username }: CreateUserProps) => {
     try {
       let { data: findByUsername } = await supabase
-        .from<Users>("users")
+        .from<Users>("user")
         .select("*")
         .eq("username", username)
         .maybeSingle();

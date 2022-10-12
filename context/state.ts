@@ -1,14 +1,15 @@
 import { User } from "@supabase/supabase-js";
 import { proxy } from "valtio";
+import { CartWithCartItems } from "~types/types";
 
 interface State {
   user: User | null;
-  loading: boolean;
   authenticated: boolean;
+  cart: CartWithCartItems | null;
 }
 
 export const state = proxy<State>({
   user: null,
-  loading: true,
   authenticated: false,
+  cart: null,
 });

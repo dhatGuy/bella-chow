@@ -5,7 +5,7 @@ import { Users } from "~types/types";
 
 const getUser = async (user: User | null) => {
   const { data, error } = await supabase
-    .from<Users>("users")
+    .from<Users>("user")
     .select("*")
     .eq("id", user?.id)
     .single();

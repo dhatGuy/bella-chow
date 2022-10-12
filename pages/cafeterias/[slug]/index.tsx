@@ -1,6 +1,12 @@
 import CafeteriaDetails from "~components/Cafeterias/CafeteriaDetails";
 import { supabase } from "~lib/api";
-const Cafe = ({ cafeteria }) => {
+import { Cafeteria, CafeteriaWithMenuAndReviews } from "~types/types";
+
+interface CafeProps {
+  cafeteria: CafeteriaWithMenuAndReviews;
+}
+
+const Cafe = ({ cafeteria }: CafeProps) => {
   return (
     <div>
       <CafeteriaDetails cafe={cafeteria} />
@@ -12,11 +18,12 @@ export default Cafe;
 
 export const getStaticPaths = async () => {
   const { data: cafeterias, error } = await supabase
-    .from("cafeterias")
+    .from<Cafeteria>("cafeteria")
     .select();
-  const paths = cafeterias.map(({ id }) => ({
+
+  const paths = cafeterias?.map(({ slug }) => ({
     params: {
-      id: id.toString(),
+      slug: slug!.toString(),
     },
   }));
 
@@ -26,11 +33,11 @@ export const getStaticPaths = async () => {
   };
 };
 export const getStaticProps = async (ctx) => {
-  const cafeId = ctx.params.id;
+  const slug = ctx.params.slug;
   const { data: cafeteria, error } = await supabase
-    .from("cafeterias")
-    .select("*, menu(*), reviews(*)")
-    .eq("id", cafeId)
+    .from<CafeteriaWithMenuAndReviews>("cafeteria")
+    .select("*, menus:menu(*), reviews:review(*)")
+    .eq("slug", slug)
     .single();
 
   return {

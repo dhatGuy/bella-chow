@@ -11,65 +11,66 @@ import {
   ModalOverlay,
   Text,
 } from "@chakra-ui/react";
-import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
-import { useAuth } from "~context/AuthContext";
-import { supabase } from "~lib/api";
+import { useEffect, useState } from "react";
+import useUser from "~hooks/auth/useUser";
+import useGetReviews from "~hooks/review/useGetReviews";
+import { Review as ReviewType } from "~types/types";
 
-export default function ReviewModal({ isOpen, onClose, cafe }) {
-  const [userReview, setUserReview] = useState(null);
-  const { user } = useAuth();
-  const { data: reviews, isLoading } = useQuery(["reviews"], getReviews);
+interface ReviewModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  cafeId: number;
+}
 
-  async function getReviews() {
-    const { data, error } = await supabase
-      .from("reviews")
-      .select(`*, users(username), cafeterias(name)`)
-      .eq("cafe_id", cafe.id);
+export default function ReviewModal({
+  isOpen,
+  onClose,
+  cafeId,
+}: ReviewModalProps) {
+  const [userReview, setUserReview] = useState<ReviewType | null>(null);
+  const { data: user } = useUser();
+  const { data: reviews, isLoading } = useGetReviews(cafeId, isOpen);
 
-    if (!error) {
-      setUserReview(data.filter((review) => review.user_id === user?.id)[0]);
-      return data;
-    }
-  }
+  useEffect(() => {
+    setUserReview(
+      reviews?.find((review) => review.user_id === user?.id) || null
+    );
+  }, [reviews, user]);
+
   if (isLoading) {
-    return <Box></Box>;
+    return null;
   }
+
   return (
-    <>
-      <Modal isOpen={isOpen} onClose={onClose} size="lg">
-        <ModalOverlay />
-        <ModalContent as={Grid}>
-          <ModalHeader>Reviews</ModalHeader>
-          <ModalCloseButton />
-          {/* <ModalBody> */}
-          <Box
-            style={{
-              height: "20rem",
-            }}
-            overflow="auto"
-            p="4"
-            boxShadow="md"
-          >
-            {!reviews.length ? (
-              <>
-                <Text>Ratings are still coming in</Text>
-              </>
-            ) : (
-              reviews.map((review) => (
-                <Review
-                  key={review.id}
-                  username={review.users.username}
-                  rating={review.rating}
-                  content={review.content}
-                  date={review.date}
-                />
-              ))
-            )}
-          </Box>
-          {user && <AddReview cafe={cafe} userReview={userReview} />}
-        </ModalContent>
-      </Modal>
-    </>
+    <Modal isOpen={isOpen} onClose={onClose} size="lg">
+      <ModalOverlay />
+      <ModalContent as={Grid}>
+        <ModalHeader>Reviews({reviews?.length})</ModalHeader>
+        <ModalCloseButton />
+        <Box
+          style={{
+            height: "20rem",
+          }}
+          overflow="auto"
+          p="4"
+          boxShadow="md"
+        >
+          {!reviews?.length ? (
+            <Text>Ratings are still coming in</Text>
+          ) : (
+            reviews.map((review) => (
+              <Review
+                key={review.id}
+                username={review.user.username}
+                rating={review.rating}
+                content={review.content}
+                date={review.date}
+              />
+            ))
+          )}
+        </Box>
+        {!!user && <AddReview cafeId={cafeId} userReview={userReview} />}
+      </ModalContent>
+    </Modal>
   );
 }

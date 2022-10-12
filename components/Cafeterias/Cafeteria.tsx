@@ -19,7 +19,7 @@ const Cafeteria = ({ cafe }: CafeteriaProps) => {
   }, [cafe]);
 
   return (
-    <NextLink href={`/cafeterias/${cafe.id}`} passHref>
+    <NextLink href={`/cafeterias/${cafe.slug}`} passHref>
       <Link _hover={{ textDecor: "none" }}>
         <Stack
           position="relative"

@@ -117,105 +117,6 @@ export interface paths {
       };
     };
   };
-  "/cartItems": {
-    get: {
-      parameters: {
-        query: {
-          id?: parameters["rowFilter.cartItems.id"];
-          cart_id?: parameters["rowFilter.cartItems.cart_id"];
-          total_price?: parameters["rowFilter.cartItems.total_price"];
-          qty?: parameters["rowFilter.cartItems.qty"];
-          menu_id?: parameters["rowFilter.cartItems.menu_id"];
-          /** Filtering Columns */
-          select?: parameters["select"];
-          /** Ordering */
-          order?: parameters["order"];
-          /** Limiting and Pagination */
-          offset?: parameters["offset"];
-          /** Limiting and Pagination */
-          limit?: parameters["limit"];
-        };
-        header: {
-          /** Limiting and Pagination */
-          Range?: parameters["range"];
-          /** Limiting and Pagination */
-          "Range-Unit"?: parameters["rangeUnit"];
-          /** Preference */
-          Prefer?: parameters["preferCount"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: {
-          schema: definitions["cartItems"][];
-        };
-        /** Partial Content */
-        206: unknown;
-      };
-    };
-    post: {
-      parameters: {
-        body: {
-          /** cartItems */
-          cartItems?: definitions["cartItems"];
-        };
-        query: {
-          /** Filtering Columns */
-          select?: parameters["select"];
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferReturn"];
-        };
-      };
-      responses: {
-        /** Created */
-        201: unknown;
-      };
-    };
-    delete: {
-      parameters: {
-        query: {
-          id?: parameters["rowFilter.cartItems.id"];
-          cart_id?: parameters["rowFilter.cartItems.cart_id"];
-          total_price?: parameters["rowFilter.cartItems.total_price"];
-          qty?: parameters["rowFilter.cartItems.qty"];
-          menu_id?: parameters["rowFilter.cartItems.menu_id"];
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferReturn"];
-        };
-      };
-      responses: {
-        /** No Content */
-        204: never;
-      };
-    };
-    patch: {
-      parameters: {
-        query: {
-          id?: parameters["rowFilter.cartItems.id"];
-          cart_id?: parameters["rowFilter.cartItems.cart_id"];
-          total_price?: parameters["rowFilter.cartItems.total_price"];
-          qty?: parameters["rowFilter.cartItems.qty"];
-          menu_id?: parameters["rowFilter.cartItems.menu_id"];
-        };
-        body: {
-          /** cartItems */
-          cartItems?: definitions["cartItems"];
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferReturn"];
-        };
-      };
-      responses: {
-        /** No Content */
-        204: never;
-      };
-    };
-  };
   "/cart": {
     get: {
       parameters: {
@@ -224,6 +125,7 @@ export interface paths {
           user_id?: parameters["rowFilter.cart.user_id"];
           totalAmount?: parameters["rowFilter.cart.totalAmount"];
           cafe_id?: parameters["rowFilter.cart.cafe_id"];
+          createdAt?: parameters["rowFilter.cart.createdAt"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Ordering */
@@ -278,6 +180,7 @@ export interface paths {
           user_id?: parameters["rowFilter.cart.user_id"];
           totalAmount?: parameters["rowFilter.cart.totalAmount"];
           cafe_id?: parameters["rowFilter.cart.cafe_id"];
+          createdAt?: parameters["rowFilter.cart.createdAt"];
         };
         header: {
           /** Preference */
@@ -296,6 +199,7 @@ export interface paths {
           user_id?: parameters["rowFilter.cart.user_id"];
           totalAmount?: parameters["rowFilter.cart.totalAmount"];
           cafe_id?: parameters["rowFilter.cart.cafe_id"];
+          createdAt?: parameters["rowFilter.cart.createdAt"];
         };
         body: {
           /** cart */
@@ -312,15 +216,15 @@ export interface paths {
       };
     };
   };
-  "/cafeterias": {
+  "/cart_item": {
     get: {
       parameters: {
         query: {
-          id?: parameters["rowFilter.cafeterias.id"];
-          name?: parameters["rowFilter.cafeterias.name"];
-          image?: parameters["rowFilter.cafeterias.image"];
-          about?: parameters["rowFilter.cafeterias.about"];
-          owned_by?: parameters["rowFilter.cafeterias.owned_by"];
+          id?: parameters["rowFilter.cart_item.id"];
+          cart_id?: parameters["rowFilter.cart_item.cart_id"];
+          total_price?: parameters["rowFilter.cart_item.total_price"];
+          qty?: parameters["rowFilter.cart_item.qty"];
+          menu_id?: parameters["rowFilter.cart_item.menu_id"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Ordering */
@@ -342,7 +246,7 @@ export interface paths {
       responses: {
         /** OK */
         200: {
-          schema: definitions["cafeterias"][];
+          schema: definitions["cart_item"][];
         };
         /** Partial Content */
         206: unknown;
@@ -351,8 +255,8 @@ export interface paths {
     post: {
       parameters: {
         body: {
-          /** cafeterias */
-          cafeterias?: definitions["cafeterias"];
+          /** cart_item */
+          cart_item?: definitions["cart_item"];
         };
         query: {
           /** Filtering Columns */
@@ -371,11 +275,11 @@ export interface paths {
     delete: {
       parameters: {
         query: {
-          id?: parameters["rowFilter.cafeterias.id"];
-          name?: parameters["rowFilter.cafeterias.name"];
-          image?: parameters["rowFilter.cafeterias.image"];
-          about?: parameters["rowFilter.cafeterias.about"];
-          owned_by?: parameters["rowFilter.cafeterias.owned_by"];
+          id?: parameters["rowFilter.cart_item.id"];
+          cart_id?: parameters["rowFilter.cart_item.cart_id"];
+          total_price?: parameters["rowFilter.cart_item.total_price"];
+          qty?: parameters["rowFilter.cart_item.qty"];
+          menu_id?: parameters["rowFilter.cart_item.menu_id"];
         };
         header: {
           /** Preference */
@@ -390,15 +294,15 @@ export interface paths {
     patch: {
       parameters: {
         query: {
-          id?: parameters["rowFilter.cafeterias.id"];
-          name?: parameters["rowFilter.cafeterias.name"];
-          image?: parameters["rowFilter.cafeterias.image"];
-          about?: parameters["rowFilter.cafeterias.about"];
-          owned_by?: parameters["rowFilter.cafeterias.owned_by"];
+          id?: parameters["rowFilter.cart_item.id"];
+          cart_id?: parameters["rowFilter.cart_item.cart_id"];
+          total_price?: parameters["rowFilter.cart_item.total_price"];
+          qty?: parameters["rowFilter.cart_item.qty"];
+          menu_id?: parameters["rowFilter.cart_item.menu_id"];
         };
         body: {
-          /** cafeterias */
-          cafeterias?: definitions["cafeterias"];
+          /** cart_item */
+          cart_item?: definitions["cart_item"];
         };
         header: {
           /** Preference */
@@ -411,16 +315,21 @@ export interface paths {
       };
     };
   };
-  "/reviews": {
+  "/user": {
     get: {
       parameters: {
         query: {
-          id?: parameters["rowFilter.reviews.id"];
-          user_id?: parameters["rowFilter.reviews.user_id"];
-          cafe_id?: parameters["rowFilter.reviews.cafe_id"];
-          content?: parameters["rowFilter.reviews.content"];
-          rating?: parameters["rowFilter.reviews.rating"];
-          date?: parameters["rowFilter.reviews.date"];
+          id?: parameters["rowFilter.user.id"];
+          updated_at?: parameters["rowFilter.user.updated_at"];
+          username?: parameters["rowFilter.user.username"];
+          avatar_url?: parameters["rowFilter.user.avatar_url"];
+          firstname?: parameters["rowFilter.user.firstname"];
+          lastname?: parameters["rowFilter.user.lastname"];
+          cafe_owner?: parameters["rowFilter.user.cafe_owner"];
+          address?: parameters["rowFilter.user.address"];
+          phone?: parameters["rowFilter.user.phone"];
+          gender?: parameters["rowFilter.user.gender"];
+          email?: parameters["rowFilter.user.email"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Ordering */
@@ -442,7 +351,7 @@ export interface paths {
       responses: {
         /** OK */
         200: {
-          schema: definitions["reviews"][];
+          schema: definitions["user"][];
         };
         /** Partial Content */
         206: unknown;
@@ -451,8 +360,8 @@ export interface paths {
     post: {
       parameters: {
         body: {
-          /** reviews */
-          reviews?: definitions["reviews"];
+          /** user */
+          user?: definitions["user"];
         };
         query: {
           /** Filtering Columns */
@@ -471,12 +380,17 @@ export interface paths {
     delete: {
       parameters: {
         query: {
-          id?: parameters["rowFilter.reviews.id"];
-          user_id?: parameters["rowFilter.reviews.user_id"];
-          cafe_id?: parameters["rowFilter.reviews.cafe_id"];
-          content?: parameters["rowFilter.reviews.content"];
-          rating?: parameters["rowFilter.reviews.rating"];
-          date?: parameters["rowFilter.reviews.date"];
+          id?: parameters["rowFilter.user.id"];
+          updated_at?: parameters["rowFilter.user.updated_at"];
+          username?: parameters["rowFilter.user.username"];
+          avatar_url?: parameters["rowFilter.user.avatar_url"];
+          firstname?: parameters["rowFilter.user.firstname"];
+          lastname?: parameters["rowFilter.user.lastname"];
+          cafe_owner?: parameters["rowFilter.user.cafe_owner"];
+          address?: parameters["rowFilter.user.address"];
+          phone?: parameters["rowFilter.user.phone"];
+          gender?: parameters["rowFilter.user.gender"];
+          email?: parameters["rowFilter.user.email"];
         };
         header: {
           /** Preference */
@@ -491,16 +405,123 @@ export interface paths {
     patch: {
       parameters: {
         query: {
-          id?: parameters["rowFilter.reviews.id"];
-          user_id?: parameters["rowFilter.reviews.user_id"];
-          cafe_id?: parameters["rowFilter.reviews.cafe_id"];
-          content?: parameters["rowFilter.reviews.content"];
-          rating?: parameters["rowFilter.reviews.rating"];
-          date?: parameters["rowFilter.reviews.date"];
+          id?: parameters["rowFilter.user.id"];
+          updated_at?: parameters["rowFilter.user.updated_at"];
+          username?: parameters["rowFilter.user.username"];
+          avatar_url?: parameters["rowFilter.user.avatar_url"];
+          firstname?: parameters["rowFilter.user.firstname"];
+          lastname?: parameters["rowFilter.user.lastname"];
+          cafe_owner?: parameters["rowFilter.user.cafe_owner"];
+          address?: parameters["rowFilter.user.address"];
+          phone?: parameters["rowFilter.user.phone"];
+          gender?: parameters["rowFilter.user.gender"];
+          email?: parameters["rowFilter.user.email"];
         };
         body: {
-          /** reviews */
-          reviews?: definitions["reviews"];
+          /** user */
+          user?: definitions["user"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
+  "/review": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.review.id"];
+          user_id?: parameters["rowFilter.review.user_id"];
+          cafe_id?: parameters["rowFilter.review.cafe_id"];
+          content?: parameters["rowFilter.review.content"];
+          rating?: parameters["rowFilter.review.rating"];
+          date?: parameters["rowFilter.review.date"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["review"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** review */
+          review?: definitions["review"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.review.id"];
+          user_id?: parameters["rowFilter.review.user_id"];
+          cafe_id?: parameters["rowFilter.review.cafe_id"];
+          content?: parameters["rowFilter.review.content"];
+          rating?: parameters["rowFilter.review.rating"];
+          date?: parameters["rowFilter.review.date"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.review.id"];
+          user_id?: parameters["rowFilter.review.user_id"];
+          cafe_id?: parameters["rowFilter.review.cafe_id"];
+          content?: parameters["rowFilter.review.content"];
+          rating?: parameters["rowFilter.review.rating"];
+          date?: parameters["rowFilter.review.date"];
+        };
+        body: {
+          /** review */
+          review?: definitions["review"];
         };
         header: {
           /** Preference */
@@ -618,20 +639,15 @@ export interface paths {
       };
     };
   };
-  "/users": {
+  "/order_item": {
     get: {
       parameters: {
         query: {
-          id?: parameters["rowFilter.users.id"];
-          updated_at?: parameters["rowFilter.users.updated_at"];
-          username?: parameters["rowFilter.users.username"];
-          avatar_url?: parameters["rowFilter.users.avatar_url"];
-          firstname?: parameters["rowFilter.users.firstname"];
-          lastname?: parameters["rowFilter.users.lastname"];
-          cafe_owner?: parameters["rowFilter.users.cafe_owner"];
-          address?: parameters["rowFilter.users.address"];
-          phone?: parameters["rowFilter.users.phone"];
-          gender?: parameters["rowFilter.users.gender"];
+          id?: parameters["rowFilter.order_item.id"];
+          order_id?: parameters["rowFilter.order_item.order_id"];
+          total_price?: parameters["rowFilter.order_item.total_price"];
+          qty?: parameters["rowFilter.order_item.qty"];
+          menu_id?: parameters["rowFilter.order_item.menu_id"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Ordering */
@@ -653,7 +669,7 @@ export interface paths {
       responses: {
         /** OK */
         200: {
-          schema: definitions["users"][];
+          schema: definitions["order_item"][];
         };
         /** Partial Content */
         206: unknown;
@@ -662,8 +678,8 @@ export interface paths {
     post: {
       parameters: {
         body: {
-          /** users */
-          users?: definitions["users"];
+          /** order_item */
+          order_item?: definitions["order_item"];
         };
         query: {
           /** Filtering Columns */
@@ -682,16 +698,11 @@ export interface paths {
     delete: {
       parameters: {
         query: {
-          id?: parameters["rowFilter.users.id"];
-          updated_at?: parameters["rowFilter.users.updated_at"];
-          username?: parameters["rowFilter.users.username"];
-          avatar_url?: parameters["rowFilter.users.avatar_url"];
-          firstname?: parameters["rowFilter.users.firstname"];
-          lastname?: parameters["rowFilter.users.lastname"];
-          cafe_owner?: parameters["rowFilter.users.cafe_owner"];
-          address?: parameters["rowFilter.users.address"];
-          phone?: parameters["rowFilter.users.phone"];
-          gender?: parameters["rowFilter.users.gender"];
+          id?: parameters["rowFilter.order_item.id"];
+          order_id?: parameters["rowFilter.order_item.order_id"];
+          total_price?: parameters["rowFilter.order_item.total_price"];
+          qty?: parameters["rowFilter.order_item.qty"];
+          menu_id?: parameters["rowFilter.order_item.menu_id"];
         };
         header: {
           /** Preference */
@@ -706,20 +717,15 @@ export interface paths {
     patch: {
       parameters: {
         query: {
-          id?: parameters["rowFilter.users.id"];
-          updated_at?: parameters["rowFilter.users.updated_at"];
-          username?: parameters["rowFilter.users.username"];
-          avatar_url?: parameters["rowFilter.users.avatar_url"];
-          firstname?: parameters["rowFilter.users.firstname"];
-          lastname?: parameters["rowFilter.users.lastname"];
-          cafe_owner?: parameters["rowFilter.users.cafe_owner"];
-          address?: parameters["rowFilter.users.address"];
-          phone?: parameters["rowFilter.users.phone"];
-          gender?: parameters["rowFilter.users.gender"];
+          id?: parameters["rowFilter.order_item.id"];
+          order_id?: parameters["rowFilter.order_item.order_id"];
+          total_price?: parameters["rowFilter.order_item.total_price"];
+          qty?: parameters["rowFilter.order_item.qty"];
+          menu_id?: parameters["rowFilter.order_item.menu_id"];
         };
         body: {
-          /** users */
-          users?: definitions["users"];
+          /** order_item */
+          order_item?: definitions["order_item"];
         };
         header: {
           /** Preference */
@@ -732,15 +738,16 @@ export interface paths {
       };
     };
   };
-  "/orderItems": {
+  "/cafeteria": {
     get: {
       parameters: {
         query: {
-          id?: parameters["rowFilter.orderItems.id"];
-          order_id?: parameters["rowFilter.orderItems.order_id"];
-          total_price?: parameters["rowFilter.orderItems.total_price"];
-          qty?: parameters["rowFilter.orderItems.qty"];
-          menu_id?: parameters["rowFilter.orderItems.menu_id"];
+          id?: parameters["rowFilter.cafeteria.id"];
+          name?: parameters["rowFilter.cafeteria.name"];
+          image?: parameters["rowFilter.cafeteria.image"];
+          about?: parameters["rowFilter.cafeteria.about"];
+          owned_by?: parameters["rowFilter.cafeteria.owned_by"];
+          slug?: parameters["rowFilter.cafeteria.slug"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Ordering */
@@ -762,7 +769,7 @@ export interface paths {
       responses: {
         /** OK */
         200: {
-          schema: definitions["orderItems"][];
+          schema: definitions["cafeteria"][];
         };
         /** Partial Content */
         206: unknown;
@@ -771,8 +778,8 @@ export interface paths {
     post: {
       parameters: {
         body: {
-          /** orderItems */
-          orderItems?: definitions["orderItems"];
+          /** cafeteria */
+          cafeteria?: definitions["cafeteria"];
         };
         query: {
           /** Filtering Columns */
@@ -791,11 +798,12 @@ export interface paths {
     delete: {
       parameters: {
         query: {
-          id?: parameters["rowFilter.orderItems.id"];
-          order_id?: parameters["rowFilter.orderItems.order_id"];
-          total_price?: parameters["rowFilter.orderItems.total_price"];
-          qty?: parameters["rowFilter.orderItems.qty"];
-          menu_id?: parameters["rowFilter.orderItems.menu_id"];
+          id?: parameters["rowFilter.cafeteria.id"];
+          name?: parameters["rowFilter.cafeteria.name"];
+          image?: parameters["rowFilter.cafeteria.image"];
+          about?: parameters["rowFilter.cafeteria.about"];
+          owned_by?: parameters["rowFilter.cafeteria.owned_by"];
+          slug?: parameters["rowFilter.cafeteria.slug"];
         };
         header: {
           /** Preference */
@@ -810,15 +818,16 @@ export interface paths {
     patch: {
       parameters: {
         query: {
-          id?: parameters["rowFilter.orderItems.id"];
-          order_id?: parameters["rowFilter.orderItems.order_id"];
-          total_price?: parameters["rowFilter.orderItems.total_price"];
-          qty?: parameters["rowFilter.orderItems.qty"];
-          menu_id?: parameters["rowFilter.orderItems.menu_id"];
+          id?: parameters["rowFilter.cafeteria.id"];
+          name?: parameters["rowFilter.cafeteria.name"];
+          image?: parameters["rowFilter.cafeteria.image"];
+          about?: parameters["rowFilter.cafeteria.about"];
+          owned_by?: parameters["rowFilter.cafeteria.owned_by"];
+          slug?: parameters["rowFilter.cafeteria.slug"];
         };
         body: {
-          /** orderItems */
-          orderItems?: definitions["orderItems"];
+          /** cafeteria */
+          cafeteria?: definitions["cafeteria"];
         };
         header: {
           /** Preference */
@@ -844,7 +853,7 @@ export interface definitions {
     /**
      * Format: uuid
      * @description Note:
-     * This is a Foreign Key to `users.id`.<fk table='users' column='id'/>
+     * This is a Foreign Key to `user.id`.<fk table='user' column='id'/>
      */
     user_id: string;
     /**
@@ -853,7 +862,7 @@ export interface definitions {
      */
     date: string;
     /** Format: numeric */
-    amount?: number;
+    amount: number;
     /**
      * Format: character varying
      * @default processing
@@ -864,12 +873,41 @@ export interface definitions {
     /**
      * Format: bigint
      * @description Note:
-     * This is a Foreign Key to `cafeterias.id`.<fk table='cafeterias' column='id'/>
+     * This is a Foreign Key to `cafeteria.id`.<fk table='cafeteria' column='id'/>
      */
-    cafe_id?: number;
+    cafe_id: number;
   };
-  /** @description This is a duplicate copy of cartDetails */
-  cartItems: {
+  cart: {
+    /**
+     * Format: integer
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    /**
+     * Format: uuid
+     * @description Note:
+     * This is a Foreign Key to `user.id`.<fk table='user' column='id'/>
+     */
+    user_id: string;
+    /**
+     * Format: numeric
+     * @default 0
+     */
+    totalAmount: number;
+    /**
+     * Format: integer
+     * @description Note:
+     * This is a Foreign Key to `cafeteria.id`.<fk table='cafeteria' column='id'/>
+     */
+    cafe_id: number;
+    /**
+     * Format: timestamp without time zone
+     * @default now()
+     */
+    createdAt: string;
+  };
+  cart_item: {
     /**
      * Format: integer
      * @description Note:
@@ -883,9 +921,12 @@ export interface definitions {
      */
     cart_id: number;
     /** Format: numeric */
-    total_price?: number;
-    /** Format: integer */
-    qty?: number;
+    total_price: number;
+    /**
+     * Format: integer
+     * @default 1
+     */
+    qty: number;
     /**
      * Format: integer
      * @description Note:
@@ -893,104 +934,7 @@ export interface definitions {
      */
     menu_id: number;
   };
-  /** @description This is a duplicate copy of cart */
-  cart: {
-    /**
-     * Format: integer
-     * @description Note:
-     * This is a Primary Key.<pk/>
-     */
-    id: number;
-    /**
-     * Format: uuid
-     * @description Note:
-     * This is a Foreign Key to `users.id`.<fk table='users' column='id'/>
-     */
-    user_id: string;
-    /**
-     * Format: numeric
-     * @default 0
-     */
-    totalAmount: number;
-    /**
-     * Format: integer
-     * @description Note:
-     * This is a Foreign Key to `cafeterias.id`.<fk table='cafeterias' column='id'/>
-     */
-    cafe_id?: number;
-  };
-  cafeterias: {
-    /**
-     * Format: integer
-     * @description Note:
-     * This is a Primary Key.<pk/>
-     */
-    id: number;
-    /** Format: character varying */
-    name?: string;
-    /** Format: character varying */
-    image?: string;
-    /** Format: character varying */
-    about?: string;
-    /**
-     * Format: uuid
-     * @description Note:
-     * This is a Foreign Key to `users.id`.<fk table='users' column='id'/>
-     */
-    owned_by?: string;
-  };
-  reviews: {
-    /** Format: integer */
-    id: number;
-    /**
-     * Format: uuid
-     * @description Note:
-     * This is a Primary Key.<pk/>
-     * This is a Foreign Key to `users.id`.<fk table='users' column='id'/>
-     */
-    user_id: string;
-    /**
-     * Format: integer
-     * @description Note:
-     * This is a Primary Key.<pk/>
-     * This is a Foreign Key to `cafeterias.id`.<fk table='cafeterias' column='id'/>
-     */
-    cafe_id: number;
-    /** Format: text */
-    content: string;
-    /** Format: integer */
-    rating: number;
-    /**
-     * Format: timestamp with time zone
-     * @default now()
-     */
-    date?: string;
-  };
-  menu: {
-    /**
-     * Format: integer
-     * @description Note:
-     * This is a Primary Key.<pk/>
-     */
-    id: number;
-    /** Format: character varying */
-    name: string;
-    /** Format: text */
-    description?: string;
-    /** Format: numeric */
-    price?: number;
-    /** Format: text */
-    image?: string;
-    /** Format: boolean */
-    available?: boolean;
-    /**
-     * Format: integer
-     * @description Note:
-     * This is a Foreign Key to `cafeterias.id`.<fk table='cafeterias' column='id'/>
-     */
-    cafe_id?: number;
-  };
-  users: {
+  user: {
     /**
      * Format: uuid
      * @description Note:
@@ -1018,8 +962,64 @@ export interface definitions {
     phone?: string;
     /** Format: text */
     gender?: string;
+    /** Format: character varying */
+    email?: string;
   };
-  orderItems: {
+  review: {
+    /** Format: integer */
+    id: number;
+    /**
+     * Format: uuid
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     * This is a Foreign Key to `user.id`.<fk table='user' column='id'/>
+     */
+    user_id: string;
+    /**
+     * Format: integer
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     * This is a Foreign Key to `cafeteria.id`.<fk table='cafeteria' column='id'/>
+     */
+    cafe_id: number;
+    /** Format: text */
+    content: string;
+    /** Format: integer */
+    rating: number;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    date: string;
+  };
+  menu: {
+    /**
+     * Format: integer
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    /** Format: character varying */
+    name: string;
+    /** Format: text */
+    description?: string;
+    /** Format: numeric */
+    price: number;
+    /** Format: text */
+    image: string;
+    /**
+     * Format: boolean
+     * @default true
+     */
+    available?: boolean;
+    /**
+     * Format: integer
+     * @description Note:
+     * This is a Foreign Key to `cafeteria.id`.<fk table='cafeteria' column='id'/>
+     */
+    cafe_id: number;
+  };
+  order_item: {
     /**
      * Format: integer
      * @description Note:
@@ -1041,7 +1041,29 @@ export interface definitions {
      * @description Note:
      * This is a Foreign Key to `menu.id`.<fk table='menu' column='id'/>
      */
-    menu_id?: number;
+    menu_id: number;
+  };
+  cafeteria: {
+    /**
+     * Format: integer
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    /** Format: character varying */
+    name: string;
+    /** Format: character varying */
+    image: string;
+    /** Format: character varying */
+    about?: string;
+    /**
+     * Format: uuid
+     * @description Note:
+     * This is a Foreign Key to `user.id`.<fk table='user' column='id'/>
+     */
+    owned_by?: string;
+    /** Format: character varying */
+    slug: string;
   };
 }
 
@@ -1094,18 +1116,6 @@ export interface parameters {
   "rowFilter.order.payment_ref": string;
   /** Format: bigint */
   "rowFilter.order.cafe_id": string;
-  /** @description cartItems */
-  "body.cartItems": definitions["cartItems"];
-  /** Format: integer */
-  "rowFilter.cartItems.id": string;
-  /** Format: integer */
-  "rowFilter.cartItems.cart_id": string;
-  /** Format: numeric */
-  "rowFilter.cartItems.total_price": string;
-  /** Format: integer */
-  "rowFilter.cartItems.qty": string;
-  /** Format: integer */
-  "rowFilter.cartItems.menu_id": string;
   /** @description cart */
   "body.cart": definitions["cart"];
   /** Format: integer */
@@ -1116,32 +1126,58 @@ export interface parameters {
   "rowFilter.cart.totalAmount": string;
   /** Format: integer */
   "rowFilter.cart.cafe_id": string;
-  /** @description cafeterias */
-  "body.cafeterias": definitions["cafeterias"];
+  /** Format: timestamp without time zone */
+  "rowFilter.cart.createdAt": string;
+  /** @description cart_item */
+  "body.cart_item": definitions["cart_item"];
   /** Format: integer */
-  "rowFilter.cafeterias.id": string;
-  /** Format: character varying */
-  "rowFilter.cafeterias.name": string;
-  /** Format: character varying */
-  "rowFilter.cafeterias.image": string;
-  /** Format: character varying */
-  "rowFilter.cafeterias.about": string;
+  "rowFilter.cart_item.id": string;
+  /** Format: integer */
+  "rowFilter.cart_item.cart_id": string;
+  /** Format: numeric */
+  "rowFilter.cart_item.total_price": string;
+  /** Format: integer */
+  "rowFilter.cart_item.qty": string;
+  /** Format: integer */
+  "rowFilter.cart_item.menu_id": string;
+  /** @description user */
+  "body.user": definitions["user"];
   /** Format: uuid */
-  "rowFilter.cafeterias.owned_by": string;
-  /** @description reviews */
-  "body.reviews": definitions["reviews"];
-  /** Format: integer */
-  "rowFilter.reviews.id": string;
-  /** Format: uuid */
-  "rowFilter.reviews.user_id": string;
-  /** Format: integer */
-  "rowFilter.reviews.cafe_id": string;
-  /** Format: text */
-  "rowFilter.reviews.content": string;
-  /** Format: integer */
-  "rowFilter.reviews.rating": string;
+  "rowFilter.user.id": string;
   /** Format: timestamp with time zone */
-  "rowFilter.reviews.date": string;
+  "rowFilter.user.updated_at": string;
+  /** Format: text */
+  "rowFilter.user.username": string;
+  /** Format: text */
+  "rowFilter.user.avatar_url": string;
+  /** Format: character varying */
+  "rowFilter.user.firstname": string;
+  /** Format: character varying */
+  "rowFilter.user.lastname": string;
+  /** Format: boolean */
+  "rowFilter.user.cafe_owner": string;
+  /** Format: text */
+  "rowFilter.user.address": string;
+  /** Format: text */
+  "rowFilter.user.phone": string;
+  /** Format: text */
+  "rowFilter.user.gender": string;
+  /** Format: character varying */
+  "rowFilter.user.email": string;
+  /** @description review */
+  "body.review": definitions["review"];
+  /** Format: integer */
+  "rowFilter.review.id": string;
+  /** Format: uuid */
+  "rowFilter.review.user_id": string;
+  /** Format: integer */
+  "rowFilter.review.cafe_id": string;
+  /** Format: text */
+  "rowFilter.review.content": string;
+  /** Format: integer */
+  "rowFilter.review.rating": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.review.date": string;
   /** @description menu */
   "body.menu": definitions["menu"];
   /** Format: integer */
@@ -1158,40 +1194,32 @@ export interface parameters {
   "rowFilter.menu.available": string;
   /** Format: integer */
   "rowFilter.menu.cafe_id": string;
-  /** @description users */
-  "body.users": definitions["users"];
-  /** Format: uuid */
-  "rowFilter.users.id": string;
-  /** Format: timestamp with time zone */
-  "rowFilter.users.updated_at": string;
-  /** Format: text */
-  "rowFilter.users.username": string;
-  /** Format: text */
-  "rowFilter.users.avatar_url": string;
-  /** Format: character varying */
-  "rowFilter.users.firstname": string;
-  /** Format: character varying */
-  "rowFilter.users.lastname": string;
-  /** Format: boolean */
-  "rowFilter.users.cafe_owner": string;
-  /** Format: text */
-  "rowFilter.users.address": string;
-  /** Format: text */
-  "rowFilter.users.phone": string;
-  /** Format: text */
-  "rowFilter.users.gender": string;
-  /** @description orderItems */
-  "body.orderItems": definitions["orderItems"];
+  /** @description order_item */
+  "body.order_item": definitions["order_item"];
   /** Format: integer */
-  "rowFilter.orderItems.id": string;
+  "rowFilter.order_item.id": string;
   /** Format: integer */
-  "rowFilter.orderItems.order_id": string;
+  "rowFilter.order_item.order_id": string;
   /** Format: numeric */
-  "rowFilter.orderItems.total_price": string;
+  "rowFilter.order_item.total_price": string;
   /** Format: integer */
-  "rowFilter.orderItems.qty": string;
+  "rowFilter.order_item.qty": string;
   /** Format: bigint */
-  "rowFilter.orderItems.menu_id": string;
+  "rowFilter.order_item.menu_id": string;
+  /** @description cafeteria */
+  "body.cafeteria": definitions["cafeteria"];
+  /** Format: integer */
+  "rowFilter.cafeteria.id": string;
+  /** Format: character varying */
+  "rowFilter.cafeteria.name": string;
+  /** Format: character varying */
+  "rowFilter.cafeteria.image": string;
+  /** Format: character varying */
+  "rowFilter.cafeteria.about": string;
+  /** Format: uuid */
+  "rowFilter.cafeteria.owned_by": string;
+  /** Format: character varying */
+  "rowFilter.cafeteria.slug": string;
 }
 
 export interface operations {}

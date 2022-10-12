@@ -14,7 +14,7 @@ import { useState } from "react";
 import { useAuth } from "~context/AuthContext";
 import { supabase } from "~lib/api";
 
-const AddReview = ({ cafe, userReview }) => {
+const AddReview = ({ cafeId, userReview }) => {
   const [rating, setRating] = useState(userReview?.rating || 0);
   const [content, setContent] = useState(userReview?.content || "");
   const { user } = useAuth();
@@ -25,7 +25,7 @@ const AddReview = ({ cafe, userReview }) => {
     async () => {
       const { data, error } = await supabase
         .from("reviews")
-        .upsert([{ content, rating, cafe_id: cafe.id, user_id: user.id }]);
+        .upsert([{ content, rating, cafe_id: cafeId, user_id: user.id }]);
     },
     {
       onSuccess: () => {
