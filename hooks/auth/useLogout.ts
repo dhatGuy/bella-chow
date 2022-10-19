@@ -1,5 +1,4 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import Router from "next/router";
 import { supabase } from "~lib/api";
 
 const signOut = async () => {
@@ -15,7 +14,6 @@ export default function useLogout() {
   return useMutation(() => signOut(), {
     onSuccess: () => {
       queryClient.removeQueries();
-      Router.push("/");
     },
   });
 }

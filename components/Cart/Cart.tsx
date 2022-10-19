@@ -1,10 +1,14 @@
+// TODO: fix paystack type
+// @ts-nocheck
+
 import {
   Box,
   Button,
-  Flex,
+  chakra,
+  Divider,
   Grid,
+  HStack,
   Icon,
-  StackDivider,
   Text,
   VStack,
 } from "@chakra-ui/react";
@@ -24,25 +28,30 @@ interface CartProps {
 }
 
 const Cart = ({ cafe }: CartProps) => {
-  const { data: user } = useUser();
+  const user = useUser();
   const clearCartMutation = useClearCart(cafe.id);
   const createOrderMutation = useCreateOrder(cafe.id);
   const [isProcessing, setIsProcessing] = useState(false);
-  const { data: cart } = useGetCart(cafe.id);
+  const cart = useGetCart(cafe.id);
 
   const config: PaystackProps = {
-    // TODO: add email key to user
-    email: user?.email,
-    amount: Number((cart?.totalAmount * 100).toFixed(2)),
+    email: user.data?.email,
+    amount: Number((cart.data?.totalAmount * 100).toFixed(2)),
     publicKey: process.env.NEXT_PUBLIC_PAYSTACK_KEY as string,
   };
   const initializePayment = usePaystackPayment(config);
 
+  // if (user.isLoading || cart.isLoading) return <Spinner />;
+
+  // if (user.isError || cart.isError) {
+  //   return null;
+  // }
+
   const onSuccess = (res) => {
     createOrderMutation.mutate({
-      amount: cart.totalAmount,
+      amount: cart.data.totalAmount,
       paymentRef: res.reference,
-      userId: user.id,
+      userId: user.data.id,
     });
     setIsProcessing(false);
   };
@@ -52,23 +61,28 @@ const Cart = ({ cafe }: CartProps) => {
     setIsProcessing(true);
   };
   return (
-    <Box position="sticky" top="5" h="70vh" mt="5">
+    <Box
+      position="sticky"
+      top={"0"}
+      h="100vh"
+      display={{ base: "none", lg: "initial" }}
+      flexBasis={{ base: "100%", lg: "30%" }}
+    >
       <Grid
-        templateRows="auto 30rem auto"
+        templateRows="auto 30em auto"
         position="relative"
         overflow="auto"
-        boxShadow="lg"
-        p="2"
+        boxShadow="md"
+        py="4"
+        px="6"
       >
-        <Text
-          size="lg"
-          fontSize={"4xl"}
-          mb="2"
-          borderBottom="2px"
-          borderBottomColor="gray.300"
-        >
-          Order from {cafe.name}
-        </Text>
+        <VStack align={"flex-start"} py={2}>
+          <Text fontSize={"xs"} fontWeight="medium">
+            ORDER FROM <br />
+            <chakra.span fontSize={"md"}>{cafe.name}</chakra.span>
+          </Text>
+          <Divider />
+        </VStack>
 
         <VStack
           direction="column"
@@ -76,41 +90,44 @@ const Cart = ({ cafe }: CartProps) => {
           spacing="2"
           align="stretch"
           h="100%"
-          divider={<StackDivider borderColor="gray.200" />}
         >
-          {!cart?.cartItems?.length ? (
+          {!cart.data?.cartItems?.length ? (
             <VStack align="center" h="100%" justify="center">
               <Icon as={FiShoppingCart} w={20} h={20} />
               <Text>You have no item in your cart</Text>
             </VStack>
           ) : (
-            cart?.cartItems.map((item) => (
+            cart.data?.cartItems.map((item) => (
               <CartItem cartItem={item} cafeId={cafe.id} key={item.id} />
             ))
           )}
         </VStack>
-        <Flex justify="space-between" align="center" w="100%">
-          <Text fontWeight="bold">Total: ₦{cart?.totalAmount || 0}</Text>
-          <Box mt="4">
+        <VStack justify="space-between" align="center">
+          <HStack w="full" justify={"space-between"}>
+            <Text fontWeight="bold">Total</Text>
+            <Text>₦{cart.data?.totalAmount.toFixed(2)}</Text>
+          </HStack>
+          <Divider />
+          <HStack justify={"space-between"} w="full">
             <Button
-              disabled={!cart?.cartItems.length || isProcessing}
+              disabled={!cart.data?.cartItems.length || isProcessing}
               variant="outline"
               mr={3}
-              onClick={() => clearCartMutation.mutate(cart!.id)}
+              onClick={() => clearCartMutation.mutate(cart.data!.id)}
             >
               Clear
             </Button>
             <Button
               colorScheme="blue"
               onClick={initiatePayment}
-              disabled={!cart?.cartItems.length || isProcessing}
-              isLoading={isProcessing}
+              disabled={!cart.data?.cartItems.length || isProcessing}
+              isLoading={createOrderMutation.isLoading}
               loadingText="Processing"
             >
               Checkout
             </Button>
-          </Box>
-        </Flex>
+          </HStack>
+        </VStack>
       </Grid>
     </Box>
   );

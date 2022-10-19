@@ -1,26 +1,26 @@
 import { Center, Spinner } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { useAuth } from "~context/AuthContext";
+import useUser from "~hooks/auth/useUser";
 
 const WithCafeAuth = (Component) => {
   const MyComponent = (props) => {
-    const { loading, user } = useAuth();
+    const { isLoading, data: user } = useUser();
     const router = useRouter();
 
     useEffect(() => {
-      if (!loading && !user) {
+      if (!isLoading && !user) {
         return router.push({
           pathname: "/login",
           query: { from: router.pathname },
         });
       }
-      if (!loading && !user?.cafe_owner) {
+      if (!isLoading && !user?.cafe_owner) {
         return router.push({
           pathname: "/",
         });
       }
-    }, [user, loading, router]);
+    }, [user, isLoading, router]);
 
     if (user) {
       return <Component {...props} />;

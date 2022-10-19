@@ -47,7 +47,9 @@ const Order = () => {
                 );
               })
             ) : (
-              <p>No order yet</p>
+              <Tr>
+                <Td colSpan={4}>No order yet</Td>
+              </Tr>
             )}
           </Tbody>
         </Table>

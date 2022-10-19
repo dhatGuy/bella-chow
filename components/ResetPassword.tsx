@@ -1,3 +1,6 @@
+// @ts-nocheck
+// TODO: remove ts-nocheck
+
 import {
   Button,
   FormControl,
@@ -16,13 +19,18 @@ import {
 import { useRef } from "react";
 import useResetPassword from "~hooks/auth/useResetPassword";
 
-export default function ResetPassword({ isOpen, onClose }) {
+interface ResetPasswordProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export default function ResetPassword({ isOpen, onClose }: ResetPasswordProps) {
   const resetPasswordMutation = useResetPassword();
-  const emailRef = useRef();
+  const emailRef = useRef<HTMLInputElement>();
   const toast = useToast();
 
   const onReset = async () => {
-    const email = emailRef.current?.value;
+    const email = emailRef.current!.value;
     resetPasswordMutation.mutate(
       { email },
       {

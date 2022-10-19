@@ -1,8 +1,9 @@
 import { Box, Flex } from "@chakra-ui/react";
+import { FC, PropsWithChildren } from "react";
 import Sidebar from "~components/dashboard/Sidebar";
 import Layout from "./Layout";
 
-const AdminLayout = ({ children }) => {
+const AdminLayout: FC<PropsWithChildren> = ({ children }) => {
   return (
     <Layout>
       <Flex

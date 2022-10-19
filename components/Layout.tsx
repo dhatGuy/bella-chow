@@ -1,12 +1,12 @@
-import { Box } from "@chakra-ui/react";
+import { FC, PropsWithChildren } from "react";
 import NavBar from "./NavBar";
 
-const Layout = ({ children }) => {
+const Layout: FC<PropsWithChildren> = ({ children }) => {
   return (
-    <Box>
+    <>
       <NavBar />
       {children}
-    </Box>
+    </>
   );
 };
 

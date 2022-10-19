@@ -9,51 +9,54 @@ import {
   Textarea,
   VStack,
 } from "@chakra-ui/react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
-import { useAuth } from "~context/AuthContext";
-import { supabase } from "~lib/api";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import useUser from "~hooks/auth/useUser";
+import useAddReview from "~hooks/review/useAddReview";
+import { ReviewWithUserAndCafeteria } from "~types/types";
 
-const AddReview = ({ cafeId, userReview }) => {
+interface AddReviewProps {
+  cafeId: number;
+  userReview: ReviewWithUserAndCafeteria | null;
+}
+
+const AddReview = ({ cafeId, userReview }: AddReviewProps) => {
+  const { data: user } = useUser();
+  const addReviewMutation = useAddReview();
   const [rating, setRating] = useState(userReview?.rating || 0);
   const [content, setContent] = useState(userReview?.content || "");
-  const { user } = useAuth();
-  const [error, setError] = useState(null);
-  const queryClient = useQueryClient();
 
-  const mutation = useMutation(
-    async () => {
-      const { data, error } = await supabase
-        .from("reviews")
-        .upsert([{ content, rating, cafe_id: cafeId, user_id: user.id }]);
-    },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries("reviews");
-      },
-    }
-  );
+  useEffect(() => {
+    setRating(userReview?.rating || 0);
+    setContent(userReview?.content || "");
+  }, [userReview]);
 
-  const onSave = async (e) => {
+  const onSave = (e: FormEvent<HTMLInputElement>): void => {
     e.preventDefault();
-    setError(null);
-    if (!content || !rating) {
-      setError("All fields required");
-      return;
-    }
-    mutation.mutate();
+
+    if (!user) return;
+
+    addReviewMutation.mutate({
+      cafeId,
+      rating,
+      content,
+      userId: user.id,
+    });
   };
+
   return (
     <Box p={2}>
-      <form onSubmit={onSave}>
-        <VStack align="stretch">
+      <VStack as="form" onSubmit={onSave}>
+        <>
           <Heading as="h5">Your review about this cafe</Heading>
           <FormControl>
             <FormLabel>Rate your experience</FormLabel>
             <Select
-              placeholder="Select option"
+              title="Rating"
+              placeholder="Select a rating"
               value={rating}
-              onChange={(e) => setRating(e.target.value)}
+              onChange={(e: ChangeEvent<HTMLSelectElement>): void =>
+                setRating(Number(e.currentTarget.value))
+              }
             >
               <option value={1}>1</option>
               <option value={2}>2</option>
@@ -71,22 +74,22 @@ const AddReview = ({ cafeId, userReview }) => {
               onChange={(e) => setContent(e.target.value)}
             />
           </FormControl>
-          {error && (
+          {addReviewMutation.error && (
             <Text color="red" as="i">
-              {error}
+              Could not add review
             </Text>
           )}
           <Button
             mt="2"
             colorScheme="blue"
             type="submit"
-            isLoading={mutation.isLoading}
+            isLoading={addReviewMutation.isLoading}
             loadingText="Saving..."
           >
             Save
           </Button>
-        </VStack>
-      </form>
+        </>
+      </VStack>
     </Box>
   );
 };

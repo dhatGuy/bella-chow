@@ -1,10 +1,10 @@
 import { Avatar, Flex, Icon, Link, Text } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { FiBox, FiDollarSign, FiHome, FiPieChart } from "react-icons/fi";
-import { useAuth } from "~context/AuthContext";
+import useUser from "~hooks/auth/useUser";
 
 const Sidebar = () => {
-  const { user } = useAuth();
+  const { data: user } = useUser();
   return (
     <Flex
       w={["100%", "100%", "10%", "15%", "15%"]}

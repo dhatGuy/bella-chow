@@ -1,17 +1,24 @@
+import { useRouter } from "next/router";
 import CafeteriaDetails from "~components/Cafeterias/CafeteriaDetails";
+import useGetCafe from "~hooks/cafe/useGetCafe";
 import { supabase } from "~lib/api";
+import { NextPageWithLayout } from "~pages/_app";
 import { Cafeteria, CafeteriaWithMenuAndReviews } from "~types/types";
 
 interface CafeProps {
   cafeteria: CafeteriaWithMenuAndReviews;
 }
 
-const Cafe = ({ cafeteria }: CafeProps) => {
-  return (
-    <div>
-      <CafeteriaDetails cafe={cafeteria} />
-    </div>
+const Cafe: NextPageWithLayout<CafeProps> = ({ cafeteria }) => {
+  const router = useRouter();
+  const { data: cafe, isLoading } = useGetCafe(
+    router.query.slug as string,
+    cafeteria
   );
+
+  // if (isLoading) return <Spinner />;
+
+  return <CafeteriaDetails cafe={cafe} />;
 };
 
 export default Cafe;
@@ -36,7 +43,12 @@ export const getStaticProps = async (ctx) => {
   const slug = ctx.params.slug;
   const { data: cafeteria, error } = await supabase
     .from<CafeteriaWithMenuAndReviews>("cafeteria")
-    .select("*, menus:menu(*), reviews:review(*)")
+    .select(
+      `*, 
+      menuCategories:menu_category(*, menus:menu(*)), 
+      menus:menu(*), 
+      reviews:review(*)`
+    )
     .eq("slug", slug)
     .single();
 

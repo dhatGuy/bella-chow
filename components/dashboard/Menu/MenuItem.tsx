@@ -12,6 +12,8 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 
+// @ts-ignore
+// TODO: remove ts-ignore
 const MenuItem = ({ menu, onDelete }) => {
   const { image, description, name, price, available, id } = menu;
   const router = useRouter();
@@ -22,7 +24,7 @@ const MenuItem = ({ menu, onDelete }) => {
         <Image w="full" h="200px" objectFit="cover" src={image} alt={name} />
       </Box>
 
-      <Stack d="flex" spacing={6} p={6} justify="space-between">
+      <Stack display="flex" spacing={6} p={6} justify="space-between">
         <Box>
           <Badge
             borderRadius="full"
@@ -44,7 +46,12 @@ const MenuItem = ({ menu, onDelete }) => {
             {description}
           </Text>
         </Box>
-        <Box d="flex" mt="2" alignItems="center" justifyContent="space-between">
+        <Box
+          display="flex"
+          mt="2"
+          alignItems="center"
+          justifyContent="space-between"
+        >
           <Text>₦{price}</Text>
           <Menu>
             <MenuButton as={Button}>...</MenuButton>

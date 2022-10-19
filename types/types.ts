@@ -8,11 +8,15 @@ export type CartItem = definitions["cart_item"];
 export type Review = definitions["review"];
 export type Cart = definitions["cart"];
 export type OrderItem = definitions["order_item"];
+export type MenuCategory = definitions["menu_category"];
+export type MenuOption = definitions["menu_option"];
+export type MenuOptionItem = definitions["menu_option_item"];
 
 export type CafeteriaWithReviews = Cafeteria & {
   reviews: Review[];
 };
 export type CafeteriaWithMenuAndReviews = Cafeteria & {
+  menuCategories: MenuCategoryWithMenu[];
   menus: Menu[];
   reviews: Review[];
 };
@@ -44,4 +48,8 @@ export type OrderWithOrderItems = Order & {
 
 export type OrderWithItemsAndMenu = Order & {
   items: OrderItemWithMenu[];
+};
+
+export type MenuCategoryWithMenu = MenuCategory & {
+  menus: Menu[];
 };

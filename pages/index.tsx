@@ -5,7 +5,6 @@ import {
   Flex,
   Heading,
   Icon,
-  Link,
   SimpleGrid,
   Stack,
   Text,
@@ -17,7 +16,15 @@ import { IoFastFoodOutline } from "react-icons/io5";
 import Lottie from "react-lottie";
 import useUser from "~hooks/auth/useUser";
 
-const Feature = ({ title, text, icon }) => {
+const Feature = ({
+  title,
+  text,
+  icon,
+}: {
+  title: string;
+  text: string;
+  icon: React.ReactNode;
+}) => {
   return (
     <Stack align="center">
       <Flex
@@ -74,7 +81,6 @@ export default function Homepage() {
         <Stack spacing={6} direction={"row"}>
           <NextLink href="/cafeterias" passHref>
             <Button
-              as={Link}
               rounded={"full"}
               px={6}
               bg={"orange.400"}
@@ -85,7 +91,7 @@ export default function Homepage() {
           </NextLink>
           {isError && (
             <NextLink href="/login" passHref>
-              <Button as={Link} rounded={"full"} px={6}>
+              <Button rounded={"full"} px={6}>
                 Login
               </Button>
             </NextLink>

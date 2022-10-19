@@ -6,40 +6,26 @@ import {
   Table,
   TableCaption,
   Tag,
+  Tbody,
   Td,
   Text,
   Th,
   Thead,
   Tr,
 } from "@chakra-ui/react";
-import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import Moment from "react-moment";
+import Spinner from "~components/Spinner";
 import WithAuth from "~components/WithAuth";
+import useGetOrder from "~hooks/order/useGetOrder";
 import { supabase } from "~lib/api";
 import { OrderWithItemsAndMenu } from "~types/types";
 
 const Order = ({ data }: { data: OrderWithItemsAndMenu }) => {
   const router = useRouter();
+  const { data: order, isLoading } = useGetOrder(data, Number(router.query.id));
 
-  const fetchOrder = async () => {
-    const { data, error } = await supabase
-      .from<OrderWithItemsAndMenu>("order")
-      .select(
-        `
-        *, items:order_item(*, menu(*))
-      `
-      )
-      .eq("id", router.query.id)
-      .single();
-    if (error) {
-      throw new Error(error);
-    }
-    return data;
-  };
-  const { data: order } = useQuery(["order", data.id], fetchOrder, {
-    initialData: data,
-  });
+  if (isLoading) return <Spinner />;
 
   return (
     <Box>
@@ -65,34 +51,35 @@ const Order = ({ data }: { data: OrderWithItemsAndMenu }) => {
               <Th isNumeric>Price</Th>
             </Tr>
           </Thead>
-
-          {order?.items.map((item) => (
-            <Tr key={item.id}>
-              <Td>
-                <Flex
-                  flexDir={["column", "column", "row"]}
-                  align={{ base: "stretch" }}
-                >
-                  <Image
-                    mr="2"
-                    objectFit="cover"
-                    w={["100%", "250px"]}
-                    h="150px"
-                    alt={item.menu.name}
-                    src={item.menu.image}
-                  />
-                  <Box>
-                    <Text fontWeight="bold" fontSize="xl">
-                      {item.menu.name}
-                    </Text>
-                    <Text>{item.menu.price}</Text>
-                  </Box>
-                </Flex>
-              </Td>
-              <Td isNumeric>{item.qty}</Td>
-              <Td isNumeric>₦{item.total_price}</Td>
-            </Tr>
-          ))}
+          <Tbody>
+            {order?.items.map((item) => (
+              <Tr key={item.id}>
+                <Td>
+                  <Flex
+                    flexDir={["column", "column", "row"]}
+                    align={{ base: "stretch" }}
+                  >
+                    <Image
+                      mr="2"
+                      objectFit="cover"
+                      w={["100%", "250px"]}
+                      h="150px"
+                      alt={item.menu.name}
+                      src={item.menu.image}
+                    />
+                    <Box>
+                      <Text fontWeight="bold" fontSize="xl">
+                        {item.menu.name}
+                      </Text>
+                      <Text>{item.menu.price}</Text>
+                    </Box>
+                  </Flex>
+                </Td>
+                <Td isNumeric>{item.qty}</Td>
+                <Td isNumeric>₦{item.total_price}</Td>
+              </Tr>
+            ))}
+          </Tbody>
         </Table>
       </Box>
     </Box>

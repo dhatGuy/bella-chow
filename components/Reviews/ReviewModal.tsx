@@ -3,18 +3,18 @@ import Review from "./Review";
 
 import {
   Box,
+  Center,
   Grid,
   Modal,
   ModalCloseButton,
   ModalContent,
   ModalHeader,
   ModalOverlay,
+  Spinner,
   Text,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
 import useUser from "~hooks/auth/useUser";
 import useGetReviews from "~hooks/review/useGetReviews";
-import { Review as ReviewType } from "~types/types";
 
 interface ReviewModalProps {
   isOpen: boolean;
@@ -27,25 +27,17 @@ export default function ReviewModal({
   onClose,
   cafeId,
 }: ReviewModalProps) {
-  const [userReview, setUserReview] = useState<ReviewType | null>(null);
-  const { data: user } = useUser();
   const { data: reviews, isLoading } = useGetReviews(cafeId, isOpen);
+  const { data: user } = useUser();
 
-  useEffect(() => {
-    setUserReview(
-      reviews?.find((review) => review.user_id === user?.id) || null
-    );
-  }, [reviews, user]);
-
-  if (isLoading) {
-    return null;
-  }
+  let userReview =
+    reviews?.find((review) => review.user_id === user?.id) || null;
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="lg">
       <ModalOverlay />
       <ModalContent as={Grid}>
-        <ModalHeader>Reviews({reviews?.length})</ModalHeader>
+        <ModalHeader>Reviews({reviews?.length || 0})</ModalHeader>
         <ModalCloseButton />
         <Box
           style={{
@@ -55,7 +47,11 @@ export default function ReviewModal({
           p="4"
           boxShadow="md"
         >
-          {!reviews?.length ? (
+          {!!isLoading ? (
+            <Center>
+              <Spinner />
+            </Center>
+          ) : !reviews?.length ? (
             <Text>Ratings are still coming in</Text>
           ) : (
             reviews.map((review) => (

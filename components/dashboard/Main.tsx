@@ -14,10 +14,9 @@ import {
 } from "@chakra-ui/react";
 import useCafeOrders from "hooks/useCafeOrders";
 import Moment from "react-moment";
-import { useAuth } from "~context/AuthContext";
 
-const Main = ({ display, changeDisplay }) => {
-  const { user } = useAuth();
+const Main = () => {
+  // const { user } = useUser();
   const { data, isLoading, error } = useCafeOrders();
 
   const totalBalance = data
@@ -87,7 +86,8 @@ const Main = ({ display, changeDisplay }) => {
                   <Td>{order.user.username}</Td>
                   <Td>
                     <AvatarGroup size="md" max={2}>
-                      {order.menu?.map((menu) => (
+                      {/* TODO: change type */}
+                      {order.menu?.map((menu: any) => (
                         <Avatar
                           key={menu.id}
                           name={menu.name}

@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import Router from "next/router";
+import { useRouter } from "next/router";
 import { supabase } from "~lib/api";
 
 interface LoginProps {
@@ -8,6 +8,7 @@ interface LoginProps {
 }
 
 const useLogin = () => {
+  const Router = useRouter();
   const login = async ({ email, password }: LoginProps) => {
     try {
       let { user, error } = await supabase.auth.signIn({

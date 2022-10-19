@@ -1,15 +1,5 @@
-import { AddIcon } from "@chakra-ui/icons";
-import {
-  Badge,
-  Box,
-  Button,
-  Image,
-  Stack,
-  Text,
-  useToast,
-} from "@chakra-ui/react";
+import { Image, ListItem, Text, VStack } from "@chakra-ui/react";
 import Router from "next/router";
-import useUser from "~hooks/auth/useUser";
 import useAddToCart from "~hooks/cart/useAddToCart";
 import { Menu } from "~types/types";
 
@@ -19,64 +9,41 @@ interface MenuItemProps {
 
 const MenuItem = ({ menu }: MenuItemProps) => {
   const { image, description, name, price, available, id, cafe_id } = menu;
-  const { data: user } = useUser();
   const addToCartMutation = useAddToCart(cafe_id as number);
-  const toast = useToast();
 
   const showDetails = () => Router.push("/menus/" + id);
 
   const addToCart = async () => {
+    // if (!available) return;
     addToCartMutation.mutate({ menu });
   };
 
   return (
-    <Box maxW="sm" borderWidth="1px" borderRadius="lg" overflow="hidden">
-      <Box w="full">
-        <Image w="full" h="200px" objectFit="cover" src={image} alt={name} />
-      </Box>
-
-      <Stack display="flex" spacing={6} p={6} justify="space-between">
-        <Box>
-          <Badge
-            borderRadius="full"
-            px="2"
-            colorScheme={available ? "teal" : "red"}
-          >
+    <ListItem
+      border={"none"}
+      borderBottom={"1px"}
+      borderWidth="1px"
+      pb={5}
+      overflow="hidden"
+      onClick={addToCart}
+      display="flex"
+      columnGap={4}
+    >
+      <Image
+        boxSize={{ base: 16, lg: 24 }}
+        objectFit="cover"
+        src={image}
+        alt={name}
+      />
+      <VStack align={"flex-start"} w="full">
+        {/* <Badge rounded="full">
             {available ? "available" : "not available"}
-          </Badge>
-          <Text mt="1" fontWeight="semibold" as="h4" lineHeight="tight">
-            {name}
-          </Text>
-          <Text
-            mt="1"
-            fontWeight="normal"
-            as="p"
-            lineHeight="tight"
-            noOfLines={[1, 2, 3]}
-          >
-            {description}
-          </Text>
-        </Box>
-        <Box
-          display="flex"
-          mt="2"
-          alignItems="center"
-          justifyContent="space-between"
-        >
-          <Text>₦{price}</Text>
-          <Button
-            colorScheme="blue"
-            onClick={addToCart}
-            isLoading={addToCartMutation.isLoading}
-            variant="outline"
-            leftIcon={<AddIcon />}
-            disabled={!available}
-          >
-            Add to cart
-          </Button>
-        </Box>
-      </Stack>
-    </Box>
+          </Badge> */}
+        <Text fontWeight={600}>{name}</Text>
+        <Text color="gray.500">{description}</Text>
+        <Text alignSelf={"flex-end"}>₦{price}</Text>
+      </VStack>
+    </ListItem>
   );
 };
 

@@ -545,6 +545,7 @@ export interface paths {
           image?: parameters["rowFilter.menu.image"];
           available?: parameters["rowFilter.menu.available"];
           cafe_id?: parameters["rowFilter.menu.cafe_id"];
+          category_id?: parameters["rowFilter.menu.category_id"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Ordering */
@@ -602,6 +603,7 @@ export interface paths {
           image?: parameters["rowFilter.menu.image"];
           available?: parameters["rowFilter.menu.available"];
           cafe_id?: parameters["rowFilter.menu.cafe_id"];
+          category_id?: parameters["rowFilter.menu.category_id"];
         };
         header: {
           /** Preference */
@@ -623,10 +625,107 @@ export interface paths {
           image?: parameters["rowFilter.menu.image"];
           available?: parameters["rowFilter.menu.available"];
           cafe_id?: parameters["rowFilter.menu.cafe_id"];
+          category_id?: parameters["rowFilter.menu.category_id"];
         };
         body: {
           /** menu */
           menu?: definitions["menu"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
+  "/menu_option": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.menu_option.id"];
+          name?: parameters["rowFilter.menu_option.name"];
+          menu_id?: parameters["rowFilter.menu_option.menu_id"];
+          multiple?: parameters["rowFilter.menu_option.multiple"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["menu_option"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** menu_option */
+          menu_option?: definitions["menu_option"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.menu_option.id"];
+          name?: parameters["rowFilter.menu_option.name"];
+          menu_id?: parameters["rowFilter.menu_option.menu_id"];
+          multiple?: parameters["rowFilter.menu_option.multiple"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.menu_option.id"];
+          name?: parameters["rowFilter.menu_option.name"];
+          menu_id?: parameters["rowFilter.menu_option.menu_id"];
+          multiple?: parameters["rowFilter.menu_option.multiple"];
+        };
+        body: {
+          /** menu_option */
+          menu_option?: definitions["menu_option"];
         };
         header: {
           /** Preference */
@@ -840,6 +939,195 @@ export interface paths {
       };
     };
   };
+  "/menu_option_item": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.menu_option_item.id"];
+          name?: parameters["rowFilter.menu_option_item.name"];
+          price?: parameters["rowFilter.menu_option_item.price"];
+          menu_option_id?: parameters["rowFilter.menu_option_item.menu_option_id"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["menu_option_item"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** menu_option_item */
+          menu_option_item?: definitions["menu_option_item"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.menu_option_item.id"];
+          name?: parameters["rowFilter.menu_option_item.name"];
+          price?: parameters["rowFilter.menu_option_item.price"];
+          menu_option_id?: parameters["rowFilter.menu_option_item.menu_option_id"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.menu_option_item.id"];
+          name?: parameters["rowFilter.menu_option_item.name"];
+          price?: parameters["rowFilter.menu_option_item.price"];
+          menu_option_id?: parameters["rowFilter.menu_option_item.menu_option_id"];
+        };
+        body: {
+          /** menu_option_item */
+          menu_option_item?: definitions["menu_option_item"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
+  "/menu_category": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.menu_category.id"];
+          cafe_id?: parameters["rowFilter.menu_category.cafe_id"];
+          name?: parameters["rowFilter.menu_category.name"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["menu_category"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** menu_category */
+          menu_category?: definitions["menu_category"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.menu_category.id"];
+          cafe_id?: parameters["rowFilter.menu_category.cafe_id"];
+          name?: parameters["rowFilter.menu_category.name"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.menu_category.id"];
+          cafe_id?: parameters["rowFilter.menu_category.cafe_id"];
+          name?: parameters["rowFilter.menu_category.name"];
+        };
+        body: {
+          /** menu_category */
+          menu_category?: definitions["menu_category"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
 }
 
 export interface definitions {
@@ -1018,6 +1306,30 @@ export interface definitions {
      * This is a Foreign Key to `cafeteria.id`.<fk table='cafeteria' column='id'/>
      */
     cafe_id: number;
+    /**
+     * Format: integer
+     * @description Note:
+     * This is a Foreign Key to `menu_category.id`.<fk table='menu_category' column='id'/>
+     */
+    category_id?: number;
+  };
+  menu_option: {
+    /**
+     * Format: integer
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    /** Format: character varying */
+    name?: string;
+    /**
+     * Format: integer
+     * @description Note:
+     * This is a Foreign Key to `menu.id`.<fk table='menu' column='id'/>
+     */
+    menu_id?: number;
+    /** Format: boolean */
+    multiple?: boolean;
   };
   order_item: {
     /**
@@ -1064,6 +1376,40 @@ export interface definitions {
     owned_by?: string;
     /** Format: character varying */
     slug: string;
+  };
+  menu_option_item: {
+    /**
+     * Format: integer
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    /** Format: character */
+    name: string;
+    /** Format: numeric */
+    price: number;
+    /**
+     * Format: integer
+     * @description Note:
+     * This is a Foreign Key to `menu_option.id`.<fk table='menu_option' column='id'/>
+     */
+    menu_option_id: number;
+  };
+  menu_category: {
+    /**
+     * Format: integer
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    /**
+     * Format: integer
+     * @description Note:
+     * This is a Foreign Key to `cafeteria.id`.<fk table='cafeteria' column='id'/>
+     */
+    cafe_id?: number;
+    /** Format: character varying */
+    name: string;
   };
 }
 
@@ -1194,6 +1540,18 @@ export interface parameters {
   "rowFilter.menu.available": string;
   /** Format: integer */
   "rowFilter.menu.cafe_id": string;
+  /** Format: integer */
+  "rowFilter.menu.category_id": string;
+  /** @description menu_option */
+  "body.menu_option": definitions["menu_option"];
+  /** Format: integer */
+  "rowFilter.menu_option.id": string;
+  /** Format: character varying */
+  "rowFilter.menu_option.name": string;
+  /** Format: integer */
+  "rowFilter.menu_option.menu_id": string;
+  /** Format: boolean */
+  "rowFilter.menu_option.multiple": string;
   /** @description order_item */
   "body.order_item": definitions["order_item"];
   /** Format: integer */
@@ -1220,6 +1578,24 @@ export interface parameters {
   "rowFilter.cafeteria.owned_by": string;
   /** Format: character varying */
   "rowFilter.cafeteria.slug": string;
+  /** @description menu_option_item */
+  "body.menu_option_item": definitions["menu_option_item"];
+  /** Format: integer */
+  "rowFilter.menu_option_item.id": string;
+  /** Format: character */
+  "rowFilter.menu_option_item.name": string;
+  /** Format: numeric */
+  "rowFilter.menu_option_item.price": string;
+  /** Format: integer */
+  "rowFilter.menu_option_item.menu_option_id": string;
+  /** @description menu_category */
+  "body.menu_category": definitions["menu_category"];
+  /** Format: integer */
+  "rowFilter.menu_category.id": string;
+  /** Format: integer */
+  "rowFilter.menu_category.cafe_id": string;
+  /** Format: character varying */
+  "rowFilter.menu_category.name": string;
 }
 
 export interface operations {}

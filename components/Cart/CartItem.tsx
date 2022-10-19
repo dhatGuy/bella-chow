@@ -1,13 +1,5 @@
-import {
-  Box,
-  Button,
-  Flex,
-  HStack,
-  Image,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
-import { RiDeleteBin5Line } from "react-icons/ri";
+import { Button, HStack, IconButton, Text, VStack } from "@chakra-ui/react";
+import { FaMinus, FaPlus } from "react-icons/fa";
 import useRemoveFromCart from "~hooks/cart/useRemoveFromCart";
 import useUpdateCartQty from "~hooks/cart/useUpdateCartQty";
 import { CartItemWithMenu } from "~types/types";
@@ -22,18 +14,18 @@ const CartItem = ({ cartItem, cafeId }: CartItemProps) => {
   const updateCartQtyMutation = useUpdateCartQty(cafeId);
 
   return (
-    <Flex>
-      <VStack flex="1" align="stretch" justify="space-between">
-        <Box>
-          <Text fontWeight="semibold">{cartItem.menu.name}</Text>
-          <p>Price: N{cartItem.menu.price.toFixed(2)}</p>
-          <p>Total: N{cartItem.total_price.toFixed(2)}</p>
-        </Box>
+    // <Flex>
+    <VStack>
+      <HStack justify={"space-between"} w="full">
+        <Text fontWeight="semibold">{cartItem.menu.name}</Text>
         <HStack>
-          <Button
-            size="sm"
+          <IconButton
+            size="xs"
             variant="solid"
             colorScheme="teal"
+            isRound
+            icon={<FaMinus />}
+            aria-label="decrease quantity"
             disabled={cartItem.qty === 1}
             onClick={() =>
               updateCartQtyMutation.mutate({
@@ -43,12 +35,15 @@ const CartItem = ({ cartItem, cafeId }: CartItemProps) => {
             }
           >
             -
-          </Button>
+          </IconButton>
           <Text>{cartItem.qty}</Text>
-          <Button
-            size="sm"
+          <IconButton
+            size="xs"
             variant="solid"
             colorScheme="teal"
+            icon={<FaPlus />}
+            isRound
+            aria-label="increase quantity"
             onClick={() =>
               updateCartQtyMutation.mutate({
                 menuToUpdate: cartItem.menu,
@@ -57,27 +52,20 @@ const CartItem = ({ cartItem, cafeId }: CartItemProps) => {
             }
           >
             +
-          </Button>
+          </IconButton>
         </HStack>
-      </VStack>
-      <Box flexBasis="50%">
-        <Image
-          w="full"
-          h="130px"
-          objectFit="cover"
-          src={cartItem.menu.image}
-          alt={cartItem.menu.name}
-        />
+      </HStack>
+      <HStack justify={"space-between"} w="full">
+        <Text>₦{cartItem.total_price.toFixed(2)}</Text>
         <Button
-          size="sm"
-          variant="solid"
-          colorScheme="red"
+          variant={"unstyled"}
           onClick={() => removeFromCartMutation.mutate(cartItem.id)}
         >
-          <RiDeleteBin5Line />
+          Remove
         </Button>
-      </Box>
-    </Flex>
+      </HStack>
+    </VStack>
+    // </Flex>
   );
 };
 

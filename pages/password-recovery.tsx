@@ -10,59 +10,33 @@ import {
   Input,
   Stack,
   useColorModeValue,
-  useToast,
 } from "@chakra-ui/react";
-import { useRouter } from "next/router";
 import { useRef, useState } from "react";
-import { supabase } from "~lib/api";
+import useUpdatePassword from "~hooks/auth/useUpdatePassword";
 
 export const Password = () => {
   const confirmPasswordRef = useRef();
   const passwordRef = useRef();
-  const [error, setError] = useState(null);
-  const [resetting, setResetting] = useState(false);
-  const router = useRouter();
-  const toast = useToast();
+  const [error, setError] = useState<string | null>(null);
+  const updatePasswordMutation = useUpdatePassword();
 
   const updatePassword = async (e) => {
     e.preventDefault();
-    setResetting(true);
     setError(null);
     const password = passwordRef.current.value;
     const confirmPassword = confirmPasswordRef.current.value;
 
-    try {
-      if (password !== confirmPassword) {
-        setError("Passwords do not match");
-        return;
-      }
-
-      if (password.length <= 6) {
-        setError("Password must be greater than 5 characters");
-        return;
-      }
-
-      const { user, error } = await supabase.auth.update({
-        password,
-      });
-      if (error) {
-        setError(error.message);
-        setResetting(false);
-      } else {
-        toast({
-          position: "top-right",
-          title: "Password Reset",
-          description: "Password reset successful",
-          status: "success",
-          duration: 4000,
-        });
-        router.push("/");
-        setResetting(false);
-      }
-    } catch (error) {
-      setError(error.message || error);
-      setResetting(false);
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
     }
+
+    if (password.length <= 6) {
+      setError("Password must be greater than 5 characters");
+      return;
+    }
+
+    updatePasswordMutation.mutate(password);
   };
   return (
     <Flex
@@ -90,11 +64,12 @@ export const Password = () => {
               <FormControl id="confirmPassword">
                 <FormLabel>Confirm Password</FormLabel>
                 <Input type="password" ref={confirmPasswordRef} />
-                {error && (
-                  <FormHelperText textColor="red" as="i">
-                    {error?.message || error}
-                  </FormHelperText>
-                )}
+                {error ||
+                  (updatePasswordMutation.isError && (
+                    <FormHelperText textColor="red" as="i">
+                      {updatePasswordMutation.error?.message || error}
+                    </FormHelperText>
+                  ))}
               </FormControl>
               <Stack spacing={10}>
                 <Button
@@ -104,7 +79,7 @@ export const Password = () => {
                     bg: "blue.500",
                   }}
                   type="submit"
-                  isLoading={resetting}
+                  isLoading={updatePasswordMutation.isLoading}
                 >
                   reset password
                 </Button>

@@ -101,7 +101,7 @@ export default function Simple() {
                     Profile
                   </MenuItem>
                 </NextLink>
-                <NextLink href="/orders" passHref>
+                <NextLink href="/order" passHref>
                   <MenuItem _hover={{ textDecor: "none" }} as={Link}>
                     Orders
                   </MenuItem>
