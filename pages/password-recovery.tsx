@@ -4,6 +4,7 @@ import {
   chakra,
   Flex,
   FormControl,
+  FormErrorMessage,
   FormHelperText,
   FormLabel,
   Heading,
@@ -11,33 +12,27 @@ import {
   Stack,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { useRef, useState } from "react";
+import { useForm } from "react-hook-form";
 import useUpdatePassword from "~hooks/auth/useUpdatePassword";
 
+type FormData = {
+  password: string;
+  confirmPassword: string;
+};
+
 export const Password = () => {
-  const confirmPasswordRef = useRef();
-  const passwordRef = useRef();
-  const [error, setError] = useState<string | null>(null);
   const updatePasswordMutation = useUpdatePassword();
+  const {
+    handleSubmit,
+    register,
+    watch,
+    formState: { errors },
+  } = useForm<FormData>();
 
-  const updatePassword = async (e) => {
-    e.preventDefault();
-    setError(null);
-    const password = passwordRef.current.value;
-    const confirmPassword = confirmPasswordRef.current.value;
+  const onSubmit = handleSubmit((data) => {
+    updatePasswordMutation.mutate(data.password);
+  });
 
-    if (password !== confirmPassword) {
-      setError("Passwords do not match");
-      return;
-    }
-
-    if (password.length <= 6) {
-      setError("Password must be greater than 5 characters");
-      return;
-    }
-
-    updatePasswordMutation.mutate(password);
-  };
   return (
     <Flex
       minH={"100vh"}
@@ -55,21 +50,48 @@ export const Password = () => {
           boxShadow={"lg"}
           p={8}
         >
-          <chakra.form onSubmit={updatePassword}>
+          <chakra.form onSubmit={onSubmit}>
             <Stack spacing={4}>
-              <FormControl id="password">
+              <FormControl id="password" isInvalid={!!errors.password}>
                 <FormLabel>New Password</FormLabel>
-                <Input type="password" ref={passwordRef} />
+                <Input
+                  type="password"
+                  {...register("password", {
+                    required: "Password is required",
+                    minLength: {
+                      value: 6,
+                      message: "Minimum length should be 6",
+                    },
+                  })}
+                />
+                <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
               </FormControl>
-              <FormControl id="confirmPassword">
+              <FormControl
+                id="confirmPassword"
+                isInvalid={!!errors.confirmPassword}
+              >
                 <FormLabel>Confirm Password</FormLabel>
-                <Input type="password" ref={confirmPasswordRef} />
-                {error ||
-                  (updatePasswordMutation.isError && (
-                    <FormHelperText textColor="red" as="i">
-                      {updatePasswordMutation.error?.message || error}
-                    </FormHelperText>
-                  ))}
+                <Input
+                  type="password"
+                  {...register("confirmPassword", {
+                    required: "Confirm Password is required",
+                    validate: (val: string) => {
+                      if (watch("password") != val) {
+                        return "Your passwords do no match";
+                      }
+                    },
+                  })}
+                />
+                <FormErrorMessage>
+                  {errors.confirmPassword?.message}
+                </FormErrorMessage>
+                {updatePasswordMutation.isError && (
+                  <FormHelperText textColor="red" as="i">
+                    {updatePasswordMutation.error instanceof Error
+                      ? updatePasswordMutation.error.message
+                      : "Something went wrong"}
+                  </FormHelperText>
+                )}
               </FormControl>
               <Stack spacing={10}>
                 <Button
@@ -81,7 +103,7 @@ export const Password = () => {
                   type="submit"
                   isLoading={updatePasswordMutation.isLoading}
                 >
-                  reset password
+                  Reset Password
                 </Button>
               </Stack>
             </Stack>

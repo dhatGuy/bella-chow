@@ -7,7 +7,7 @@ const forgotPassword = async (email: string) => {
   });
 
   if (error) {
-    throw error;
+    throw new Error(error.message);
   }
 
   return data;

@@ -2,6 +2,7 @@ import {
   Button,
   Flex,
   FormControl,
+  FormErrorMessage,
   FormLabel,
   Heading,
   Input,
@@ -13,18 +14,27 @@ import {
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
-import { FormEvent, useEffect, useRef } from "react";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import { useSnapshot } from "valtio";
 import { state } from "~context/state";
 import useCreateUser from "~hooks/auth/useCreateUser";
 
+type FormData = {
+  email: string;
+  password: string;
+  username: string;
+};
+
 export default function Signup() {
-  const emailRef = useRef<HTMLInputElement | null>();
-  const passwordRef = useRef<HTMLInputElement | null>();
-  const usernameRef = useRef<HTMLInputElement | null>();
   const router = useRouter();
   const createUserMutation = useCreateUser();
   const { authenticated } = useSnapshot(state);
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useForm<FormData>();
 
   useEffect(() => {
     // redirect to home if already logged in
@@ -34,20 +44,9 @@ export default function Signup() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-
-    // Get email and password input values
-    const email = emailRef.current?.value;
-    const username = usernameRef.current?.value;
-    const password = passwordRef.current?.value;
-
-    createUserMutation.mutate({
-      username,
-      email,
-      password,
-    });
-  };
+  const onSubmit = handleSubmit((data) => {
+    createUserMutation.mutate(data);
+  });
 
   return (
     <Flex
@@ -56,7 +55,7 @@ export default function Signup() {
       justify={"center"}
       bg={useColorModeValue("gray.50", "gray.800")}
     >
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={onSubmit}>
         <Stack spacing={8} mx={"auto"} maxW={"xl"} py={12} px={6}>
           <Stack align={"center"}>
             <Heading fontSize={"4xl"}>Create an account</Heading>
@@ -73,21 +72,53 @@ export default function Signup() {
             alignItems={"stretch"}
           >
             <Stack spacing={4}>
-              <FormControl id="email">
+              <FormControl id="email" isInvalid={!!errors.email}>
                 <FormLabel>Email address</FormLabel>
-                <Input type="email" ref={emailRef} />
+                <Input
+                  type="email"
+                  {...register("email", {
+                    required: "Email is required",
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                      message: "Invalid email address",
+                    },
+                  })}
+                />
+                <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
               </FormControl>
-              <FormControl id="username">
+              <FormControl id="username" isInvalid={!!errors.username}>
                 <FormLabel>Username</FormLabel>
-                <Input type="text" ref={usernameRef} />
+                <Input
+                  type="text"
+                  {...register("username", {
+                    required: "Username is required",
+                    minLength: {
+                      value: 4,
+                      message: "Minimum length should be 4",
+                    },
+                  })}
+                />
+                <FormErrorMessage>{errors.username?.message}</FormErrorMessage>
               </FormControl>
-              <FormControl id="password">
+              <FormControl id="password" isInvalid={!!errors.password}>
                 <FormLabel>Password</FormLabel>
-                <Input type="password" ref={passwordRef} />
+                <Input
+                  type="password"
+                  {...register("password", {
+                    required: "Password is required",
+                    minLength: {
+                      value: 6,
+                      message: "Minimum length should be 6",
+                    },
+                  })}
+                />
+                <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
               </FormControl>
               {createUserMutation.isError && (
                 <Text textColor="red" as="i">
-                  {createUserMutation.error.message}
+                  {(createUserMutation.error instanceof Error &&
+                    createUserMutation.error.message) ||
+                    "Something went wrong"}
                 </Text>
               )}
             </Stack>

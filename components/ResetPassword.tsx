@@ -14,9 +14,10 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Text,
   useToast,
 } from "@chakra-ui/react";
-import { useRef } from "react";
+import { useForm } from "react-hook-form";
 import useResetPassword from "~hooks/auth/useResetPassword";
 
 interface ResetPasswordProps {
@@ -26,61 +27,71 @@ interface ResetPasswordProps {
 
 export default function ResetPassword({ isOpen, onClose }: ResetPasswordProps) {
   const resetPasswordMutation = useResetPassword();
-  const emailRef = useRef<HTMLInputElement>();
   const toast = useToast();
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useForm<{
+    email: string;
+  }>();
 
-  const onReset = async () => {
-    const email = emailRef.current!.value;
-    resetPasswordMutation.mutate(
-      { email },
-      {
-        onSuccess: () => {
-          toast({
-            position: "top-right",
-            title: "Password Reset",
-            description: "Check your mail",
-            status: "success",
-            duration: 5000,
-          });
-          onClose();
-        },
-      }
-    );
-  };
+  const onReset = handleSubmit((data) => {
+    resetPasswordMutation.mutate(data, {
+      onSuccess: () => {
+        toast({
+          position: "top-right",
+          title: "Password Reset",
+          description: "Check your mail",
+          status: "success",
+          duration: 5000,
+        });
+        onClose();
+      },
+    });
+  });
+
   return (
-    <>
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Reset password</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <FormControl isInvalid={resetPasswordMutation.isError}>
-              <FormLabel>Email address</FormLabel>
-              <Input type="email" ref={emailRef} />
-              {resetPasswordMutation.isError && (
-                <FormErrorMessage color="red.500">
-                  {resetPasswordMutation.error.message}
-                </FormErrorMessage>
-              )}
-            </FormControl>
-          </ModalBody>
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>Reset password</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody>
+          <FormControl isInvalid={!!errors.email}>
+            <FormLabel>Email address</FormLabel>
+            <Input
+              type="email"
+              {...register("email", {
+                required: "Email is required",
+              })}
+            />
+            <FormErrorMessage color="red.500">
+              {errors.email?.message}
+            </FormErrorMessage>
+          </FormControl>
+          {resetPasswordMutation.isError && (
+            <Text textColor="red" as="i">
+              {(resetPasswordMutation.error instanceof Error &&
+                resetPasswordMutation.error.message) ||
+                "Something went wrong"}
+            </Text>
+          )}
+        </ModalBody>
 
-          <ModalFooter>
-            <Button variant="ghost" mr={3} onClick={onClose}>
-              Close
-            </Button>
-            <Button
-              colorScheme="blue"
-              isLoading={resetPasswordMutation.isLoading}
-              // disabled={!emailRef.current.value.length}
-              onClick={onReset}
-            >
-              Reset
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </>
+        <ModalFooter>
+          <Button variant="ghost" mr={3} onClick={onClose}>
+            Close
+          </Button>
+          <Button
+            colorScheme="blue"
+            isLoading={resetPasswordMutation.isLoading}
+            onClick={onReset}
+          >
+            Reset
+          </Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
   );
 }

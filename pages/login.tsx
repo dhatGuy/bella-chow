@@ -3,6 +3,7 @@ import {
   Button,
   Flex,
   FormControl,
+  FormErrorMessage,
   FormLabel,
   Heading,
   Input,
@@ -14,36 +15,32 @@ import {
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
-import { useRef } from "react";
+import { useForm } from "react-hook-form";
 import ResetPassword from "~components/ResetPassword";
 import useLogin from "~hooks/auth/useLogin";
 
+type FormData = {
+  email: string;
+  password: string;
+};
+
 export default function Login() {
   const router = useRouter();
-  const emailRef = useRef();
-  const passwordRef = useRef();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const loginMutation = useLogin();
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useForm<FormData>();
 
-  async function handleSubmit(e) {
-    e.preventDefault();
-
-    // Get email and password input values
-    const email = emailRef.current.value;
-    const password = passwordRef.current.value;
-
-    loginMutation.mutate(
-      {
-        email,
-        password,
+  const onSubmit = handleSubmit((data) => {
+    loginMutation.mutate(data, {
+      onSuccess: () => {
+        router.push((router.query.from as string) || "/");
       },
-      {
-        onSuccess: () => {
-          router.push((router.query.from as string) || "/");
-        },
-      }
-    );
-  }
+    });
+  });
 
   return (
     <Flex
@@ -62,19 +59,33 @@ export default function Login() {
           boxShadow={"lg"}
           p={8}
         >
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={onSubmit}>
             <Stack spacing={4}>
-              <FormControl id="email">
+              <FormControl id="email" isInvalid={!!errors.email}>
                 <FormLabel>Email address</FormLabel>
-                <Input type="email" ref={emailRef} />
+                <Input
+                  type="email"
+                  {...register("email", {
+                    required: "Email is required",
+                  })}
+                />
+                <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
               </FormControl>
-              <FormControl id="password">
+              <FormControl id="password" isInvalid={!!errors.password}>
                 <FormLabel>Password</FormLabel>
-                <Input type="password" ref={passwordRef} />
+                <Input
+                  type="password"
+                  {...register("password", {
+                    required: true,
+                  })}
+                />
+                <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
               </FormControl>
               {loginMutation.isError && (
                 <Text textColor="red" as="i">
-                  {loginMutation.error.message}
+                  {loginMutation.error instanceof Error
+                    ? loginMutation.error.message
+                    : "An error occurred"}
                 </Text>
               )}
               <Stack spacing={10}>
@@ -107,7 +118,7 @@ export default function Login() {
           </form>
         </Box>
       </Stack>
-      <ResetPassword isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
+      <ResetPassword isOpen={isOpen} onClose={onClose} />
     </Flex>
   );
 }

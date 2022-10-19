@@ -10,27 +10,20 @@ interface LoginProps {
 const useLogin = () => {
   const Router = useRouter();
   const login = async ({ email, password }: LoginProps) => {
-    try {
-      let { user, error } = await supabase.auth.signIn({
-        email,
-        password,
-      });
+    let { user, error } = await supabase.auth.signIn({
+      email,
+      password,
+    });
 
-      if (error) {
-        throw error;
-      }
-
-      return user;
-    } catch (error) {
-      throw error;
+    if (error) {
+      throw new Error(`${error.message}`);
     }
+
+    return user;
   };
 
   return useMutation((data: LoginProps) => login(data), {
-    async onSuccess(user) {
-      Router.push("/");
-    },
-    onError(error, variables, context) {
+    onError(error) {
       console.log(error);
     },
   });
