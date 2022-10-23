@@ -16,7 +16,7 @@ import { useRouter } from "next/router";
 import { FiShoppingCart } from "react-icons/fi";
 import useClearCart from "~hooks/cart/useClearCart";
 import useGetCart from "~hooks/cart/useGetCart";
-import { Cafeteria } from "~types/types";
+import { Cafeteria } from "~types";
 import CartItem from "./CartItem";
 
 interface CartProps {

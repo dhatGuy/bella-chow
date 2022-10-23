@@ -1,5 +1,5 @@
 import { Box, Heading, Image, Text } from "@chakra-ui/react";
-import { Menu } from "~types/types";
+import { Menu } from "~types";
 
 interface MenuDetailsProps {
   menu: Menu;

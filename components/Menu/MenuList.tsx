@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { forwardRef } from "react";
 import { Element, ScrollLink } from "react-scroll";
-import { MenuCategoryWithMenu } from "~types/types";
+import { MenuCategoryWithMenu } from "~types";
 import MenuItem from "./MenuItem";
 
 interface MenuListProps {

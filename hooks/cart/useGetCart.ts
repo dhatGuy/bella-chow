@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import useUser from "~hooks/auth/useUser";
 import { supabase } from "~lib/api";
-import { CartWithItemAndMenu } from "~types/types";
+import { CartWithItemAndMenu } from "~types";
 
 interface IGetCart {
   userId: string;

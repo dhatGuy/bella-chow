@@ -6,7 +6,7 @@ import Spinner from "~components/Spinner";
 import useGetCafe from "~hooks/cafe/useGetCafe";
 import { supabase } from "~lib/api";
 import { NextPageWithLayout } from "~pages/_app";
-import { Cafeteria, CafeteriaWithMenuAndReviews } from "~types/types";
+import { Cafeteria, CafeteriaWithMenuAndReviews } from "~types";
 
 const Cafe: NextPageWithLayout = () => {
   const router = useRouter();

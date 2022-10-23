@@ -21,7 +21,7 @@ import Spinner from "~components/Spinner";
 import WithAuth from "~components/WithAuth";
 import useGetOrder from "~hooks/order/useGetOrder";
 import { supabase } from "~lib/api";
-import { OrderWithItemsAndMenu } from "~types/types";
+import { OrderWithItemsAndMenu } from "~types";
 
 const Order = ({ data }: { data: OrderWithItemsAndMenu }) => {
   const router = useRouter();

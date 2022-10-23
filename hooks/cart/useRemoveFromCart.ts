@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "~lib/api";
-import { CartItem } from "~types/types";
+import { CartItem } from "~types";
 import calculateCartTotal from "~utils/calculateCartTotal";
 
 const removeFromCart = async (cartItemId: number) => {

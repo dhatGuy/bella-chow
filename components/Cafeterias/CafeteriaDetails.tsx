@@ -20,7 +20,7 @@ import Rating from "~components/Rating";
 import ReviewModal from "~components/Reviews/ReviewModal";
 import useUser from "~hooks/auth/useUser";
 import useGetCart from "~hooks/cart/useGetCart";
-import { CafeteriaWithMenuAndReviews } from "~types/types";
+import { CafeteriaWithMenuAndReviews } from "~types";
 
 interface CafeteriaDetailsProps {
   cafe: CafeteriaWithMenuAndReviews;

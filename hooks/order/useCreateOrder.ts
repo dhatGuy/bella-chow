@@ -3,7 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 import useClearCart from "~hooks/cart/useClearCart";
 import useGetCart from "~hooks/cart/useGetCart";
 import { supabase } from "~lib/api";
-import { Order, OrderItem } from "~types/types";
+import { Order, OrderItem } from "~types";
 
 interface CreateOrderType {
   amount: number;

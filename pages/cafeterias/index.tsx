@@ -1,7 +1,7 @@
 import { Box, Heading } from "@chakra-ui/react";
 import CafeteriaList from "~components/Cafeterias/CafeteriaList";
 import { supabase } from "~lib/api";
-import { CafeteriaWithReviews } from "~types/types";
+import { CafeteriaWithReviews } from "~types";
 
 interface CafeteriasProps {
   cafeterias: CafeteriaWithReviews[];

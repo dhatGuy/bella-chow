@@ -2,7 +2,7 @@ import { Box, Heading, Link, Stack } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { useEffect, useState } from "react";
 import Rating from "~components/Rating";
-import { CafeteriaWithReviews } from "~types/types";
+import { CafeteriaWithReviews } from "~types";
 
 interface CafeteriaProps {
   cafe: CafeteriaWithReviews;

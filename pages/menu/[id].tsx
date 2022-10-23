@@ -1,7 +1,7 @@
 import { GetStaticProps } from "next";
 import MenuDetails from "~components/Menu/MenuDetails";
 import { supabase } from "~lib/api";
-import { Menu } from "~types/types";
+import { Menu } from "~types";
 
 const Menu = ({ menu }: { menu: Menu }) => {
   return <MenuDetails menu={menu} />;

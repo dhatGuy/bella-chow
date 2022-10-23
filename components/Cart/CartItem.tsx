@@ -2,7 +2,7 @@ import { Button, HStack, IconButton, Text, VStack } from "@chakra-ui/react";
 import { FaMinus, FaPlus } from "react-icons/fa";
 import useRemoveFromCart from "~hooks/cart/useRemoveFromCart";
 import useUpdateCartQty from "~hooks/cart/useUpdateCartQty";
-import { CartItemWithMenu } from "~types/types";
+import { CartItemWithMenu } from "~types";
 
 interface CartItemProps {
   cartItem: CartItemWithMenu;

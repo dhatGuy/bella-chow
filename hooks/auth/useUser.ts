@@ -1,7 +1,7 @@
 import { User } from "@supabase/supabase-js";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "~lib/api";
-import { Users } from "~types/types";
+import { Users } from "~types";
 
 const getUser = async (user: User | null) => {
   const { data, error } = await supabase

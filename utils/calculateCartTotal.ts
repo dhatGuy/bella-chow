@@ -1,5 +1,5 @@
 import { supabase } from "~lib/api";
-import { CartItem } from "~types/types";
+import { CartItem } from "~types";
 
 const calculateCartTotal = async (cartId: number) => {
   const { data, error } = await supabase

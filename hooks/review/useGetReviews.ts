@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "~lib/api";
-import { ReviewWithUserAndCafeteria } from "~types/types";
+import { ReviewWithUserAndCafeteria } from "~types";
 
 const getReviews = async (cafeId: number) => {
   const { data, error } = await supabase

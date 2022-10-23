@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import router from "next/router";
 import { state } from "~context/state";
 import { supabase } from "~lib/api";
-import { Users } from "~types/types";
+import { Users } from "~types";
 
 interface CreateUserProps {
   email: string;

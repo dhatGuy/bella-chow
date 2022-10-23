@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "~lib/api";
-import { OrderWithItemsAndMenu } from "~types/types";
+import { OrderWithItemsAndMenu } from "~types";
 
 const getOrder = async (orderId: number) => {
   const { data, error } = await supabase

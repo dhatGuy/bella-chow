@@ -1,7 +1,7 @@
 import { Image, ListItem, Text, VStack } from "@chakra-ui/react";
 import Router from "next/router";
 import useAddToCart from "~hooks/cart/useAddToCart";
-import { Menu } from "~types/types";
+import { Menu } from "~types";
 
 interface MenuItemProps {
   menu: Menu;

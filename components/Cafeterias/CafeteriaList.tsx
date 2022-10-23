@@ -1,5 +1,5 @@
 import { Stack } from "@chakra-ui/react";
-import { CafeteriaWithReviews } from "~types/types";
+import { CafeteriaWithReviews } from "~types";
 import Cafeteria from "./Cafeteria";
 
 interface CafeteriaListProps {

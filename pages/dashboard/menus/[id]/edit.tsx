@@ -16,7 +16,7 @@ import { useRouter } from "next/router";
 import { FormEvent, useState } from "react";
 import WithCafeAuth from "~components/WithCafeAuth";
 import { supabase } from "~lib/api";
-import { Menu } from "~types/types";
+import { Menu } from "~types";
 
 const Edit = (data: Menu) => {
   const router = useRouter();

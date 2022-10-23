@@ -12,7 +12,7 @@ import {
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import useUser from "~hooks/auth/useUser";
 import useAddReview from "~hooks/review/useAddReview";
-import { ReviewWithUserAndCafeteria } from "~types/types";
+import { ReviewWithUserAndCafeteria } from "~types";
 
 interface AddReviewProps {
   cafeId: number;

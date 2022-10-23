@@ -22,7 +22,7 @@ import { FiShoppingCart } from "react-icons/fi";
 import CartItem from "~components/Cart/CartItem";
 import useClearCart from "~hooks/cart/useClearCart";
 import useGetCart from "~hooks/cart/useGetCart";
-import { Cafeteria } from "~types/types";
+import { Cafeteria } from "~types";
 
 interface CartDrawerProp {
   isOpen: boolean;

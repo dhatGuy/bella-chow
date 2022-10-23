@@ -18,7 +18,7 @@ import { GetServerSideProps } from "next/types";
 import Moment from "react-moment";
 import WithCafeAuth from "~components/WithCafeAuth";
 import { supabase } from "~lib/api";
-import { OrderWithItemsAndMenu } from "~types/types";
+import { OrderWithItemsAndMenu } from "~types";
 
 const Order = (data: OrderWithItemsAndMenu) => {
   const router = useRouter();

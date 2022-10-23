@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import useUser from "~hooks/auth/useUser";
 import { supabase } from "~lib/api";
-import { OrderWithOrderItems } from "~types/types";
+import { OrderWithOrderItems } from "~types";
 
 const getOrders = async (userId?: string) => {
   const { data, error } = await supabase

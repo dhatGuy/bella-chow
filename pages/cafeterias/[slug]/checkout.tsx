@@ -20,7 +20,7 @@ import useUser from "~hooks/auth/useUser";
 import useGetCart from "~hooks/cart/useGetCart";
 import useCreateOrder from "~hooks/order/useCreateOrder";
 import { supabase } from "~lib/api";
-import { Cafeteria } from "~types/types";
+import { Cafeteria } from "~types";
 
 function Checkout({ cafe }: { cafe: Cafeteria }) {
   const user = useUser();

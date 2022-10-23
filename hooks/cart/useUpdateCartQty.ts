@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "~lib/api";
-import { CartItemWithMenu, Menu } from "~types/types";
+import { CartItemWithMenu, Menu } from "~types";
 import calculateCartTotal from "~utils/calculateCartTotal";
 import useGetCart from "./useGetCart";
 

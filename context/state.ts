@@ -1,6 +1,6 @@
 import { User } from "@supabase/supabase-js";
 import { proxy } from "valtio";
-import { CartWithCartItems } from "~types/types";
+import { CartWithCartItems } from "~types";
 
 interface State {
   user: User | null;

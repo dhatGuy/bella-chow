@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "~lib/api";
-import { CafeteriaWithMenuAndReviews } from "~types/types";
+import { CafeteriaWithMenuAndReviews } from "~types";
 
 const getCafe = async (slug: string) => {
   const { data: cafeteria, error } = await supabase

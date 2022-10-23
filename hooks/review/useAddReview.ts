@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "~lib/api";
-import { Review } from "~types/types";
+import { Review } from "~types";
 
 interface IAddReview {
   content: string;
