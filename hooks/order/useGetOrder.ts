@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import useUser from "~hooks/auth/useUser";
 import { supabase } from "~lib/api";
 import { OrderWithItemsAndMenu } from "~types/types";
 
@@ -21,14 +20,6 @@ const getOrder = async (orderId: number) => {
   return data;
 };
 
-export default function useGetOrder(
-  initialData: OrderWithItemsAndMenu,
-  orderId: number
-) {
-  const { data: user } = useUser();
-
-  return useQuery(["order", orderId], () => getOrder(orderId), {
-    enabled: !!user,
-    initialData,
-  });
+export default function useGetOrder(orderId: number) {
+  return useQuery(["order", orderId], () => getOrder(orderId));
 }

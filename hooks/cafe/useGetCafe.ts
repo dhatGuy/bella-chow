@@ -21,11 +21,6 @@ const getCafe = async (slug: string) => {
   return cafeteria;
 };
 
-export default function useGetCafe(
-  slug: string,
-  initialData?: CafeteriaWithMenuAndReviews
-) {
-  return useQuery(["cafe"], () => getCafe(slug), {
-    initialData,
-  });
+export default function useGetCafe(slug: string) {
+  return useQuery(["cafe"], () => getCafe(slug));
 }

@@ -13,6 +13,7 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
+import { dehydrate, QueryClient } from "@tanstack/react-query";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import Moment from "react-moment";
@@ -24,7 +25,7 @@ import { OrderWithItemsAndMenu } from "~types/types";
 
 const Order = ({ data }: { data: OrderWithItemsAndMenu }) => {
   const router = useRouter();
-  const { data: order, isLoading } = useGetOrder(data, Number(router.query.id));
+  const { data: order, isLoading } = useGetOrder(Number(router.query.id));
 
   if (isLoading) return <Spinner />;
 
@@ -90,20 +91,28 @@ const Order = ({ data }: { data: OrderWithItemsAndMenu }) => {
 export default WithAuth(Order);
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const queryClient = new QueryClient();
   const id = ctx.query.id as string;
-  const { data } = await supabase
-    .from<OrderWithItemsAndMenu>("order")
-    .select(
-      `
+
+  const getOrder = async () => {
+    const { data } = await supabase
+      .from<OrderWithItemsAndMenu>("order")
+      .select(
+        `
         *, items:order_item(*, menu(*))
       `
-    )
-    .eq("id", id)
-    .single();
+      )
+      .eq("id", id)
+      .single();
+
+    return data;
+  };
+
+  await queryClient.prefetchQuery(["order", +id], getOrder);
 
   return {
     props: {
-      data,
+      dehydratedState: dehydrate(queryClient),
     },
   };
 };

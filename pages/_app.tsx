@@ -1,31 +1,33 @@
 import { ChakraProvider } from "@chakra-ui/react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+  Hydrate,
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import type { NextPage } from "next";
 import type { AppProps } from "next/app";
 import Router from "next/router";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
-import { ReactElement, ReactNode, useEffect } from "react";
+import { ReactElement, ReactNode, useEffect, useState } from "react";
 import Layout from "~components/Layout";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
 };
 
-type AppPropsWithLayout = AppProps & {
+type AppPropsWithLayout = AppProps<{
+  dehydratedState: unknown;
+}> & {
   Component: NextPageWithLayout;
 };
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: 0,
-    },
-  },
-});
-
-function MyApp({ Component, pageProps }: AppPropsWithLayout) {
+function MyApp({
+  Component,
+  pageProps: { dehydratedState, ...pageProps },
+}: AppPropsWithLayout) {
+  const [queryClient] = useState(() => new QueryClient());
   useEffect(() => {
     const delay = 500; // in milliseconds
     let timer: string | number | NodeJS.Timeout | undefined;
@@ -49,10 +51,12 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ChakraProvider>
-        {getLayout(<Component {...pageProps} />)}
-        <ReactQueryDevtools initialIsOpen={false} />
-      </ChakraProvider>
+      <Hydrate state={dehydratedState}>
+        <ChakraProvider>
+          {getLayout(<Component {...pageProps} />)}
+          <ReactQueryDevtools initialIsOpen={false} />
+        </ChakraProvider>
+      </Hydrate>
     </QueryClientProvider>
   );
 }

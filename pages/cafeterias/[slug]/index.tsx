@@ -1,3 +1,4 @@
+import { dehydrate, QueryClient } from "@tanstack/react-query";
 import { GetStaticProps } from "next";
 import { useRouter } from "next/router";
 import CafeteriaDetails from "~components/Cafeterias/CafeteriaDetails";
@@ -7,16 +8,9 @@ import { supabase } from "~lib/api";
 import { NextPageWithLayout } from "~pages/_app";
 import { Cafeteria, CafeteriaWithMenuAndReviews } from "~types/types";
 
-interface CafeProps {
-  cafeteria: CafeteriaWithMenuAndReviews;
-}
-
-const Cafe: NextPageWithLayout<CafeProps> = ({ cafeteria }) => {
+const Cafe: NextPageWithLayout = () => {
   const router = useRouter();
-  const { data: cafe, isLoading } = useGetCafe(
-    router.query.slug as string,
-    cafeteria
-  );
+  const { data: cafe, isLoading } = useGetCafe(router.query.slug as string);
 
   if (isLoading) return <Spinner />;
 
@@ -42,21 +36,29 @@ export const getStaticPaths = async () => {
   };
 };
 export const getStaticProps: GetStaticProps = async (ctx) => {
+  const queryClient = new QueryClient();
   const slug = ctx.params?.slug;
-  const { data: cafeteria, error } = await supabase
-    .from<CafeteriaWithMenuAndReviews>("cafeteria")
-    .select(
-      `*, 
+
+  const getCafeteria = async () => {
+    const { data: cafeteria, error } = await supabase
+      .from<CafeteriaWithMenuAndReviews>("cafeteria")
+      .select(
+        `*, 
       menuCategories:menu_category(*, menus:menu(*)), 
       menus:menu(*), 
       reviews:review(*)`
-    )
-    .eq("slug", slug as string)
-    .single();
+      )
+      .eq("slug", slug as string)
+      .single();
+
+    return cafeteria;
+  };
+
+  await queryClient.prefetchQuery(["cafe"], getCafeteria);
 
   return {
     props: {
-      cafeteria,
+      dehydratedState: dehydrate(queryClient),
     },
     revalidate: 10,
   };
