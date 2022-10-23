@@ -3,19 +3,17 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import NextLink from "next/link";
 import MenuItem from "~components/dashboard/Menu/MenuItem";
 import WithCafeAuth from "~components/WithCafeAuth";
-import { useAuth } from "~context/AuthContext";
+import useUser from "~hooks/auth/useUser";
 import { supabase } from "~lib/api";
 
 const Menus = () => {
-  const { user } = useAuth();
+  const { data: user } = useUser();
   const toast = useToast();
   const queryClient = useQueryClient();
 
   const getMenus = async () => {
-    const { data: menus, error } = await supabase
-      .from("menu")
-      .select()
-      .eq("cafe_id", user?.cafe[0].id);
+    const { data: menus, error } = await supabase.from("menu").select();
+    // .eq("cafe_id", user?.cafe[0].id);
     return menus;
   };
   const { data: menus, isLoading } = useQuery(["menus", user], getMenus);
@@ -29,7 +27,7 @@ const Menus = () => {
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries("menus");
+        queryClient.invalidateQueries(["menus"]);
         toast({
           description: "Menu deleted",
           status: "success",
@@ -48,7 +46,7 @@ const Menus = () => {
     }
   );
 
-  const onDelete = async (id) => {
+  const onDelete = async (id: void) => {
     mutation.mutate(id);
   };
 
@@ -77,7 +75,7 @@ const Menus = () => {
         justifyItems="center"
         mx={[null, "2"]}
       >
-        {menus.map((menu) => (
+        {menus?.map((menu) => (
           <MenuItem onDelete={onDelete} menu={menu} key={menu.id} />
         ))}
       </SimpleGrid>

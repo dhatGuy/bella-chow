@@ -11,35 +11,36 @@ import {
 } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import WithCafeAuth from "~components/WithCafeAuth";
-import { useAuth } from "~context/AuthContext";
+import useUser from "~hooks/auth/useUser";
 import { supabase } from "~lib/api";
 
 const Create = () => {
-  const { user } = useAuth();
+  const { data: user } = useUser();
   const router = useRouter();
   const queryClient = useQueryClient();
 
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState<File>();
   const [available, setAvailable] = useState(false);
 
   // upload image
   const handleUpload = async () => {
-    const fileExt = image.name.split(".").pop();
+    const fileExt = image?.name.split(".").pop();
 
     const { data, error } = await supabase.storage
       .from("food-app")
-      .upload(`menus/${name}.${fileExt}`, image);
+      .upload(`menus/${name}.${fileExt}`, image!);
 
     const { publicURL } = supabase.storage
       .from("food-app")
       .getPublicUrl(`menus/${name}.${fileExt}`);
     return publicURL;
   };
+
   const mutation = useMutation(
     async () => {
       let imgUrl = await handleUpload();
@@ -50,18 +51,18 @@ const Create = () => {
         image: imgUrl,
         price,
         available,
-        cafe_id: user.cafe[0].id,
+        // cafe_id: user.cafe[0].id,
       });
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries("menu");
+        queryClient.invalidateQueries(["menu"]);
         router.push("/dashboard/menus");
       },
     }
   );
 
-  const onCreate = async (e) => {
+  const onCreate = async (e: FormEvent) => {
     e.preventDefault();
     if (!name || !description || !price || !image) {
       return alert("All fields required");
@@ -113,8 +114,10 @@ const Create = () => {
             <FormLabel>Product image</FormLabel>
             <Input
               type="file"
-              accept=".png, .jpg, .jpeg"
-              onChange={(e) => setImage(e.target.files[0])}
+              accept=".png, .jpg, .jpeg, .jiff"
+              onChange={(e) => {
+                if (e.target.files) setImage(e.target.files[0]);
+              }}
             />
           </FormControl>
           <FormControl display="flex" alignItems="center">

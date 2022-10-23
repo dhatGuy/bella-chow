@@ -11,12 +11,14 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import WithCafeAuth from "~components/WithCafeAuth";
 import { supabase } from "~lib/api";
+import { Menu } from "~types/types";
 
-const Edit = ({ data }) => {
+const Edit = (data: Menu) => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { data: menu, isLoading } = useQuery(["menu", router.query], getMenu, {
@@ -26,7 +28,7 @@ const Edit = ({ data }) => {
   const [name, setName] = useState(menu.name || "");
   const [price, setPrice] = useState(menu.price || "");
   const [description, setDescription] = useState(menu.description || "");
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState<File>();
   const [available, setAvailable] = useState(menu.available || false);
 
   async function getMenu() {
@@ -39,11 +41,15 @@ const Edit = ({ data }) => {
   }
   // upload image
   const handleUpload = async () => {
+    if (!image) {
+      return;
+    }
+
     const { data: upload, error: uploadError } = await supabase.storage
       .from("food-app")
       .update(`menus/${name}.png`, image, {
-        cacheControl: 1,
         upsert: true,
+        cacheControl: "1800",
       });
 
     const { publicURL } = supabase.storage
@@ -64,12 +70,12 @@ const Edit = ({ data }) => {
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries("menu");
+        queryClient.invalidateQueries(["menu"]);
       },
     }
   );
 
-  const onSave = async (e) => {
+  const onSave = async (e: FormEvent) => {
     e.preventDefault();
     mutation.mutate();
   };
@@ -94,7 +100,6 @@ const Edit = ({ data }) => {
             <FormLabel>Product description</FormLabel>
             <Textarea
               w={["100%", "50%"]}
-              type="text"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
@@ -117,7 +122,9 @@ const Edit = ({ data }) => {
               w={["100%", "50%"]}
               type="file"
               accept=".png, .jpg, .jpeg"
-              onChange={(e) => setImage(e.target.files[0])}
+              onChange={(e) => {
+                if (e.target.files) setImage(e.target.files[0]);
+              }}
             />
           </FormControl>
           <FormControl display="flex" alignItems="center">
@@ -147,7 +154,7 @@ const Edit = ({ data }) => {
 
 export default WithCafeAuth(Edit);
 
-export const getServerSideProps = async (ctx) => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { data, error } = await supabase
     .from("menu")
     .select()

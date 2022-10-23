@@ -1,5 +1,7 @@
+import { GetStaticProps } from "next";
 import { useRouter } from "next/router";
 import CafeteriaDetails from "~components/Cafeterias/CafeteriaDetails";
+import Spinner from "~components/Spinner";
 import useGetCafe from "~hooks/cafe/useGetCafe";
 import { supabase } from "~lib/api";
 import { NextPageWithLayout } from "~pages/_app";
@@ -16,9 +18,9 @@ const Cafe: NextPageWithLayout<CafeProps> = ({ cafeteria }) => {
     cafeteria
   );
 
-  // if (isLoading) return <Spinner />;
+  if (isLoading) return <Spinner />;
 
-  return <CafeteriaDetails cafe={cafe} />;
+  return <CafeteriaDetails cafe={cafe!} />;
 };
 
 export default Cafe;
@@ -39,8 +41,8 @@ export const getStaticPaths = async () => {
     fallback: "blocking",
   };
 };
-export const getStaticProps = async (ctx) => {
-  const slug = ctx.params.slug;
+export const getStaticProps: GetStaticProps = async (ctx) => {
+  const slug = ctx.params?.slug;
   const { data: cafeteria, error } = await supabase
     .from<CafeteriaWithMenuAndReviews>("cafeteria")
     .select(
@@ -49,7 +51,7 @@ export const getStaticProps = async (ctx) => {
       menus:menu(*), 
       reviews:review(*)`
     )
-    .eq("slug", slug)
+    .eq("slug", slug as string)
     .single();
 
   return {

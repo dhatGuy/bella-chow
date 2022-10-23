@@ -3,8 +3,8 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import useUser from "~hooks/auth/useUser";
 
-const WithAuth = (Component) => {
-  const MyComponent = (props) => {
+function WithAuth<T>(Component: React.ComponentType<T>) {
+  const MyComponent = (props: T & {}) => {
     const { isLoading, data: user } = useUser();
     const router = useRouter();
 
@@ -35,6 +35,6 @@ const WithAuth = (Component) => {
   };
 
   return MyComponent;
-};
+}
 
 export default WithAuth;

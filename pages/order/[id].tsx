@@ -13,6 +13,7 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
+import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import Moment from "react-moment";
 import Spinner from "~components/Spinner";
@@ -88,8 +89,8 @@ const Order = ({ data }: { data: OrderWithItemsAndMenu }) => {
 
 export default WithAuth(Order);
 
-export const getServerSideProps = async (ctx) => {
-  const id = ctx.query.id;
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const id = ctx.query.id as string;
   const { data } = await supabase
     .from<OrderWithItemsAndMenu>("order")
     .select(

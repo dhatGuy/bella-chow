@@ -8,9 +8,6 @@ import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 import { ReactElement, ReactNode, useEffect } from "react";
 import Layout from "~components/Layout";
-import { AuthProvider } from "~context/AuthContext";
-import { CartProvider } from "~context/CartContext";
-import { OrderProvider } from "~context/OrderContext";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -53,13 +50,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   return (
     <QueryClientProvider client={queryClient}>
       <ChakraProvider>
-        <AuthProvider>
-          <CartProvider>
-            <OrderProvider>
-              {getLayout(<Component {...pageProps} />)}
-            </OrderProvider>
-          </CartProvider>
-        </AuthProvider>
+        {getLayout(<Component {...pageProps} />)}
         <ReactQueryDevtools initialIsOpen={false} />
       </ChakraProvider>
     </QueryClientProvider>

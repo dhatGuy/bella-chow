@@ -1,25 +1,25 @@
 /* eslint-disable react/no-children-prop */
-import React, { useState } from "react";
 import {
   Box,
-  Text,
-  Stack,
-  InputGroup,
-  Input,
-  InputLeftElement,
-  Icon,
-  FormLabel,
   Button,
   Divider,
   FormControl,
+  FormLabel,
   Heading,
+  Icon,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  Stack,
+  Text,
 } from "@chakra-ui/react";
+import { FormEvent, useState } from "react";
 
-import { FaRegEnvelope, FaLock } from "react-icons/fa";
+import { FaLock, FaRegEnvelope } from "react-icons/fa";
 
 export default function Register() {
   const [isSubmitting, setSubmitting] = useState(false);
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = (e: FormEvent) => {
     e.preventDefault();
     // Demo: Submit registration form
     setSubmitting(true);

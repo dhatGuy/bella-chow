@@ -11,6 +11,7 @@ import {
   SimpleGrid,
   Text,
 } from "@chakra-ui/react";
+import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { usePaystackPayment } from "react-paystack";
@@ -301,12 +302,12 @@ function Checkout({ cafe }: { cafe: Cafeteria }) {
 
 export default Checkout;
 
-export const getServerSideProps = async (ctx) => {
-  const slug = ctx.params.slug;
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const slug = ctx.params!.slug;
   const { data, error } = await supabase
     .from<Cafeteria>("cafeteria")
     .select()
-    .eq("slug", slug)
+    .eq("slug", slug as string)
     .single();
 
   return {

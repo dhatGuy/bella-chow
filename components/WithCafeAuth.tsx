@@ -3,22 +3,20 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import useUser from "~hooks/auth/useUser";
 
-const WithCafeAuth = (Component) => {
-  const MyComponent = (props) => {
+function WithCafeAuth<T>(Component: React.ComponentType<T>) {
+  function MyComponent(props: T & {}) {
     const { isLoading, data: user } = useUser();
     const router = useRouter();
 
     useEffect(() => {
       if (!isLoading && !user) {
-        return router.push({
+        router.push({
           pathname: "/login",
           query: { from: router.pathname },
         });
       }
       if (!isLoading && !user?.cafe_owner) {
-        return router.push({
-          pathname: "/",
-        });
+        router.push("/");
       }
     }, [user, isLoading, router]);
 
@@ -37,9 +35,9 @@ const WithCafeAuth = (Component) => {
         />
       </Center>
     );
-  };
+  }
 
   return MyComponent;
-};
+}
 
 export default WithCafeAuth;

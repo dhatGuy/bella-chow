@@ -14,30 +14,32 @@ import {
 } from "@chakra-ui/react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
+import { GetServerSideProps } from "next/types";
 import Moment from "react-moment";
 import WithCafeAuth from "~components/WithCafeAuth";
 import { supabase } from "~lib/api";
+import { OrderWithItemsAndMenu } from "~types/types";
 
-const Order = ({ data }) => {
+const Order = (data: OrderWithItemsAndMenu) => {
   const router = useRouter();
   const queryClient = useQueryClient();
 
   const fetchOrder = async () => {
     const { data, error } = await supabase
-      .from("order")
+      .from<OrderWithItemsAndMenu>("order")
       .select(
         `
         *, user:users(username), orderItems(*, menu(*))
       `
       )
-      .eq("id", router.query.id)
+      .eq("id", router.query.id as string)
       .single();
     if (error) {
-      throw new Error(error);
+      throw new Error(error.message);
     }
     return data;
   };
-  const { data: order } = useQuery("order", fetchOrder, {
+  const { data: order } = useQuery(["order"], fetchOrder, {
     initialData: data,
   });
 
@@ -46,7 +48,8 @@ const Order = ({ data }) => {
       <Heading as="h1">Order Details</Heading>
       <Box boxShadow="md">
         <Text>Order id: #{order.id}</Text>
-        <Text>Ordered by: {order.user.username}</Text>
+        {/* TODO: fix type */}
+        {/* <Text>Ordered by: {order.user.username}</Text> */}
         <Text>
           Placed on: <Moment format="ddd LL">{order.date}</Moment>
         </Text>
@@ -67,7 +70,7 @@ const Order = ({ data }) => {
             </Tr>
           </Thead>
 
-          {order.orderItems.map((item) => (
+          {order.items.map((item) => (
             <Tr key={item.id}>
               <Td>
                 <Flex
@@ -103,16 +106,16 @@ const Order = ({ data }) => {
 
 export default WithCafeAuth(Order);
 
-export const getServerSideProps = async (ctx) => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const id = ctx.query.id;
   const { data } = await supabase
-    .from("order")
+    .from<OrderWithItemsAndMenu>("order")
     .select(
       `
         *, user:users(username), orderItems(*, menu(*))
       `
     )
-    .eq("id", id)
+    .eq("id", id as string)
     .single();
 
   return {

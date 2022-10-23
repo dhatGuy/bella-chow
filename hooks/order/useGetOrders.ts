@@ -3,7 +3,7 @@ import useUser from "~hooks/auth/useUser";
 import { supabase } from "~lib/api";
 import { OrderWithOrderItems } from "~types/types";
 
-const getOrders = async (userId: string) => {
+const getOrders = async (userId?: string) => {
   const { data, error } = await supabase
     .from<OrderWithOrderItems>("order")
     .select(`*, orderItems:order_item(*), cafeteria(*)`)

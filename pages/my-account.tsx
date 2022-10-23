@@ -14,10 +14,18 @@ import {
   useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
-import { useAuth } from "~context/AuthContext";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { FormEvent, useState } from "react";
+import useUser from "~hooks/auth/useUser";
 import { supabase } from "~lib/api";
+
+interface FormData {
+  address: string;
+  lastname: string;
+  firstname: string;
+  gender: string;
+  phone: string;
+}
 
 const Account = () => {
   const [firstname, setFirstname] = useState("");
@@ -31,7 +39,7 @@ const Account = () => {
   const toast = useToast();
 
   const mutation = useMutation(
-    async (data) => {
+    async (data: FormData) => {
       try {
         return await supabase.from("users").update(data);
       } catch (error) {
@@ -40,7 +48,7 @@ const Account = () => {
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries("account");
+        queryClient.invalidateQueries(["account"]);
         toast({
           position: "top-right",
           title: "Profile update",
@@ -61,24 +69,9 @@ const Account = () => {
     }
   );
 
-  const { user } = useAuth();
-  const { data, isLoading } = useQuery(
-    "account",
-    async () =>
-      await supabase.from("users").select("*").eq("id", user?.id).single(),
-    {
-      enabled: !!user?.id,
-      onSuccess: ({ data }) => {
-        setLastname(data?.lastname || "");
-        setFirstname(data?.firstname || "");
-        setGender(data?.gender || "");
-        setAddress(data?.address || "");
-        setPhone(data?.phone || "");
-      },
-    }
-  );
+  const { data: user } = useUser();
 
-  const onSubmit = async (e) => {
+  const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
     mutation.mutate({
       address,
@@ -148,7 +141,7 @@ const Account = () => {
                       size="sm"
                       w="full"
                       rounded="md"
-                      value={firstname}
+                      value={user?.firstname || firstname}
                       onChange={(e) => setFirstname(e.target.value)}
                     />
                   </FormControl>
@@ -171,7 +164,7 @@ const Account = () => {
                       size="sm"
                       w="full"
                       rounded="md"
-                      value={lastname}
+                      value={user?.lastname || lastname}
                       onChange={(e) => setLastname(e.target.value)}
                     />
                   </FormControl>
@@ -195,7 +188,7 @@ const Account = () => {
                       size="sm"
                       w="full"
                       rounded="md"
-                      value={phone}
+                      value={user?.phone || phone}
                       onChange={(e) => setPhone(e.target.value)}
                     />
                   </FormControl>
@@ -219,7 +212,8 @@ const Account = () => {
                       size="sm"
                       w="full"
                       rounded="md"
-                      value={gender}
+                      title="gender"
+                      value={user?.gender || gender}
                       onChange={(e) => setGender(e.target.value)}
                     >
                       <option value="MALE">Male</option>
@@ -247,7 +241,7 @@ const Account = () => {
                       size="sm"
                       w="full"
                       rounded="md"
-                      value={address}
+                      value={user?.address || address}
                       onChange={(e) => setAddress(e.target.value)}
                     />
                   </FormControl>

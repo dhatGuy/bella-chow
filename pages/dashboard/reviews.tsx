@@ -2,16 +2,15 @@ import { Box, Container, Heading } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import Review from "~components/Reviews/Review";
 import WithCafeAuth from "~components/WithCafeAuth";
-import { useAuth } from "~context/AuthContext";
+import useUser from "~hooks/auth/useUser";
 import { supabase } from "~lib/api";
 
 const Reviews = () => {
-  const { user } = useAuth();
+  const { data: user } = useUser();
   const getReviews = async () => {
     const { data, error } = await supabase
       .from("reviews")
-      .select(`*, user:users(username)`)
-      .eq("cafe_id", user.cafe[0].id);
+      .select(`*, user:users(username)`);
     return data;
   };
   const {
@@ -28,7 +27,7 @@ const Reviews = () => {
       <Heading as="h2" textAlign="center">
         Reviews
       </Heading>
-      {reviews.map((review) => (
+      {reviews?.map((review) => (
         <Box key={review.id} boxShadow="lg" p="3">
           <Review
             username={review.user.username}

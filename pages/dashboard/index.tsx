@@ -8,7 +8,7 @@ function Dashboard() {
   const [value, changeValue] = useState(1);
   return (
     <>
-      <Main display={display} changeDisplay={changeDisplay} />
+      <Main />
     </>
   );
 }
