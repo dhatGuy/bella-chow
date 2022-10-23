@@ -17,15 +17,11 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useRouter } from "next/router";
 import { FiShoppingCart } from "react-icons/fi";
-import { usePaystackPayment } from "react-paystack";
-import { PaystackProps } from "react-paystack/dist/types";
 import CartItem from "~components/Cart/CartItem";
-import useUser from "~hooks/auth/useUser";
 import useClearCart from "~hooks/cart/useClearCart";
 import useGetCart from "~hooks/cart/useGetCart";
-import useCreateOrder from "~hooks/order/useCreateOrder";
 import { Cafeteria } from "~types/types";
 
 interface CartDrawerProp {
@@ -35,19 +31,9 @@ interface CartDrawerProp {
 }
 
 function CartDrawer({ isOpen, onClose, cafe }: CartDrawerProp) {
-  const user = useUser();
   const clearCartMutation = useClearCart(cafe.id);
-  const createOrderMutation = useCreateOrder(cafe.id);
-  const [isProcessing, setIsProcessing] = useState(false);
   const cart = useGetCart(cafe.id);
-
-  const config: PaystackProps = {
-    email: user.data?.email,
-    amount: Number((cart.data?.totalAmount * 100).toFixed(2)),
-    publicKey: process.env.NEXT_PUBLIC_PAYSTACK_KEY as string,
-  };
-
-  const initializePayment = usePaystackPayment(config);
+  const router = useRouter();
 
   // if (user.isLoading || cart.isLoading) return <Spinner />;
 
@@ -55,19 +41,6 @@ function CartDrawer({ isOpen, onClose, cafe }: CartDrawerProp) {
   //   return <span>Error: {user.error?.message || cart.error?.message}</span>;
   // }
 
-  const onSuccess = (res) => {
-    createOrderMutation.mutate({
-      amount: cart.data.totalAmount,
-      paymentRef: res.reference,
-      userId: user.data.id,
-    });
-    setIsProcessing(false);
-  };
-  const onClosePayment = () => setIsProcessing(false);
-  const initiatePayment = () => {
-    initializePayment(onSuccess, onClosePayment);
-    setIsProcessing(true);
-  };
   return (
     <>
       <Drawer
@@ -120,7 +93,7 @@ function CartDrawer({ isOpen, onClose, cafe }: CartDrawerProp) {
               </HStack>
               <HStack justify={"space-between"} w="full">
                 <Button
-                  disabled={!cart.data?.cartItems.length || isProcessing}
+                  disabled={!cart.data?.cartItems.length}
                   variant="outline"
                   mr={3}
                   onClick={() => clearCartMutation.mutate(cart.data!.id)}
@@ -129,10 +102,8 @@ function CartDrawer({ isOpen, onClose, cafe }: CartDrawerProp) {
                 </Button>
                 <Button
                   colorScheme="blue"
-                  onClick={initiatePayment}
-                  disabled={!cart.data?.cartItems.length || isProcessing}
-                  isLoading={createOrderMutation.isLoading}
-                  loadingText="Processing"
+                  onClick={() => router.push(`${router.asPath}/checkout`)}
+                  disabled={!cart.data?.cartItems.length}
                 >
                   Checkout
                 </Button>

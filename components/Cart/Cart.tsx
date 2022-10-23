@@ -12,14 +12,10 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useRouter } from "next/router";
 import { FiShoppingCart } from "react-icons/fi";
-import { usePaystackPayment } from "react-paystack";
-import { PaystackProps } from "react-paystack/dist/types";
-import useUser from "~hooks/auth/useUser";
 import useClearCart from "~hooks/cart/useClearCart";
 import useGetCart from "~hooks/cart/useGetCart";
-import useCreateOrder from "~hooks/order/useCreateOrder";
 import { Cafeteria } from "~types/types";
 import CartItem from "./CartItem";
 
@@ -28,38 +24,10 @@ interface CartProps {
 }
 
 const Cart = ({ cafe }: CartProps) => {
-  const user = useUser();
   const clearCartMutation = useClearCart(cafe.id);
-  const createOrderMutation = useCreateOrder(cafe.id);
-  const [isProcessing, setIsProcessing] = useState(false);
   const cart = useGetCart(cafe.id);
+  const router = useRouter();
 
-  const config: PaystackProps = {
-    email: user.data?.email,
-    amount: Number((cart.data?.totalAmount * 100).toFixed(2)),
-    publicKey: process.env.NEXT_PUBLIC_PAYSTACK_KEY as string,
-  };
-  const initializePayment = usePaystackPayment(config);
-
-  // if (user.isLoading || cart.isLoading) return <Spinner />;
-
-  // if (user.isError || cart.isError) {
-  //   return null;
-  // }
-
-  const onSuccess = (res) => {
-    createOrderMutation.mutate({
-      amount: cart.data.totalAmount,
-      paymentRef: res.reference,
-      userId: user.data.id,
-    });
-    setIsProcessing(false);
-  };
-  const onClosePayment = () => setIsProcessing(false);
-  const initiatePayment = () => {
-    initializePayment(onSuccess, onClosePayment);
-    setIsProcessing(true);
-  };
   return (
     <Box
       position="sticky"
@@ -92,7 +60,7 @@ const Cart = ({ cafe }: CartProps) => {
           h="100%"
         >
           {!cart.data?.cartItems?.length ? (
-            <VStack align="center" h="100%" justify="center">
+            <VStack align="center" h="full" justify="center">
               <Icon as={FiShoppingCart} w={20} h={20} />
               <Text>You have no item in your cart</Text>
             </VStack>
@@ -110,7 +78,7 @@ const Cart = ({ cafe }: CartProps) => {
           <Divider />
           <HStack justify={"space-between"} w="full">
             <Button
-              disabled={!cart.data?.cartItems.length || isProcessing}
+              disabled={!cart.data?.cartItems.length}
               variant="outline"
               mr={3}
               onClick={() => clearCartMutation.mutate(cart.data!.id)}
@@ -119,12 +87,10 @@ const Cart = ({ cafe }: CartProps) => {
             </Button>
             <Button
               colorScheme="blue"
-              onClick={initiatePayment}
-              disabled={!cart.data?.cartItems.length || isProcessing}
-              isLoading={createOrderMutation.isLoading}
-              loadingText="Processing"
+              disabled={!cart.data?.cartItems.length}
+              onClick={() => router.push(`${router.asPath}/checkout`)}
             >
-              Checkout
+              Continue to checkout
             </Button>
           </HStack>
         </VStack>

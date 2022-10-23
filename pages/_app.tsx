@@ -7,7 +7,6 @@ import Router from "next/router";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 import { ReactElement, ReactNode, useEffect } from "react";
-import AdminLayout from "~components/AdminLayout";
 import Layout from "~components/Layout";
 import { AuthProvider } from "~context/AuthContext";
 import { CartProvider } from "~context/CartContext";
@@ -28,11 +27,6 @@ const queryClient = new QueryClient({
     },
   },
 });
-
-const layouts = {
-  admin: AdminLayout,
-  default: Layout,
-};
 
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   useEffect(() => {

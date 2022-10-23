@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import { state } from "~context/state";
 import useUser from "~hooks/auth/useUser";
 import { supabase } from "~lib/api";
 import { CartWithItemAndMenu } from "~types/types";
@@ -48,9 +47,6 @@ export default function useGetCart(cafeId: number) {
     () => getCart({ userId: user!.id, cafeId }),
     {
       enabled: !!user,
-      onSuccess: (data) => {
-        state.cart = data;
-      },
     }
   );
 }
