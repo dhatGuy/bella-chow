@@ -56,7 +56,7 @@ export default function useCreateOrder(cafeId: number) {
   };
 
   return useMutation((input: CreateOrderType) => createOrder(input), {
-    onSuccess: () => {
+    async onSuccess() {
       toast({
         title: "Order placed successfully",
         status: "success",
@@ -64,7 +64,7 @@ export default function useCreateOrder(cafeId: number) {
         isClosable: true,
         position: "top-right",
       });
-      clearCartMutation.mutate(cart!.id);
+      await clearCartMutation.mutateAsync(cart!.id);
     },
     onError: () => {
       toast({

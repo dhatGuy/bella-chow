@@ -1,6 +1,3 @@
-// @ts-nocheck
-// TODO: remove ts-nocheck
-
 import {
   Button,
   FormControl,

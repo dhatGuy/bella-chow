@@ -7,8 +7,7 @@ export default function useResetPassword() {
     const { data, error } = await supabaseClient.auth.resetPasswordForEmail(
       email,
       {
-        redirectTo:
-          "https://food-ordering-app-bice.vercel.app/password-recovery",
+        redirectTo: `${window.location.origin}/password-recovery`,
       }
     );
 

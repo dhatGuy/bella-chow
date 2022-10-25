@@ -39,9 +39,10 @@ export default function Login() {
 
   useEffect(() => {
     if (user) {
-      router.back();
+      router.push("/");
     }
-  }, [router, user]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const onSubmit = handleSubmit((data) => {
     loginMutation.mutate(data, {

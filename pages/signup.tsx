@@ -37,9 +37,10 @@ export default function Signup() {
 
   useEffect(() => {
     if (user) {
-      router.back();
+      router.push("/");
     }
-  }, [router, user]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const onSubmit = handleSubmit((data) => {
     createUserMutation.mutate(data);
