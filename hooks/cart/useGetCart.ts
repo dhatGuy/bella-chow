@@ -1,19 +1,20 @@
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useQuery } from "@tanstack/react-query";
 import useUser from "~hooks/auth/useUser";
-import { supabase } from "~lib/api";
-import { CartWithItemAndMenu } from "~types";
+import { definitions } from "~types/supabase";
 
-interface IGetCart {
+interface GetCart {
   userId: string;
   cafeId: number;
 }
 export default function useGetCart(cafeId: number) {
   const { data: user } = useUser();
+  const supabaseClient = useSupabaseClient<definitions>();
 
-  const getCart = async ({ userId, cafeId }: IGetCart) => {
+  const getCart = async ({ userId, cafeId }: GetCart) => {
     // check if user has cart for this cafe
-    const { data: cart, error: cartError } = await supabase
-      .from<CartWithItemAndMenu>("cart")
+    const { data: cart, error: cartError } = await supabaseClient
+      .from("cart")
       .select(`*, cartItems: cart_item(*, menu(*))`)
       .eq("user_id", userId)
       .eq("cafe_id", cafeId)
@@ -21,17 +22,17 @@ export default function useGetCart(cafeId: number) {
 
     // if error, create a new cart
     if (cartError) {
-      const { data: newCart, error: newCartError } = await supabase
-        .from<CartWithItemAndMenu>("cart")
+      const { data: newCart, error: newCartError } = await supabaseClient
+        .from("cart")
         .insert([
           {
             user_id: userId,
             cafe_id: cafeId,
           },
         ])
-        .select(`*, cartItems:cart_item(*, menu(*))`)
         .eq("user_id", userId)
         .eq("cafe_id", cafeId)
+        .select(`*, cartItems:cart_item(*, menu(*))`)
         .single();
 
       if (newCartError) throw new Error(newCartError.message);

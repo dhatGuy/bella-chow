@@ -1,6 +1,5 @@
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "~lib/api";
-import { Review } from "~types";
 
 interface IAddReview {
   content: string;
@@ -9,20 +8,21 @@ interface IAddReview {
   userId: string;
 }
 
-const addReview = async ({ content, rating, cafeId, userId }: IAddReview) => {
-  const { data, error } = await supabase
-    .from<Review>("review")
-    .upsert([{ content, rating, cafe_id: cafeId, user_id: userId }]);
-
-  if (error) {
-    throw new Error(error.message);
-  }
-
-  return data;
-};
-
 export default function useAddReview() {
   const queryClient = useQueryClient();
+  const supabaseClient = useSupabaseClient();
+
+  const addReview = async ({ content, rating, cafeId, userId }: IAddReview) => {
+    const { data, error } = await supabaseClient
+      .from("review")
+      .upsert([{ content, rating, cafe_id: cafeId, user_id: userId }]);
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    return data;
+  };
 
   return useMutation((input: IAddReview) => addReview(input), {
     onSuccess: (_, variables) => {

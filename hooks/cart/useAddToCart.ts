@@ -1,8 +1,9 @@
 import { useToast } from "@chakra-ui/react";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useUser from "~hooks/auth/useUser";
-import { supabase } from "~lib/api";
 import { CartItemWithMenu, Menu } from "~types";
+import { definitions } from "~types/supabase";
 import calculateCartTotal from "~utils/calculateCartTotal";
 import useGetCart from "./useGetCart";
 
@@ -15,6 +16,7 @@ export default function useAddToCart(cafeId: number) {
   const { data: cart, isSuccess } = useGetCart(cafeId);
   const queryClient = useQueryClient();
   const { data: user } = useUser();
+  const supabaseClient = useSupabaseClient<definitions>();
   const toast = useToast();
 
   const addToCart = async ({ menu, qty = 1 }: AddToCartProps) => {
@@ -32,13 +34,13 @@ export default function useAddToCart(cafeId: number) {
           qty: newItem.qty + qty,
         };
 
-        const { data, error } = await supabase
-          .from<CartItemWithMenu>("cart_item")
+        const { data, error } = await supabaseClient
+          .from("cart_item")
           .update(updateItem)
           .match({ id: updateItem.id })
-          .select(`*, menu(*)`)
           .filter("menu_id", "eq", menu.id)
           .filter("cart_id", "eq", cart?.id)
+          .select(`*, menu(*)`)
           .single();
 
         if (error) throw new Error(error.message);
@@ -46,8 +48,8 @@ export default function useAddToCart(cafeId: number) {
         await calculateCartTotal(cart.id);
         return data;
       } else {
-        const { data, error } = await supabase
-          .from<CartItemWithMenu>("cart_item")
+        const { data, error } = await supabaseClient
+          .from("cart_item")
           .insert([
             {
               menu_id: menu.id,
@@ -56,9 +58,9 @@ export default function useAddToCart(cafeId: number) {
               qty,
             },
           ])
-          .select(`*, menu(*)`)
           .filter("menu_id", "eq", menu.id)
           .filter("cart_id", "eq", cart?.id)
+          .select(`*, menu(*)`)
           .single();
 
         if (error) throw new Error(error.message);

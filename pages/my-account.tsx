@@ -14,6 +14,7 @@ import {
   useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
+import { withPageAuth } from "@supabase/auth-helpers-nextjs";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { FormEvent, useState } from "react";
 import useUser from "~hooks/auth/useUser";
@@ -273,3 +274,7 @@ const Account = () => {
 };
 
 export default Account;
+
+export const getServerSideProps = withPageAuth({
+  redirectTo: "/login",
+});

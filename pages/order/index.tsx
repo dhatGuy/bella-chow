@@ -8,13 +8,16 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
+import { withPageAuth } from "@supabase/auth-helpers-nextjs";
 import Router from "next/router";
 import Moment from "react-moment";
-import WithAuth from "~components/WithAuth";
+import Spinner from "~components/Spinner";
 import useGetOrders from "~hooks/order/useGetOrders";
 
 const Order = () => {
-  const { data: order } = useGetOrders();
+  const { data: order, isLoading } = useGetOrders();
+
+  if (isLoading) return <Spinner />;
 
   return (
     <Box overflow="auto">
@@ -58,4 +61,8 @@ const Order = () => {
   );
 };
 
-export default WithAuth(Order);
+export default Order;
+
+export const getServerSideProps = withPageAuth({
+  redirectTo: "/login",
+});

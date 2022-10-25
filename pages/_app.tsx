@@ -1,5 +1,10 @@
 import { ChakraProvider } from "@chakra-ui/react";
 import {
+  createBrowserSupabaseClient,
+  Session,
+} from "@supabase/auth-helpers-nextjs";
+import { SessionContextProvider } from "@supabase/auth-helpers-react";
+import {
   Hydrate,
   QueryClient,
   QueryClientProvider,
@@ -19,15 +24,19 @@ export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
 
 type AppPropsWithLayout = AppProps<{
   dehydratedState: unknown;
+  initialSession: Session | null | undefined;
 }> & {
   Component: NextPageWithLayout;
 };
 
 function MyApp({
   Component,
-  pageProps: { dehydratedState, ...pageProps },
+  pageProps: { dehydratedState, initialSession, ...pageProps },
 }: AppPropsWithLayout) {
+  console.log("PAGEPROPS:", pageProps, initialSession, dehydratedState);
   const [queryClient] = useState(() => new QueryClient());
+  const [supabaseClient] = useState(() => createBrowserSupabaseClient());
+
   useEffect(() => {
     const delay = 500; // in milliseconds
     let timer: string | number | NodeJS.Timeout | undefined;
@@ -50,14 +59,19 @@ function MyApp({
   const getLayout = Component.getLayout ?? ((page) => <Layout>{page}</Layout>);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <Hydrate state={dehydratedState}>
-        <ChakraProvider>
-          {getLayout(<Component {...pageProps} />)}
-          <ReactQueryDevtools initialIsOpen={false} />
-        </ChakraProvider>
-      </Hydrate>
-    </QueryClientProvider>
+    <SessionContextProvider
+      supabaseClient={supabaseClient}
+      initialSession={initialSession}
+    >
+      <QueryClientProvider client={queryClient}>
+        <Hydrate state={dehydratedState}>
+          <ChakraProvider>
+            {getLayout(<Component {...pageProps} />)}
+            <ReactQueryDevtools initialIsOpen={false} />
+          </ChakraProvider>
+        </Hydrate>
+      </QueryClientProvider>
+    </SessionContextProvider>
   );
 }
 

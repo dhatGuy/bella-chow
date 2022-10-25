@@ -47,7 +47,8 @@ const Feature = ({
 };
 
 export default function Homepage() {
-  const { isLoading, isError } = useUser();
+  const { isError } = useUser();
+  // const { isLoading, session, error, supabaseClient } = useSessionContext();
   const defaultOptions = {
     loop: true,
     autoplay: true,

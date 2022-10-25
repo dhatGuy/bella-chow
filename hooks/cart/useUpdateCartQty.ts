@@ -1,5 +1,5 @@
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "~lib/api";
 import { CartItemWithMenu, Menu } from "~types";
 import calculateCartTotal from "~utils/calculateCartTotal";
 import useGetCart from "./useGetCart";
@@ -13,6 +13,7 @@ type UpdateCartQtyProps = {
 export default function useUpdateCartQty(cafeId: number) {
   const { data: cart, isSuccess } = useGetCart(cafeId);
   const queryClient = useQueryClient();
+  const supabaseClient = useSupabaseClient();
 
   const updateCartQty = async ({
     menuToUpdate,
@@ -30,13 +31,13 @@ export default function useUpdateCartQty(cafeId: number) {
       qty: action == "+" ? cartItem.qty + qty : cartItem.qty - qty,
     };
 
-    const { data: updateData, error: updateError } = await supabase
-      .from<CartItemWithMenu>("cart_item")
+    const { data: updateData, error: updateError } = await supabaseClient
+      .from("cart_item")
       .update(updateItem)
       .match({ id: updateItem.id })
-      .select(`*, menu(*)`)
       .filter("menu_id", "eq", menu.id)
       .filter("cart_id", "eq", cart?.id)
+      .select(`*, menu(*)`)
       .single();
 
     if (updateError) {

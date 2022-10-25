@@ -1,30 +1,38 @@
-import { User } from "@supabase/supabase-js";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "~lib/api";
-import { Users } from "~types";
-
-const getUser = async (user: User | null) => {
-  const { data, error } = await supabase
-    .from<Users>("user")
-    .select("*")
-    .eq("id", user?.id)
-    .single();
-
-  if (error) {
-    throw new Error(error.message);
-  }
-
-  if (!data) {
-    throw new Error("User not found");
-  }
-
-  return data;
-};
 
 export default function useUser() {
   const queryClient = useQueryClient();
-  const user = supabase.auth.user();
-  return useQuery(["user"], () => getUser(user), {
+  const supabaseClient = useSupabaseClient();
+
+  const getUser = async () => {
+    const {
+      data: { user },
+      error: userError,
+    } = await supabaseClient.auth.getUser();
+
+    if (userError) {
+      throw new Error(userError.message);
+    }
+
+    const { data, error } = await supabaseClient
+      .from("user")
+      .select("*")
+      .eq("id", user?.id)
+      .single();
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    if (!data) {
+      throw new Error("User not found");
+    }
+
+    return data;
+  };
+
+  return useQuery(["user"], () => getUser(), {
     refetchOnWindowFocus: false,
     retry: false,
   });

@@ -6,7 +6,6 @@ import Spinner from "~components/Spinner";
 import useGetCafe from "~hooks/cafe/useGetCafe";
 import { supabase } from "~lib/api";
 import { NextPageWithLayout } from "~pages/_app";
-import { Cafeteria, CafeteriaWithMenuAndReviews } from "~types";
 
 const Cafe: NextPageWithLayout = () => {
   const router = useRouter();
@@ -20,13 +19,12 @@ const Cafe: NextPageWithLayout = () => {
 export default Cafe;
 
 export const getStaticPaths = async () => {
-  const { data: cafeterias, error } = await supabase
-    .from<Cafeteria>("cafeteria")
-    .select();
+  const { data: cafeterias, error } = await supabase.from("cafeteria").select();
+  console.log(cafeterias);
 
   const paths = cafeterias?.map(({ slug }) => ({
     params: {
-      slug: slug!.toString(),
+      slug: slug.toString(),
     },
   }));
 
@@ -41,7 +39,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
 
   const getCafeteria = async () => {
     const { data: cafeteria, error } = await supabase
-      .from<CafeteriaWithMenuAndReviews>("cafeteria")
+      .from("cafeteria")
       .select(
         `*, 
       menuCategories:menu_category(*, menus:menu(*)), 

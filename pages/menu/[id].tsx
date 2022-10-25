@@ -7,7 +7,7 @@ const Menu = ({ menu }: { menu: Menu }) => {
   return <MenuDetails menu={menu} />;
 };
 export const getStaticPaths = async () => {
-  const { data: menus, error } = await supabase.from<Menu>("menu").select();
+  const { data: menus, error } = await supabase.from("menu").select();
 
   const paths = menus?.map(({ id }) => ({
     params: { id: id.toString() },
@@ -23,7 +23,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
   const menuId = ctx.params!.id as string;
 
   const { data: menu, error } = await supabase
-    .from<Menu>("menu")
+    .from("menu")
     .select()
     .eq("id", menuId)
     .single();

@@ -1,8 +1,7 @@
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useMutation } from "@tanstack/react-query";
 import router from "next/router";
 import { state } from "~context/state";
-import { supabase } from "~lib/api";
-import { Users } from "~types";
 
 interface CreateUserProps {
   email: string;
@@ -11,9 +10,10 @@ interface CreateUserProps {
 }
 
 const useCreateUser = () => {
+  const supabaseClient = useSupabaseClient();
   const createUser = async ({ email, password, username }: CreateUserProps) => {
-    let { data: findByUsername } = await supabase
-      .from<Users>("user")
+    let { data: findByUsername } = await supabaseClient
+      .from("user")
       .select("*")
       .eq("username", username)
       .maybeSingle();
@@ -22,18 +22,19 @@ const useCreateUser = () => {
       throw new Error("Username already exists");
     }
 
-    let { user, error } = await supabase.auth.signUp(
-      {
-        email,
-        password,
-      },
-      {
+    let {
+      data: { user },
+      error,
+    } = await supabaseClient.auth.signUp({
+      email,
+      password,
+      options: {
         data: {
           username,
           email,
         },
-      }
-    );
+      },
+    });
 
     if (error) {
       throw new Error(`${error.message}`);

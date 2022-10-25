@@ -1,9 +1,8 @@
 import { useToast } from "@chakra-ui/react";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useMutation } from "@tanstack/react-query";
 import useClearCart from "~hooks/cart/useClearCart";
 import useGetCart from "~hooks/cart/useGetCart";
-import { supabase } from "~lib/api";
-import { Order, OrderItem } from "~types";
 
 interface CreateOrderType {
   amount: number;
@@ -14,6 +13,7 @@ interface CreateOrderType {
 export default function useCreateOrder(cafeId: number) {
   const clearCartMutation = useClearCart(cafeId);
   const { data: cart } = useGetCart(cafeId);
+  const supabaseClient = useSupabaseClient();
   const toast = useToast();
 
   const createOrder = async ({
@@ -22,8 +22,8 @@ export default function useCreateOrder(cafeId: number) {
     userId,
   }: CreateOrderType) => {
     if (!cart) return;
-    const { data: order, error: orderError } = await supabase
-      .from<Order>("order")
+    const { data: order, error: orderError } = await supabaseClient
+      .from("order")
       .insert({
         amount,
         user_id: userId,
@@ -41,8 +41,8 @@ export default function useCreateOrder(cafeId: number) {
       qty: item.qty,
     }));
 
-    const { data, error } = await supabase
-      .from<OrderItem>("order_item")
+    const { data, error } = await supabaseClient
+      .from("order_item")
       .insert(orderItems);
 
     if (error) {

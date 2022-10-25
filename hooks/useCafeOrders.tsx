@@ -1,12 +1,13 @@
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "~lib/api";
 import useUser from "./auth/useUser";
 
 const useCafeOrders = () => {
   const { data: user } = useUser();
+  const supabaseClient = useSupabaseClient();
   const fetchOrders = async () => {
     if (user) {
-      const { data, error } = await supabase
+      const { data, error } = await supabaseClient
         .from("order")
         .select(`*, menu(*), user:user(*)`);
       // .filter("cafe_id", "eq", user?.cafe[0].id);
@@ -16,6 +17,7 @@ const useCafeOrders = () => {
       return data;
     }
   };
+
   return useQuery(["orders", user], fetchOrders);
 };
 

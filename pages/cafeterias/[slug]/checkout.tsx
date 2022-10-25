@@ -11,7 +11,7 @@ import {
   SimpleGrid,
   Text,
 } from "@chakra-ui/react";
-import { GetServerSideProps } from "next";
+import { withPageAuth } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { usePaystackPayment } from "react-paystack";
@@ -19,7 +19,6 @@ import { PaystackProps } from "react-paystack/dist/types";
 import useUser from "~hooks/auth/useUser";
 import useGetCart from "~hooks/cart/useGetCart";
 import useCreateOrder from "~hooks/order/useCreateOrder";
-import { supabase } from "~lib/api";
 import { Cafeteria } from "~types";
 
 function Checkout({ cafe }: { cafe: Cafeteria }) {
@@ -302,17 +301,21 @@ function Checkout({ cafe }: { cafe: Cafeteria }) {
 
 export default Checkout;
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const slug = ctx.params!.slug;
-  const { data, error } = await supabase
-    .from<Cafeteria>("cafeteria")
-    .select()
-    .eq("slug", slug as string)
-    .single();
+export const getServerSideProps = withPageAuth({
+  redirectTo: "/login",
+  async getServerSideProps(ctx, supabase) {
+    const slug = ctx.params!.slug;
 
-  return {
-    props: {
-      cafe: data,
-    },
-  };
-};
+    const { data, error } = await supabase
+      .from("cafeteria")
+      .select()
+      .eq("slug", slug as string)
+      .single();
+
+    return {
+      props: {
+        cafe: data,
+      },
+    };
+  },
+});

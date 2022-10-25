@@ -1,6 +1,6 @@
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/router";
-import { supabase } from "~lib/api";
 
 interface LoginProps {
   email: string;
@@ -9,8 +9,13 @@ interface LoginProps {
 
 const useLogin = () => {
   const Router = useRouter();
+  const supabaseClient = useSupabaseClient();
+
   const login = async ({ email, password }: LoginProps) => {
-    let { user, error } = await supabase.auth.signIn({
+    let {
+      data: { user },
+      error,
+    } = await supabaseClient.auth.signInWithPassword({
       email,
       password,
     });

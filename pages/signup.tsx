@@ -12,12 +12,11 @@ import {
   useColorModeValue,
   VStack,
 } from "@chakra-ui/react";
+import { useUser } from "@supabase/auth-helpers-react";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useSnapshot } from "valtio";
-import { state } from "~context/state";
 import useCreateUser from "~hooks/auth/useCreateUser";
 
 type FormData = {
@@ -29,20 +28,18 @@ type FormData = {
 export default function Signup() {
   const router = useRouter();
   const createUserMutation = useCreateUser();
-  const { authenticated } = useSnapshot(state);
   const {
     handleSubmit,
     register,
     formState: { errors },
   } = useForm<FormData>();
+  const user = useUser();
 
   useEffect(() => {
-    // redirect to home if already logged in
-    if (authenticated) {
-      router.push("/");
+    if (user) {
+      router.back();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [router, user]);
 
   const onSubmit = handleSubmit((data) => {
     createUserMutation.mutate(data);

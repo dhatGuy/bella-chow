@@ -13,17 +13,14 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
+import { withPageAuth } from "@supabase/auth-helpers-nextjs";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
-import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import Moment from "react-moment";
 import Spinner from "~components/Spinner";
-import WithAuth from "~components/WithAuth";
 import useGetOrder from "~hooks/order/useGetOrder";
-import { supabase } from "~lib/api";
-import { OrderWithItemsAndMenu } from "~types";
 
-const Order = ({ data }: { data: OrderWithItemsAndMenu }) => {
+const Order = () => {
   const router = useRouter();
   const { data: order, isLoading } = useGetOrder(Number(router.query.id));
 
@@ -88,31 +85,34 @@ const Order = ({ data }: { data: OrderWithItemsAndMenu }) => {
   );
 };
 
-export default WithAuth(Order);
+export default Order;
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const queryClient = new QueryClient();
-  const id = ctx.query.id as string;
+export const getServerSideProps = withPageAuth({
+  redirectTo: "/login",
+  async getServerSideProps(ctx, supabase) {
+    const queryClient = new QueryClient();
+    const id = ctx.query.id as string;
 
-  const getOrder = async () => {
-    const { data } = await supabase
-      .from<OrderWithItemsAndMenu>("order")
-      .select(
-        `
+    const getOrder = async () => {
+      const { data } = await supabase
+        .from("order")
+        .select(
+          `
         *, items:order_item(*, menu(*))
       `
-      )
-      .eq("id", id)
-      .single();
+        )
+        .eq("id", id)
+        .single();
 
-    return data;
-  };
+      return data;
+    };
 
-  await queryClient.prefetchQuery(["order", +id], getOrder);
+    await queryClient.prefetchQuery(["order", +id], getOrder);
 
-  return {
-    props: {
-      dehydratedState: dehydrate(queryClient),
-    },
-  };
-};
+    return {
+      props: {
+        dehydratedState: dehydrate(queryClient),
+      },
+    };
+  },
+});

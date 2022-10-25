@@ -1,22 +1,22 @@
 import { useToast } from "@chakra-ui/react";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useMutation } from "@tanstack/react-query";
 import Router from "next/router";
-import { supabase } from "~lib/api";
-
-const updatePassword = async (password: string) => {
-  const { user, error } = await supabase.auth.update({
-    password,
-  });
-
-  if (error) {
-    throw new Error(error.message);
-  }
-
-  return user;
-};
 
 export default function useUpdatePassword() {
   const toast = useToast();
+  const supabaseClient = useSupabaseClient();
+  const updatePassword = async (password: string) => {
+    const { data: user, error } = await supabaseClient.auth.updateUser({
+      password,
+    });
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    return user;
+  };
 
   return useMutation((password: string) => updatePassword(password), {
     onSuccess: () => {

@@ -1,24 +1,24 @@
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "~lib/api";
-import { CartItem } from "~types";
 import calculateCartTotal from "~utils/calculateCartTotal";
-
-const clearCart = async (cartId: number) => {
-  const res = await supabase
-    .from<CartItem>("cart_item")
-    .delete()
-    .match({ cart_id: cartId });
-
-  if (res.error) {
-    throw new Error(res.error.message);
-  }
-
-  await calculateCartTotal(cartId);
-  return res.data;
-};
 
 export default function useClearCart(cafeId: number) {
   const queryClient = useQueryClient();
+  const supabaseClient = useSupabaseClient();
+
+  const clearCart = async (cartId: number) => {
+    const res = await supabaseClient
+      .from("cart_item")
+      .delete()
+      .match({ cart_id: cartId });
+
+    if (res.error) {
+      throw new Error(res.error.message);
+    }
+
+    await calculateCartTotal(cartId);
+    return res.data;
+  };
 
   return useMutation((cartId: number) => clearCart(cartId), {
     onSuccess: () => {

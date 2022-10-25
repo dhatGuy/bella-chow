@@ -13,8 +13,10 @@ import {
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
+import { useUser } from "@supabase/auth-helpers-react";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import ResetPassword from "~components/ResetPassword";
 import useLogin from "~hooks/auth/useLogin";
@@ -27,12 +29,19 @@ type FormData = {
 export default function Login() {
   const router = useRouter();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const user = useUser();
   const loginMutation = useLogin();
   const {
     handleSubmit,
     register,
     formState: { errors },
   } = useForm<FormData>();
+
+  useEffect(() => {
+    if (user) {
+      router.back();
+    }
+  }, [router, user]);
 
   const onSubmit = handleSubmit((data) => {
     loginMutation.mutate(data, {
