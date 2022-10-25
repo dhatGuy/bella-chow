@@ -1,6 +1,6 @@
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import calculateCartTotal from "~utils/calculateCartTotal";
+import { CartWithItemAndMenu } from "~types";
 
 export default function useClearCart(cafeId: number) {
   const queryClient = useQueryClient();
@@ -16,12 +16,36 @@ export default function useClearCart(cafeId: number) {
       throw new Error(res.error.message);
     }
 
-    await calculateCartTotal(cartId);
     return res.data;
   };
 
   return useMutation((cartId: number) => clearCart(cartId), {
-    onSuccess: () => {
+    async onMutate() {
+      await queryClient.cancelQueries(["cart", cafeId]);
+
+      const previousCart = queryClient.getQueryData<CartWithItemAndMenu>([
+        "cart",
+        cafeId,
+      ]);
+
+      queryClient.setQueryData<CartWithItemAndMenu>(["cart", cafeId], (old) => {
+        if (!old) return old;
+
+        return {
+          ...old,
+          totalAmount: 0,
+          cartItems: [],
+        };
+      });
+
+      return { previousCart };
+    },
+    onError(_error, _cartId, context) {
+      if (context?.previousCart) {
+        queryClient.setQueryData(["cart", cafeId], context.previousCart);
+      }
+    },
+    onSettled() {
       queryClient.invalidateQueries(["cart", cafeId]);
     },
   });

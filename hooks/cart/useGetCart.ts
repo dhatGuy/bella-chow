@@ -1,17 +1,19 @@
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { useQuery } from "@tanstack/react-query";
-import useUser from "~hooks/auth/useUser";
-import { definitions } from "~types/supabase";
+import { CartItemWithMenu, CartWithItemAndMenu } from "~types";
 
 interface GetCart {
   userId: string;
   cafeId: number;
 }
 export default function useGetCart(cafeId: number) {
-  const { data: user } = useUser();
-  const supabaseClient = useSupabaseClient<definitions>();
+  const user = useUser();
+  const supabaseClient = useSupabaseClient();
 
-  const getCart = async ({ userId, cafeId }: GetCart) => {
+  const getCart = async ({
+    userId,
+    cafeId,
+  }: GetCart): Promise<CartWithItemAndMenu> => {
     // check if user has cart for this cafe
     const { data: cart, error: cartError } = await supabaseClient
       .from("cart")
@@ -40,7 +42,13 @@ export default function useGetCart(cafeId: number) {
       return newCart;
     }
 
-    return cart;
+    return {
+      ...cart,
+      totalAmount: cart?.cartItems.reduce(
+        (acc: number, item: CartItemWithMenu) => acc + item.total_price,
+        0
+      ),
+    };
   };
 
   return useQuery(

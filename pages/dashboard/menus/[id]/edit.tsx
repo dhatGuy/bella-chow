@@ -52,10 +52,10 @@ const Edit = (data: Menu) => {
         cacheControl: "1800",
       });
 
-    const { publicURL } = supabase.storage
+    const { data } = supabase.storage
       .from("food-app")
       .getPublicUrl(`menus/${name}.png`);
-    return publicURL;
+    return data.publicUrl;
   };
   const mutation = useMutation(
     async () => {

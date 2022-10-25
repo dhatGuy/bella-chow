@@ -1,6 +1,3 @@
-// TODO: fix paystack type
-// @ts-nocheck
-
 import {
   Box,
   Button,
@@ -16,7 +13,7 @@ import { useRouter } from "next/router";
 import { FiShoppingCart } from "react-icons/fi";
 import useClearCart from "~hooks/cart/useClearCart";
 import useGetCart from "~hooks/cart/useGetCart";
-import { Cafeteria } from "~types";
+import { Cafeteria, CartItemWithMenu } from "~types";
 import CartItem from "./CartItem";
 
 interface CartProps {
@@ -27,6 +24,16 @@ const Cart = ({ cafe }: CartProps) => {
   const clearCartMutation = useClearCart(cafe.id);
   const cart = useGetCart(cafe.id);
   const router = useRouter();
+  // const [total, setTotal] = useState(0);
+
+  // useEffect(() => {
+  //   setTotal(
+  //     cart.data?.cartItems.reduce(
+  //       (acc: number, item: CartItemWithMenu) => acc + item.total_price,
+  //       0
+  //     )
+  //   );
+  // }, [cart]);
 
   return (
     <Box
@@ -65,7 +72,7 @@ const Cart = ({ cafe }: CartProps) => {
               <Text>You have no item in your cart</Text>
             </VStack>
           ) : (
-            cart.data?.cartItems.map((item) => (
+            cart.data?.cartItems.map((item: CartItemWithMenu) => (
               <CartItem cartItem={item} cafeId={cafe.id} key={item.id} />
             ))
           )}
@@ -73,7 +80,7 @@ const Cart = ({ cafe }: CartProps) => {
         <VStack justify="space-between" align="center">
           <HStack w="full" justify={"space-between"}>
             <Text fontWeight="bold">Total</Text>
-            <Text>₦{cart.data?.totalAmount.toFixed(2)}</Text>
+            <Text>₦{cart.data?.totalAmount.toFixed(2) || 0.0}</Text>
           </HStack>
           <Divider />
           <HStack justify={"space-between"} w="full">

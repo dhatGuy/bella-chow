@@ -1,10 +1,7 @@
 import { useToast } from "@chakra-ui/react";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import useUser from "~hooks/auth/useUser";
-import { CartItemWithMenu, Menu } from "~types";
-import { definitions } from "~types/supabase";
-import calculateCartTotal from "~utils/calculateCartTotal";
+import { CartItemWithMenu, CartWithItemAndMenu, Menu } from "~types";
 import useGetCart from "./useGetCart";
 
 type AddToCartProps = {
@@ -15,15 +12,17 @@ type AddToCartProps = {
 export default function useAddToCart(cafeId: number) {
   const { data: cart, isSuccess } = useGetCart(cafeId);
   const queryClient = useQueryClient();
-  const { data: user } = useUser();
-  const supabaseClient = useSupabaseClient<definitions>();
+  const user = useUser();
+  const supabaseClient = useSupabaseClient();
   const toast = useToast();
 
   const addToCart = async ({ menu, qty = 1 }: AddToCartProps) => {
     if (!user) throw "You must be logged in to add to cart";
     if (!isSuccess) return;
 
-    const newItem = cart?.cartItems.find((item) => item.menu_id === menu.id);
+    const newItem = cart?.cartItems.find(
+      (item: CartItemWithMenu) => item.menu_id === menu.id
+    );
 
     try {
       // update existing cart item
@@ -45,7 +44,6 @@ export default function useAddToCart(cafeId: number) {
 
         if (error) throw new Error(error.message);
 
-        await calculateCartTotal(cart.id);
         return data;
       } else {
         const { data, error } = await supabaseClient
@@ -65,7 +63,6 @@ export default function useAddToCart(cafeId: number) {
 
         if (error) throw new Error(error.message);
 
-        await calculateCartTotal(cart.id);
         return data;
       }
     } catch (error) {
@@ -74,20 +71,60 @@ export default function useAddToCart(cafeId: number) {
   };
 
   return useMutation((input: AddToCartProps) => addToCart(input), {
-    onSuccess: (data, variables) => {
-      if (!data) return;
+    async onMutate(variables) {
+      await queryClient.cancelQueries(["cart", cafeId]);
 
-      queryClient.invalidateQueries(["cart", cafeId]);
-      toast({
-        title: "Added to cart",
-        description: `${variables.menu.name} added to cart`,
-        status: "success",
-        duration: 2000,
-        isClosable: true,
-        position: "top-right",
+      const previousCart = queryClient.getQueryData<CartWithItemAndMenu>([
+        "cart",
+        cafeId,
+      ]);
+      let newCart = previousCart;
+
+      queryClient.setQueryData<CartWithItemAndMenu>(["cart", cafeId], (old) => {
+        if (!old) return old;
+        const newItem = old?.cartItems.find(
+          (item) => item.menu_id === variables.menu.id
+        );
+
+        if (newItem) {
+          const updateItem: CartItemWithMenu = {
+            ...newItem,
+            total_price: newItem.total_price + newItem.menu.price,
+            qty: newItem.qty + 1,
+          };
+
+          newCart = {
+            ...old,
+            totalAmount: old.totalAmount + variables.menu.price,
+            cartItems: old.cartItems.map((item) =>
+              item.id === updateItem.id ? updateItem : item
+            ),
+          };
+
+          return newCart;
+        } else {
+          newCart = {
+            ...old,
+            totalAmount: old?.totalAmount + variables.menu.price,
+            cartItems: [
+              ...old.cartItems,
+              {
+                id: Math.floor(Math.random() * 100000),
+                menu_id: variables.menu.id,
+                cart_id: cart!.id,
+                total_price: variables.menu.price,
+                qty: variables.qty || 1,
+                menu: variables.menu,
+              },
+            ],
+          };
+          return newCart;
+        }
       });
+
+      return { previousCart };
     },
-    onError: () => {
+    onError: (_err, _newCart, context) => {
       toast({
         title: "Error",
         description: user ? `An error occurred` : `You need to login`,
@@ -96,6 +133,12 @@ export default function useAddToCart(cafeId: number) {
         isClosable: true,
         position: "top-right",
       });
+      if (context?.previousCart) {
+        queryClient.setQueryData(["cart", cafeId], context.previousCart);
+      }
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries(["cart", cafeId]);
     },
   });
 }

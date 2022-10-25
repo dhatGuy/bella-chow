@@ -26,7 +26,7 @@ const Order = (data: OrderWithItemsAndMenu) => {
 
   const fetchOrder = async () => {
     const { data, error } = await supabase
-      .from<OrderWithItemsAndMenu>("order")
+      .from("order")
       .select(
         `
         *, user:users(username), orderItems(*, menu(*))
@@ -70,7 +70,7 @@ const Order = (data: OrderWithItemsAndMenu) => {
             </Tr>
           </Thead>
 
-          {order.items.map((item) => (
+          {order.items.map((item: any) => (
             <Tr key={item.id}>
               <Td>
                 <Flex
@@ -109,7 +109,7 @@ export default WithCafeAuth(Order);
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const id = ctx.query.id;
   const { data } = await supabase
-    .from<OrderWithItemsAndMenu>("order")
+    .from("order")
     .select(
       `
         *, user:users(username), orderItems(*, menu(*))

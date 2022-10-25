@@ -3,6 +3,7 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useMutation } from "@tanstack/react-query";
 import useClearCart from "~hooks/cart/useClearCart";
 import useGetCart from "~hooks/cart/useGetCart";
+import { CartItem } from "~types";
 
 interface CreateOrderType {
   amount: number;
@@ -30,11 +31,12 @@ export default function useCreateOrder(cafeId: number) {
         payment_ref: paymentRef,
         cafe_id: cafeId,
       })
+      .select()
       .single();
 
     if (orderError) throw new Error(orderError.message);
 
-    const orderItems = cart?.cartItems.map((item) => ({
+    const orderItems = cart?.cartItems.map((item: CartItem) => ({
       order_id: order?.id,
       total_price: item.total_price,
       menu_id: item.menu_id,
@@ -46,6 +48,7 @@ export default function useCreateOrder(cafeId: number) {
       .insert(orderItems);
 
     if (error) {
+      await supabaseClient.from("order").delete().eq("id", order?.id);
       throw new Error(error?.message);
     }
 
@@ -62,6 +65,15 @@ export default function useCreateOrder(cafeId: number) {
         position: "top-right",
       });
       clearCartMutation.mutate(cart!.id);
+    },
+    onError: () => {
+      toast({
+        title: "Error placing order",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top-right",
+      });
     },
   });
 }

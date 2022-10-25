@@ -35,10 +35,12 @@ const Create = () => {
       .from("food-app")
       .upload(`menus/${name}.${fileExt}`, image!);
 
-    const { publicURL } = supabase.storage
+    const {
+      data: { publicUrl },
+    } = supabase.storage
       .from("food-app")
       .getPublicUrl(`menus/${name}.${fileExt}`);
-    return publicURL;
+    return publicUrl;
   };
 
   const mutation = useMutation(

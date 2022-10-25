@@ -51,7 +51,7 @@ const Order = () => {
             </Tr>
           </Thead>
           <Tbody>
-            {order?.items.map((item) => (
+            {order?.items.map((item: any) => (
               <Tr key={item.id}>
                 <Td>
                   <Flex

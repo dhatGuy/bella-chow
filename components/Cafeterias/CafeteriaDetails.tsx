@@ -156,7 +156,7 @@ const CafeteriaDetails = ({ cafe }: CafeteriaDetailsProps) => {
           <Button variant={"unstyled"} fontWeight={"bold"}>
             View Cart
           </Button>
-          <Text>₦{cart?.totalAmount.toFixed(2)}</Text>
+          <Text>₦{cart?.totalAmount.toFixed(2) || 0.0}</Text>
         </HStack>
       ) : null}
     </>

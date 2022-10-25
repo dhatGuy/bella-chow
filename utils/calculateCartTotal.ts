@@ -1,6 +1,7 @@
 import { supabase } from "~lib/api";
 
 const calculateCartTotal = async (cartId: number) => {
+  console.log("calculating cart total");
   const { data, error } = await supabase
     .from("cart_item")
     .select(`total_price`)
