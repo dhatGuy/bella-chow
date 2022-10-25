@@ -1,11 +1,11 @@
 import { Center, Spinner } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import useUser from "~hooks/auth/useUser";
+import useProfile from "~hooks/auth/useProfile";
 
 function WithAuth<T>(Component: React.ComponentType<T>) {
   const MyComponent = (props: T & {}) => {
-    const { isLoading, data: user } = useUser();
+    const { isLoading, data: user } = useProfile();
     const router = useRouter();
 
     useEffect(() => {

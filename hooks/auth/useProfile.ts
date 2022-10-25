@@ -1,24 +1,23 @@
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
-export default function useUser() {
-  const queryClient = useQueryClient();
+export default function useProfile() {
   const supabaseClient = useSupabaseClient();
 
   const getUser = async () => {
     const {
-      data: { user },
-      error: userError,
-    } = await supabaseClient.auth.getUser();
+      data: { session },
+      error: sessionError,
+    } = await supabaseClient.auth.getSession();
 
-    if (userError) {
-      throw new Error(userError.message);
+    if (sessionError) {
+      throw new Error(sessionError.message);
     }
 
     const { data, error } = await supabaseClient
       .from("user")
       .select("*")
-      .eq("id", user?.id)
+      .eq("id", session?.user?.id)
       .single();
 
     if (error) {
@@ -32,7 +31,7 @@ export default function useUser() {
     return data;
   };
 
-  return useQuery(["user"], () => getUser(), {
+  return useQuery(["profile"], () => getUser(), {
     refetchOnWindowFocus: false,
     retry: false,
   });

@@ -13,7 +13,7 @@ import {
   Spinner,
   Text,
 } from "@chakra-ui/react";
-import useUser from "~hooks/auth/useUser";
+import useUser from "~hooks/auth/useProfile";
 import useGetReviews from "~hooks/review/useGetReviews";
 
 interface ReviewModalProps {

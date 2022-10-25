@@ -14,7 +14,7 @@ import NextLink from "next/link";
 import { GiFoodTruck, GiStorkDelivery } from "react-icons/gi";
 import { IoFastFoodOutline } from "react-icons/io5";
 import Lottie from "react-lottie";
-import useUser from "~hooks/auth/useUser";
+import useProfile from "~hooks/auth/useProfile";
 
 const Feature = ({
   title,
@@ -47,7 +47,7 @@ const Feature = ({
 };
 
 export default function Homepage() {
-  const { isError } = useUser();
+  const { isError } = useProfile();
   // const { isLoading, session, error, supabaseClient } = useSessionContext();
   const defaultOptions = {
     loop: true,

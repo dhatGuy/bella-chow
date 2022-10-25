@@ -15,7 +15,7 @@ export default function useLogout() {
 
   return useMutation(() => signOut(), {
     onSuccess: () => {
-      queryClient.clear();
+      queryClient.removeQueries();
     },
     onError: (error) => {
       console.log(error);

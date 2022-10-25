@@ -1,9 +1,9 @@
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useQuery } from "@tanstack/react-query";
-import useUser from "~hooks/auth/useUser";
+import useProfile from "~hooks/auth/useProfile";
 
 export default function useGetOrders() {
-  const { data: user } = useUser();
+  const { data: user } = useProfile();
   const supabaseClient = useSupabaseClient();
 
   const getOrders = async (userId?: string) => {

@@ -10,7 +10,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
-import useUser from "~hooks/auth/useUser";
+import useProfile from "~hooks/auth/useProfile";
 import useAddReview from "~hooks/review/useAddReview";
 import { ReviewWithUserAndCafeteria } from "~types";
 
@@ -20,7 +20,7 @@ interface AddReviewProps {
 }
 
 const AddReview = ({ cafeId, userReview }: AddReviewProps) => {
-  const { data: user } = useUser();
+  const { data: user } = useProfile();
   const addReviewMutation = useAddReview();
   const [rating, setRating] = useState(userReview?.rating || 0);
   const [content, setContent] = useState(userReview?.content || "");

@@ -16,13 +16,13 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { usePaystackPayment } from "react-paystack";
 import { PaystackProps } from "react-paystack/dist/types";
-import useUser from "~hooks/auth/useUser";
+import useProfile from "~hooks/auth/useProfile";
 import useGetCart from "~hooks/cart/useGetCart";
 import useCreateOrder from "~hooks/order/useCreateOrder";
 import { Cafeteria } from "~types";
 
 function Checkout({ cafe }: { cafe: Cafeteria }) {
-  const user = useUser();
+  const user = useProfile();
   const [isProcessing, setIsProcessing] = useState(false);
   const createOrderMutation = useCreateOrder(cafe.id);
   const { data: cart } = useGetCart(cafe.id);

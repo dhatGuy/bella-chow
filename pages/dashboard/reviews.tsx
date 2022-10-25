@@ -2,11 +2,11 @@ import { Box, Container, Heading } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import Review from "~components/Reviews/Review";
 import WithCafeAuth from "~components/WithCafeAuth";
-import useUser from "~hooks/auth/useUser";
+import useProfile from "~hooks/auth/useProfile";
 import { supabase } from "~lib/api";
 
 const Reviews = () => {
-  const { data: user } = useUser();
+  const { data: user } = useProfile();
   const getReviews = async () => {
     const { data, error } = await supabase
       .from("reviews")

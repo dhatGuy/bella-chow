@@ -1,9 +1,9 @@
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useQuery } from "@tanstack/react-query";
-import useUser from "./auth/useUser";
+import useProfile from "./auth/useProfile";
 
 const useCafeOrders = () => {
-  const { data: user } = useUser();
+  const { data: user } = useProfile();
   const supabaseClient = useSupabaseClient();
   const fetchOrders = async () => {
     if (user) {

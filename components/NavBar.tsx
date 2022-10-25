@@ -20,7 +20,7 @@ import {
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import useLogout from "~hooks/auth/useLogout";
-import useUser from "~hooks/auth/useUser";
+import useProfile from "~hooks/auth/useProfile";
 
 const Loading = () => {
   return (
@@ -31,7 +31,7 @@ const Loading = () => {
 };
 
 export default function Simple() {
-  const { isError, isLoading, data: user } = useUser();
+  const { isError, isLoading, data: user } = useProfile();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const logoutMutation = useLogout();
   const bg = useColorModeValue("gray.100", "gray.900");

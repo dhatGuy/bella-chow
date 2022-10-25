@@ -3,11 +3,11 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import NextLink from "next/link";
 import MenuItem from "~components/dashboard/Menu/MenuItem";
 import WithCafeAuth from "~components/WithCafeAuth";
-import useUser from "~hooks/auth/useUser";
+import useProfile from "~hooks/auth/useProfile";
 import { supabase } from "~lib/api";
 
 const Menus = () => {
-  const { data: user } = useUser();
+  const { data: user } = useProfile();
   const toast = useToast();
   const queryClient = useQueryClient();
 

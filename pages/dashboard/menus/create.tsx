@@ -13,11 +13,11 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { FormEvent, useState } from "react";
 import WithCafeAuth from "~components/WithCafeAuth";
-import useUser from "~hooks/auth/useUser";
+import useProfile from "~hooks/auth/useProfile";
 import { supabase } from "~lib/api";
 
 const Create = () => {
-  const { data: user } = useUser();
+  const { data: user } = useProfile();
   const router = useRouter();
   const queryClient = useQueryClient();
 

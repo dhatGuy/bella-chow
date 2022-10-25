@@ -17,7 +17,7 @@ import {
 import { withPageAuth } from "@supabase/auth-helpers-nextjs";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { FormEvent, useState } from "react";
-import useUser from "~hooks/auth/useUser";
+import useProfile from "~hooks/auth/useProfile";
 import { supabase } from "~lib/api";
 
 interface FormData {
@@ -70,7 +70,7 @@ const Account = () => {
     }
   );
 
-  const { data: user } = useUser();
+  const { data: user } = useProfile();
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();

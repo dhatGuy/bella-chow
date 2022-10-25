@@ -18,7 +18,7 @@ import CartDrawer from "~components/Cart/CartDrawer";
 import MenuList from "~components/Menu/MenuList";
 import Rating from "~components/Rating";
 import ReviewModal from "~components/Reviews/ReviewModal";
-import useUser from "~hooks/auth/useUser";
+import useProfile from "~hooks/auth/useProfile";
 import useGetCart from "~hooks/cart/useGetCart";
 import { CafeteriaWithMenuAndReviews } from "~types";
 
@@ -28,7 +28,7 @@ interface CafeteriaDetailsProps {
 
 const CafeteriaDetails = ({ cafe }: CafeteriaDetailsProps) => {
   const [avg_rating, setAvg_rating] = useState(0);
-  const { data: user } = useUser();
+  const { data: user } = useProfile();
   const {
     isOpen: isOpenCart,
     onOpen: onOpenCart,
