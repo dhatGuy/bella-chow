@@ -1,17 +1,24 @@
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useMutation } from "@tanstack/react-query";
-import router from "next/router";
+import { useRouter } from "next/router";
 import { state } from "~context/state";
 
 interface CreateUserProps {
   email: string;
   password: string;
   username?: string;
+  role?: "CUSTOMER" | "CAFE_OWNER";
 }
 
 const useCreateUser = () => {
   const supabaseClient = useSupabaseClient();
-  const createUser = async ({ email, password, username }: CreateUserProps) => {
+  const router = useRouter();
+  const createUser = async ({
+    email,
+    password,
+    username,
+    role = "CUSTOMER",
+  }: CreateUserProps) => {
     let { data: findByUsername } = await supabaseClient
       .from("user")
       .select("*")
@@ -32,6 +39,7 @@ const useCreateUser = () => {
         data: {
           username,
           email,
+          role,
         },
       },
     });
@@ -47,7 +55,9 @@ const useCreateUser = () => {
     onSuccess(user) {
       state.user = user;
 
-      router.push("/");
+      user?.user_metadata?.role === "CUSTOMER"
+        ? router.push("/")
+        : router.push("/admin");
     },
     onError(error) {
       console.log(error);

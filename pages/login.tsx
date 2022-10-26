@@ -13,7 +13,7 @@ import {
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
-import { useUser } from "@supabase/auth-helpers-react";
+import { useSession } from "@supabase/auth-helpers-react";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
@@ -29,7 +29,7 @@ type FormData = {
 export default function Login() {
   const router = useRouter();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const user = useUser();
+  const session = useSession();
   const loginMutation = useLogin();
   const {
     handleSubmit,
@@ -38,7 +38,7 @@ export default function Login() {
   } = useForm<FormData>();
 
   useEffect(() => {
-    if (user) {
+    if (session) {
       router.push("/");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
