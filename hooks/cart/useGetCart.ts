@@ -1,6 +1,6 @@
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
-import { useQuery } from "@tanstack/react-query";
-import { CartItemWithMenu, CartWithItemAndMenu } from "~types";
+import { useIsMutating, useQuery } from "@tanstack/react-query";
+import { CartWithItemAndMenu } from "~types";
 
 interface GetCart {
   userId: string;
@@ -42,20 +42,35 @@ export default function useGetCart(cafeId: number) {
       return newCart;
     }
 
-    return {
-      ...cart,
-      totalAmount: cart?.cartItems.reduce(
-        (acc: number, item: CartItemWithMenu) => acc + item.total_price,
-        0
-      ),
-    };
+    return cart;
   };
+
+  /**
+   * this is to prevent the cart update from flashing on the screen
+   * happens when the cart is updated(useAddToCart)
+   * and the cart query is refetched
+   */
+  const isMutating = useIsMutating({ mutationKey: ["addToCart", cafeId] });
 
   return useQuery(
     ["cart", cafeId],
     () => getCart({ userId: user!.id, cafeId }),
     {
-      enabled: !!user,
+      enabled: !!user && isMutating === 0,
+      select(data) {
+        return {
+          ...data,
+          totalAmount: data?.cartItems.reduce(
+            (acc: number, item) => acc + item.total_price,
+            0
+          ),
+          // sort cart items by date added to prevent cart items from moving around
+          cartItems: data?.cartItems.sort(
+            (a, b) =>
+              new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+          ),
+        };
+      },
     }
   );
 }

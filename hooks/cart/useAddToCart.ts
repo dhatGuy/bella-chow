@@ -115,6 +115,7 @@ export default function useAddToCart(cafeId: number) {
                 total_price: variables.menu.price,
                 qty: variables.qty || 1,
                 menu: variables.menu,
+                createdAt: new Date().toISOString(),
               },
             ],
           };
@@ -140,5 +141,6 @@ export default function useAddToCart(cafeId: number) {
     onSettled: () => {
       queryClient.invalidateQueries(["cart", cafeId]);
     },
+    mutationKey: ["addToCart", cafeId],
   });
 }

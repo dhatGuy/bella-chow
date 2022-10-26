@@ -52,7 +52,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
     return cafeteria;
   };
 
-  await queryClient.prefetchQuery(["cafe"], getCafeteria);
+  await queryClient.prefetchQuery(["cafe", slug], getCafeteria);
 
   return {
     props: {

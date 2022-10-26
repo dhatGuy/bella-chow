@@ -23,5 +23,5 @@ export default function useGetCafe(slug: string) {
     return cafeteria;
   };
 
-  return useQuery(["cafe"], () => getCafe(slug));
+  return useQuery(["cafe", slug], () => getCafe(slug));
 }

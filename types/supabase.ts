@@ -225,6 +225,7 @@ export interface paths {
           total_price?: parameters["rowFilter.cart_item.total_price"];
           qty?: parameters["rowFilter.cart_item.qty"];
           menu_id?: parameters["rowFilter.cart_item.menu_id"];
+          createdAt?: parameters["rowFilter.cart_item.createdAt"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Ordering */
@@ -280,6 +281,7 @@ export interface paths {
           total_price?: parameters["rowFilter.cart_item.total_price"];
           qty?: parameters["rowFilter.cart_item.qty"];
           menu_id?: parameters["rowFilter.cart_item.menu_id"];
+          createdAt?: parameters["rowFilter.cart_item.createdAt"];
         };
         header: {
           /** Preference */
@@ -299,6 +301,7 @@ export interface paths {
           total_price?: parameters["rowFilter.cart_item.total_price"];
           qty?: parameters["rowFilter.cart_item.qty"];
           menu_id?: parameters["rowFilter.cart_item.menu_id"];
+          createdAt?: parameters["rowFilter.cart_item.createdAt"];
         };
         body: {
           /** cart_item */
@@ -650,6 +653,7 @@ export interface paths {
           name?: parameters["rowFilter.menu_option.name"];
           menu_id?: parameters["rowFilter.menu_option.menu_id"];
           multiple?: parameters["rowFilter.menu_option.multiple"];
+          description?: parameters["rowFilter.menu_option.description"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Ordering */
@@ -704,6 +708,7 @@ export interface paths {
           name?: parameters["rowFilter.menu_option.name"];
           menu_id?: parameters["rowFilter.menu_option.menu_id"];
           multiple?: parameters["rowFilter.menu_option.multiple"];
+          description?: parameters["rowFilter.menu_option.description"];
         };
         header: {
           /** Preference */
@@ -722,6 +727,7 @@ export interface paths {
           name?: parameters["rowFilter.menu_option.name"];
           menu_id?: parameters["rowFilter.menu_option.menu_id"];
           multiple?: parameters["rowFilter.menu_option.multiple"];
+          description?: parameters["rowFilter.menu_option.description"];
         };
         body: {
           /** menu_option */
@@ -1221,6 +1227,11 @@ export interface definitions {
      * This is a Foreign Key to `menu.id`.<fk table='menu' column='id'/>
      */
     menu_id: number;
+    /**
+     * Format: timestamp without time zone
+     * @default now()
+     */
+    createdAt: string;
   };
   user: {
     /**
@@ -1330,6 +1341,8 @@ export interface definitions {
     menu_id?: number;
     /** Format: boolean */
     multiple?: boolean;
+    /** Format: character varying */
+    description?: string;
   };
   order_item: {
     /**
@@ -1486,6 +1499,8 @@ export interface parameters {
   "rowFilter.cart_item.qty": string;
   /** Format: integer */
   "rowFilter.cart_item.menu_id": string;
+  /** Format: timestamp without time zone */
+  "rowFilter.cart_item.createdAt": string;
   /** @description user */
   "body.user": definitions["user"];
   /** Format: uuid */
@@ -1552,6 +1567,8 @@ export interface parameters {
   "rowFilter.menu_option.menu_id": string;
   /** Format: boolean */
   "rowFilter.menu_option.multiple": string;
+  /** Format: character varying */
+  "rowFilter.menu_option.description": string;
   /** @description order_item */
   "body.order_item": definitions["order_item"];
   /** Format: integer */
