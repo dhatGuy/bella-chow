@@ -2,7 +2,12 @@ import { useSessionContext } from "@supabase/auth-helpers-react";
 import { useQuery } from "@tanstack/react-query";
 
 export default function useProfile() {
-  const { session, error: authError, supabaseClient } = useSessionContext();
+  const {
+    isLoading,
+    session,
+    error: authError,
+    supabaseClient,
+  } = useSessionContext();
 
   const getUser = async () => {
     if (authError || !session) {
@@ -28,5 +33,6 @@ export default function useProfile() {
   return useQuery(["profile"], () => getUser(), {
     refetchOnWindowFocus: false,
     retry: false,
+    enabled: !isLoading,
   });
 }

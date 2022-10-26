@@ -36,11 +36,13 @@ export default function Signup() {
   const user = useUser();
 
   useEffect(() => {
-    if (user) {
+    if (user && !user.user_metadata?.role) {
       router.push("/");
+    } else if (user) {
+      router.push("/admin");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [user]);
 
   const onSubmit = handleSubmit((data) => {
     createUserMutation.mutate(data);
