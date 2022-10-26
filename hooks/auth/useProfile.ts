@@ -17,8 +17,9 @@ export default function useProfile() {
     const { data, error } = await supabaseClient
       .from("user")
       .select("*")
-      .eq("id", session?.user?.id)
       .single();
+
+    console.log(data);
 
     if (error) {
       throw new Error(error.message);

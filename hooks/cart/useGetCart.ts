@@ -18,7 +18,6 @@ export default function useGetCart(cafeId: number) {
     const { data: cart, error: cartError } = await supabaseClient
       .from("cart")
       .select(`*, cartItems: cart_item(*, menu(*))`)
-      .eq("user_id", userId)
       .eq("cafe_id", cafeId)
       .single();
 
@@ -32,7 +31,6 @@ export default function useGetCart(cafeId: number) {
             cafe_id: cafeId,
           },
         ])
-        .eq("user_id", userId)
         .eq("cafe_id", cafeId)
         .select(`*, cartItems:cart_item(*, menu(*))`)
         .single();
