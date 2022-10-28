@@ -45,7 +45,13 @@ export default function Signup() {
   }, [user]);
 
   const onSubmit = handleSubmit((data) => {
-    createUserMutation.mutate(data);
+    createUserMutation.mutate(data, {
+      onSuccess: (user) => {
+        user?.user_metadata?.role === "CUSTOMER"
+          ? router.push("/")
+          : router.push("/admin");
+      },
+    });
   });
 
   return (
