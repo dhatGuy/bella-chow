@@ -36,12 +36,12 @@ const Sidebar = () => {
             h="100%"
           >
             <Flex className="sidebar-items" mr={[2, 6, 0, 0, 0]}>
-              <NextLink href="/dashboard" passHref>
+              <NextLink href="/admin" passHref>
                 <Link display={["none", "none", "flex", "flex", "flex"]}>
                   <Icon as={FiHome} fontSize="2xl" className="active-icon" />
                 </Link>
               </NextLink>
-              <NextLink href="/dashboard" passHref>
+              <NextLink href="/admin" passHref>
                 <Link
                   _hover={{ textDecor: "none" }}
                   display={["flex", "flex", "none", "flex", "flex"]}
@@ -51,12 +51,12 @@ const Sidebar = () => {
               </NextLink>
             </Flex>
             <Flex className="sidebar-items" mr={[2, 6, 0, 0, 0]}>
-              <NextLink href="/dashboard/menus" passHref>
+              <NextLink href="/admin/menus" passHref>
                 <Link display={["none", "none", "flex", "flex", "flex"]}>
                   <Icon as={FiPieChart} fontSize="2xl" />
                 </Link>
               </NextLink>
-              <NextLink href="/dashboard/menus" passHref>
+              <NextLink href="/admin/menus" passHref>
                 <Link
                   _hover={{ textDecor: "none" }}
                   display={["flex", "flex", "none", "flex", "flex"]}
@@ -66,12 +66,12 @@ const Sidebar = () => {
               </NextLink>
             </Flex>
             <Flex className="sidebar-items" mr={[2, 6, 0, 0, 0]}>
-              <NextLink href="/dashboard/reviews" passHref>
+              <NextLink href="/admin/reviews" passHref>
                 <Link display={["none", "none", "flex", "flex", "flex"]}>
                   <Icon as={FiDollarSign} fontSize="2xl" />
                 </Link>
               </NextLink>
-              <NextLink href="/dashboard/reviews" passHref>
+              <NextLink href="/admin/reviews" passHref>
                 <Link
                   _hover={{ textDecor: "none" }}
                   display={["flex", "flex", "none", "flex", "flex"]}
@@ -81,12 +81,12 @@ const Sidebar = () => {
               </NextLink>
             </Flex>
             <Flex className="sidebar-items" mr={[2, 6, 0, 0, 0]}>
-              <NextLink href="/dashboard/orders" passHref>
+              <NextLink href="/admin/orders" passHref>
                 <Link display={["none", "none", "flex", "flex", "flex"]}>
                   <Icon as={FiBox} fontSize="2xl" />
                 </Link>
               </NextLink>
-              <NextLink href="/dashboard/orders" passHref>
+              <NextLink href="/admin/orders" passHref>
                 <Link
                   _hover={{ textDecor: "none" }}
                   display={["flex", "flex", "none", "flex", "flex"]}

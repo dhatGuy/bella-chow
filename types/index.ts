@@ -1,16 +1,18 @@
-import { definitions } from "./supabase";
+import { Database } from "./supabase";
 
-export type Users = definitions["user"];
-export type Order = definitions["order"];
-export type Cafeteria = definitions["cafeteria"];
-export type Menu = definitions["menu"];
-export type CartItem = definitions["cart_item"];
-export type Review = definitions["review"];
-export type Cart = definitions["cart"];
-export type OrderItem = definitions["order_item"];
-export type MenuCategory = definitions["menu_category"];
-export type MenuOption = definitions["menu_option"];
-export type MenuOptionItem = definitions["menu_option_item"];
+export type Users = Database["public"]["Tables"]["user"]["Row"];
+export type Order = Database["public"]["Tables"]["order"]["Row"];
+export type Cafeteria = Database["public"]["Tables"]["cafeteria"]["Row"];
+export type Menu = Database["public"]["Tables"]["menu"]["Row"];
+export type CartItem = Database["public"]["Tables"]["cart_item"]["Row"];
+export type Review = Database["public"]["Tables"]["review"]["Row"];
+export type Cart = Database["public"]["Tables"]["cart"]["Row"];
+export type OrderItem = Database["public"]["Tables"]["order_item"]["Row"];
+export type MenuCategory = Database["public"]["Tables"]["menu_category"]["Row"];
+
+export type UserWithCafeteria = Users & {
+  cafeteria: Cafeteria;
+};
 
 export type CafeteriaWithReviews = Cafeteria & {
   reviews: Review[];

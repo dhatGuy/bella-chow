@@ -41,64 +41,6 @@ export default function Register() {
     },
   });
 
-  // const FilePondProcess = (
-  //   fieldName,
-  //   file,
-  //   metadata,
-  //   load,
-  //   error,
-  //   progress,
-  //   abort,
-  //   transfer,
-  //   options
-  // ) => {
-  //   console.log("file", file);
-  //   const url = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/food-app/cafe-banner/${file.name}`;
-
-  //   const formData = new FormData();
-  //   formData.append(fieldName, file, file.name);
-  //   formData.append("key", `food-app/${file.name}`);
-
-  //   const request = new XMLHttpRequest();
-  //   request.open("POST", url);
-  //   // set authorization header
-  //   // request.setRequestHeader(
-  //   //   "Authorization",
-  //   //   `Bearer ${session?.access_token}`
-  //   // );
-
-  //   // Should call the progress method to update the progress to 100% before calling load
-  //   request.upload.onprogress = (e) => {
-  //     progress(e.lengthComputable, e.loaded, e.total);
-  //   };
-
-  //   // Should call the load method when done and pass the returned server file id
-  //   // this server file id is then used later on when reverting or restoring a file
-  //   // so your server knows which file to return without exposing that info to the client
-  //   request.onload = function () {
-  //     if (request.status >= 200 && request.status < 300) {
-  //       // the load method accepts either a string (id) or an object
-  //       load(request.responseText);
-  //     } else {
-  //       // Can call the error method if something is wrong, should exit after
-  //       error("oh no");
-  //     }
-  //   };
-
-  //   request.send(formData);
-
-  //   // Should expose an abort method so the request can be cancelled
-  //   return {
-  //     abort: () => {
-  //       // This function is entered if the user has tapped the cancel button
-  //       request.abort();
-
-  //       // Let FilePond know the request has been cancelled
-  //       abort();
-  //     },
-  //   };
-  // };
-
   // const FilePondRevert = (uniqueFileId, load, error) => {
   //   console.log("uniqueFileId", uniqueFileId);
   //   const url = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/food-app/cafe-banner/${uniqueFileId}`;

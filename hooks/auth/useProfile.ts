@@ -1,13 +1,15 @@
-import { useSessionContext } from "@supabase/auth-helpers-react";
+import {
+  useSessionContext,
+  useSupabaseClient,
+} from "@supabase/auth-helpers-react";
 import { useQuery } from "@tanstack/react-query";
+import { UserWithCafeteria } from "~types";
+
+type UserResponseSuccess = UserWithCafeteria;
 
 export default function useProfile() {
-  const {
-    isLoading,
-    session,
-    error: authError,
-    supabaseClient,
-  } = useSessionContext();
+  const { isLoading, session, error: authError } = useSessionContext();
+  const supabaseClient = useSupabaseClient();
 
   const getUser = async () => {
     if (authError || !session) {
@@ -16,7 +18,7 @@ export default function useProfile() {
 
     const { data, error } = await supabaseClient
       .from("user")
-      .select("*")
+      .select("*, cafeteria:cafeteria!owner_id(*)")
       .single();
 
     if (error) {
@@ -27,7 +29,10 @@ export default function useProfile() {
       throw new Error("User not found");
     }
 
-    return data;
+    return {
+      ...data,
+      cafeteria: data.cafeteria[0],
+    } as UserResponseSuccess;
   };
 
   return useQuery(["profile"], () => getUser(), {

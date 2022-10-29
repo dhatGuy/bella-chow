@@ -1,9 +1,11 @@
 import { Box, Heading, Link, SimpleGrid, useToast } from "@chakra-ui/react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { withPageAuth } from "@supabase/auth-helpers-nextjs";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import NextLink from "next/link";
 import MenuItem from "~components/dashboard/Menu/MenuItem";
-import WithCafeAuth from "~components/WithCafeAuth";
+import Spinner from "~components/Spinner";
 import useProfile from "~hooks/auth/useProfile";
+import { useMenus } from "~hooks/menu";
 import { supabase } from "~lib/api";
 
 const Menus = () => {
@@ -11,12 +13,7 @@ const Menus = () => {
   const toast = useToast();
   const queryClient = useQueryClient();
 
-  const getMenus = async () => {
-    const { data: menus, error } = await supabase.from("menu").select();
-    // .eq("cafe_id", user?.cafe[0].id);
-    return menus;
-  };
-  const { data: menus, isLoading } = useQuery(["menus", user], getMenus);
+  const { data: menus, isLoading } = useMenus();
 
   const mutation = useMutation(
     async (id) => {
@@ -50,9 +47,8 @@ const Menus = () => {
     mutation.mutate(id);
   };
 
-  if (isLoading || !user) {
-    return <Box>Loading...</Box>;
-  }
+  if (isLoading) return <Spinner />;
+
   return (
     <Box>
       {/* <Breadcrumb>
@@ -66,7 +62,7 @@ const Menus = () => {
         Menus
       </Heading>
 
-      <NextLink href="/dashboard/menus/create" passHref>
+      <NextLink href="/admin/menus/create" passHref>
         <Link>Add new product</Link>
       </NextLink>
       <SimpleGrid
@@ -83,4 +79,8 @@ const Menus = () => {
   );
 };
 
-export default WithCafeAuth(Menus);
+export default Menus;
+
+export const getServerSideProps = withPageAuth({
+  redirectTo: "/login",
+});

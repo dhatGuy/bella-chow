@@ -1,10 +1,26 @@
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useQuery } from "@tanstack/react-query";
+import { Database } from "~types/supabase";
 
-export default function useGetCafe(slug: string) {
-  const supabaseClient = useSupabaseClient();
+type Cafeterias = Database["public"]["Tables"]["cafeteria"]["Row"];
+type Menus = Database["public"]["Tables"]["menu"]["Row"];
+type Reviews = Database["public"]["Tables"]["review"]["Row"];
+type Categories = Database["public"]["Tables"]["menu_category"]["Row"];
+type CafeteriasResponseSuccess = Cafeterias & {
+  menuCategories: Categories[] &
+    {
+      menus: Menus[];
+    }[];
+  menus: Menus[];
+  reviews: Reviews[];
+};
 
-  const getCafe = async (slug: string) => {
+export default function useGetCafe(slug?: string) {
+  const supabaseClient = useSupabaseClient<Database>();
+
+  const getCafe = async (slug?: string) => {
+    if (!slug) return null;
+
     const { data: cafeteria, error } = await supabaseClient
       .from("cafeteria")
       .select(
@@ -20,7 +36,7 @@ export default function useGetCafe(slug: string) {
       throw new Error(error.message);
     }
 
-    return cafeteria;
+    return cafeteria as CafeteriasResponseSuccess;
   };
 
   return useQuery(["cafe", slug], () => getCafe(slug));

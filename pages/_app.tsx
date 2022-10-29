@@ -17,6 +17,7 @@ import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 import { ReactElement, ReactNode, useEffect, useState } from "react";
 import Layout from "~components/Layout";
+import { Database } from "~types/supabase";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -35,7 +36,9 @@ function MyApp({
 }: AppPropsWithLayout) {
   console.log("PAGEPROPS:", pageProps, initialSession, dehydratedState);
   const [queryClient] = useState(() => new QueryClient());
-  const [supabaseClient] = useState(() => createBrowserSupabaseClient());
+  const [supabaseClient] = useState(() =>
+    createBrowserSupabaseClient<Database>()
+  );
 
   useEffect(() => {
     const delay = 500; // in milliseconds
