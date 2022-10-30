@@ -15,9 +15,6 @@ function WithCafeAuth<T>(Component: React.ComponentType<T>) {
           query: { from: router.pathname },
         });
       }
-      if (!isLoading && !user?.cafe_owner) {
-        router.push("/");
-      }
     }, [user, isLoading, router]);
 
     if (user) {

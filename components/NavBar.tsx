@@ -68,13 +68,6 @@ export default function Simple() {
                     </NextLink>
                   </>
                 )}
-                {user?.cafe_owner && (
-                  <>
-                    <NextLink href={"/admin"} passHref>
-                      <Link>Dashboard</Link>
-                    </NextLink>
-                  </>
-                )}
                 {user && (
                   <>
                     <NextLink href={"/cafeterias"} passHref>
@@ -135,13 +128,6 @@ export default function Simple() {
                 </NextLink>
                 <NextLink href={"/login"} passHref>
                   <Link>Login</Link>
-                </NextLink>
-              </>
-            )}
-            {user?.cafe_owner && (
-              <>
-                <NextLink href={"/admin"} passHref>
-                  <Link>Dashboard</Link>
                 </NextLink>
               </>
             )}
