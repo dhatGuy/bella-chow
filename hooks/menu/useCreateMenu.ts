@@ -3,16 +3,12 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { FilePondFile } from "filepond";
 import { useRouter } from "next/router";
 import useProfile from "~hooks/auth/useProfile";
+import { Menus } from "~types";
 import { Database } from "~types/supabase";
 
-interface CreateMenu {
-  name: string;
-  description: string;
-  price: number;
-  available: boolean;
-  categoryId: number;
-  image: FilePondFile[] | undefined;
-}
+type CreateMenu = Omit<Menus, "id" | "image" | "cafe_id"> & {
+  image: FilePondFile | undefined;
+};
 
 export default function useCreateMenu() {
   const supabase = useSupabaseClient<Database>();
@@ -21,12 +17,12 @@ export default function useCreateMenu() {
   const router = useRouter();
 
   const handleUpload = async (files: CreateMenu["image"], name: string) => {
-    if (!files) return;
-    const fileExt = files[0].fileExtension;
+    if (!files) throw new Error("Image upload failed");
+    const fileExt = files.fileExtension;
 
     const { data, error } = await supabase.storage
       .from("food-app")
-      .upload(`menus/${name}.${fileExt}`, files[0].file);
+      .upload(`menus/${name}.${fileExt}`, files.file); // create folder for each cafe
 
     if (error) throw new Error(error.message);
 
@@ -39,28 +35,32 @@ export default function useCreateMenu() {
     return publicUrl;
   };
 
-  const createMenu = async (data: CreateMenu) => {
-    let imgUrl = await handleUpload(data.image, data.name);
+  const createMenu = async (menu: CreateMenu) => {
+    // TODO: generate id to make it easier for deleting image
+    let imgUrl = await handleUpload(menu.image, menu.name);
 
     if (!imgUrl) throw new Error("Image upload failed");
 
     if (!user?.cafeteria) throw new Error("Cafeteria not found");
 
-    const { data: res, error } = await supabase.from("menu").insert({
-      ...data,
+    const { data, error } = await supabase.from("menu").insert({
+      ...menu,
       image: imgUrl,
       cafe_id: user?.cafeteria.id,
-      category_id: data.categoryId,
     });
 
     if (error) {
+      await supabase.storage
+        .from("food-app")
+        .remove([`menus/${menu.name}.${menu.image?.fileExtension}`]);
+
       throw new Error(error.message);
     }
 
-    return res;
+    return data;
   };
 
-  return useMutation((data: CreateMenu) => createMenu(data), {
+  return useMutation((menu: CreateMenu) => createMenu(menu), {
     onSuccess: () => {
       queryClient.invalidateQueries(["menus"]);
       router.push("/admin/menus");

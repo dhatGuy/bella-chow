@@ -70,7 +70,7 @@ export default function Simple() {
                 )}
                 {user?.cafe_owner && (
                   <>
-                    <NextLink href={"/dashboard"} passHref>
+                    <NextLink href={"/admin"} passHref>
                       <Link>Dashboard</Link>
                     </NextLink>
                   </>
@@ -93,7 +93,11 @@ export default function Simple() {
                 variant={"link"}
                 cursor={"pointer"}
               >
-                <Avatar size={"sm"} src={""} name={user.username} />
+                <Avatar
+                  size={"sm"}
+                  src={user.avatar_url ?? ""}
+                  name={user.username ?? ""}
+                />
               </MenuButton>
               <MenuList zIndex={3}>
                 <NextLink href="/my-account" passHref>
@@ -136,7 +140,7 @@ export default function Simple() {
             )}
             {user?.cafe_owner && (
               <>
-                <NextLink href={"/dashboard"} passHref>
+                <NextLink href={"/admin"} passHref>
                   <Link>Dashboard</Link>
                 </NextLink>
               </>

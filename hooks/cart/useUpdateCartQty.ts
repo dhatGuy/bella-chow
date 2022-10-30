@@ -1,10 +1,10 @@
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { CartItemWithMenu, CartWithItemAndMenu, Menu } from "~types";
+import { CartItemWithMenu, CartWithItemAndMenu, Menus } from "~types";
 import useGetCart from "./useGetCart";
 
 type UpdateCartQtyProps = {
-  menuToUpdate: Menu;
+  menuToUpdate: Menus;
   qty?: number;
   action: "+" | "-";
 };

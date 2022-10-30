@@ -1,11 +1,11 @@
 import { useToast } from "@chakra-ui/react";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { CartItemWithMenu, CartWithItemAndMenu, Menu } from "~types";
+import { CartItemWithMenu, CartWithItemAndMenu, Menus } from "~types";
 import useGetCart from "./useGetCart";
 
 type AddToCartProps = {
-  menu: Menu;
+  menu: Menus;
   qty?: number;
 };
 

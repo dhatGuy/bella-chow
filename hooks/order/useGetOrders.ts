@@ -19,7 +19,7 @@ export default function useGetOrders() {
     return data;
   };
 
-  return useQuery(["orders"], () => getOrders(user.id), {
+  return useQuery(["orders"], () => getOrders(user?.id), {
     enabled: !!user,
   });
 }

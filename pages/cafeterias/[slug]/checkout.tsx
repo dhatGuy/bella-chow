@@ -19,17 +19,17 @@ import { PaystackProps } from "react-paystack/dist/types";
 import useProfile from "~hooks/auth/useProfile";
 import useGetCart from "~hooks/cart/useGetCart";
 import useCreateOrder from "~hooks/order/useCreateOrder";
-import { Cafeteria } from "~types";
+import { Cafeterias } from "~types";
 
-function Checkout({ cafe }: { cafe: Cafeteria }) {
-  const user = useProfile();
+function Checkout({ cafe }: { cafe: Cafeterias }) {
+  const { data: user } = useProfile();
   const [isProcessing, setIsProcessing] = useState(false);
   const createOrderMutation = useCreateOrder(cafe.id);
   const { data: cart } = useGetCart(cafe.id);
   const router = useRouter();
 
   const config: PaystackProps = {
-    email: user.data!.email,
+    email: user!.email,
     amount: Number((cart!.totalAmount * 100).toFixed(2)),
     publicKey: process.env.NEXT_PUBLIC_PAYSTACK_KEY as string,
   };
@@ -40,7 +40,7 @@ function Checkout({ cafe }: { cafe: Cafeteria }) {
       {
         amount: cart!.totalAmount,
         paymentRef: res.reference,
-        userId: user.data!.id,
+        userId: user!.id,
       },
       {
         onSuccess: () => {
@@ -136,7 +136,7 @@ function Checkout({ cafe }: { cafe: Cafeteria }) {
                   type="email"
                   variant="flushed"
                   placeholder="Email address"
-                  defaultValue={user.data?.email}
+                  defaultValue={user?.email || ""}
                   isDisabled
                 />
               </FormControl>
@@ -145,7 +145,7 @@ function Checkout({ cafe }: { cafe: Cafeteria }) {
                   variant="flushed"
                   type="text"
                   placeholder="Your name"
-                  defaultValue={user.data?.firstname}
+                  defaultValue={user?.firstname || ""}
                 />
               </FormControl>
               <FormControl>
@@ -153,7 +153,7 @@ function Checkout({ cafe }: { cafe: Cafeteria }) {
                   type="text"
                   variant="flushed"
                   placeholder="Phone Number"
-                  defaultValue={user.data?.phone}
+                  defaultValue={user?.phone || ""}
                 />
               </FormControl>
             </SimpleGrid>

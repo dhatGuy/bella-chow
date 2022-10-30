@@ -3,7 +3,7 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useMutation } from "@tanstack/react-query";
 import useClearCart from "~hooks/cart/useClearCart";
 import useGetCart from "~hooks/cart/useGetCart";
-import { CartItem } from "~types";
+import { CartItems } from "~types";
 
 interface CreateOrderType {
   amount: number;
@@ -36,7 +36,7 @@ export default function useCreateOrder(cafeId: number) {
 
     if (orderError) throw new Error(orderError.message);
 
-    const orderItems = cart?.cartItems.map((item: CartItem) => ({
+    const orderItems = cart?.cartItems.map((item: CartItems) => ({
       order_id: order?.id,
       total_price: item.total_price,
       menu_id: item.menu_id,

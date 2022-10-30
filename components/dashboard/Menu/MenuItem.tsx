@@ -57,7 +57,7 @@ const MenuItem = ({ menu, onDelete }) => {
             <MenuButton as={Button}>...</MenuButton>
             <MenuList>
               <MenuChild
-                onClick={() => router.push(`/dashboard/menus/${menu.id}/edit`)}
+                onClick={() => router.push(`/admin/menus/${menu.id}/edit`)}
               >
                 Edit
               </MenuChild>

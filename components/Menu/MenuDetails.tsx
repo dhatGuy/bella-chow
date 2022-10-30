@@ -1,8 +1,8 @@
 import { Box, Heading, Image, Text } from "@chakra-ui/react";
-import { Menu } from "~types";
+import { Menus } from "~types";
 
 interface MenuDetailsProps {
-  menu: Menu;
+  menu: Menus;
 }
 
 const MenuDetails = ({ menu }: MenuDetailsProps) => {

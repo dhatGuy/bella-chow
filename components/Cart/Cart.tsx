@@ -13,11 +13,11 @@ import { useRouter } from "next/router";
 import { FiShoppingCart } from "react-icons/fi";
 import useClearCart from "~hooks/cart/useClearCart";
 import useGetCart from "~hooks/cart/useGetCart";
-import { Cafeteria, CartItemWithMenu } from "~types";
+import { Cafeterias, CartItemWithMenu } from "~types";
 import CartItem from "./CartItem";
 
 interface CartProps {
-  cafe: Cafeteria;
+  cafe: Cafeterias;
 }
 
 const Cart = ({ cafe }: CartProps) => {

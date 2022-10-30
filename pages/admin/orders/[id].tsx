@@ -12,15 +12,19 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { withPageAuth } from "@supabase/auth-helpers-nextjs";
+import {
+  dehydrate,
+  QueryClient,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { GetServerSideProps } from "next/types";
 import Moment from "react-moment";
-import WithCafeAuth from "~components/WithCafeAuth";
 import { supabase } from "~lib/api";
-import { OrderWithItemsAndMenu } from "~types";
 
-const Order = (data: OrderWithItemsAndMenu) => {
+const Order = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
 
@@ -39,9 +43,11 @@ const Order = (data: OrderWithItemsAndMenu) => {
     }
     return data;
   };
-  const { data: order } = useQuery(["order"], fetchOrder, {
-    initialData: data,
-  });
+  const { data: order } = useQuery(["order", router.query.id], fetchOrder);
+
+  if (!order) {
+    return null;
+  }
 
   return (
     <Box>
@@ -69,8 +75,8 @@ const Order = (data: OrderWithItemsAndMenu) => {
               <Th isNumeric>Price</Th>
             </Tr>
           </Thead>
-
-          {order.items.map((item: any) => (
+          {/* @ts-ignore */}
+          {order.orderItems.map((item: any) => (
             <Tr key={item.id}>
               <Td>
                 <Flex
@@ -104,23 +110,34 @@ const Order = (data: OrderWithItemsAndMenu) => {
   );
 };
 
-export default WithCafeAuth(Order);
+export default Order;
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const id = ctx.query.id;
-  const { data } = await supabase
-    .from("order")
-    .select(
-      `
+export const getServerSideProps: GetServerSideProps = withPageAuth({
+  redirectTo: "/login",
+  getServerSideProps: async (ctx) => {
+    const id = ctx.query.id;
+    const queryClient = new QueryClient();
+
+    const fetchOrder = async () => {
+      const { data } = await supabase
+        .from("order")
+        .select(
+          `
         *, user:users(username), orderItems(*, menu(*))
       `
-    )
-    .eq("id", id as string)
-    .single();
+        )
+        .eq("id", id as string)
+        .single();
 
-  return {
-    props: {
-      data,
-    },
-  };
-};
+      return data;
+    };
+
+    await queryClient.prefetchQuery(["order", ctx.query.id], fetchOrder);
+
+    return {
+      props: {
+        dehydratedState: dehydrate(queryClient),
+      },
+    };
+  },
+});

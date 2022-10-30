@@ -1,12 +1,12 @@
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { CartItem, CartWithItemAndMenu } from "~types";
+import { CartItems, CartWithItemAndMenu } from "~types";
 
 export default function useRemoveFromCart(cafeId: number) {
   const queryClient = useQueryClient();
   const supabaseClient = useSupabaseClient();
 
-  const removeFromCart = async (cartItemId: number): Promise<CartItem> => {
+  const removeFromCart = async (cartItemId: number): Promise<CartItems> => {
     const { data, error } = await supabaseClient
       .from("cart_item")
       .delete()

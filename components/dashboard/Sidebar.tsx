@@ -98,7 +98,11 @@ const Sidebar = () => {
           </Flex>
         </Flex>
         <Flex flexDir="column" alignItems="center" mb={10} mt={5}>
-          <Avatar my={2} src="" name={user?.username} />
+          <Avatar
+            my={2}
+            src={user?.avatar_url ?? ""}
+            name={user?.username ?? ""}
+          />
           <Text textAlign="center">{user?.username}</Text>
         </Flex>
       </Flex>

@@ -11,11 +11,11 @@ import {
 } from "@chakra-ui/react";
 import { forwardRef } from "react";
 import { Element, ScrollLink } from "react-scroll";
-import { MenuCategoryWithMenu } from "~types";
+import { MenuCategoryWithMenus } from "~types";
 import MenuItem from "./MenuItem";
 
 interface MenuListProps {
-  menuCategories: MenuCategoryWithMenu[];
+  menuCategories: MenuCategoryWithMenus[];
 }
 
 const CustomTab = forwardRef<HTMLButtonElement, TabProps>((props, ref) => {

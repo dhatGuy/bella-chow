@@ -1,9 +1,9 @@
 import { GetStaticProps } from "next";
 import MenuDetails from "~components/Menu/MenuDetails";
 import { supabase } from "~lib/api";
-import { Menu } from "~types";
+import { Menus } from "~types";
 
-const Menu = ({ menu }: { menu: Menu }) => {
+const Menu = ({ menu }: { menu: Menus }) => {
   return <MenuDetails menu={menu} />;
 };
 export const getStaticPaths = async () => {

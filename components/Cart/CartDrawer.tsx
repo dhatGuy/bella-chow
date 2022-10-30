@@ -22,12 +22,12 @@ import { FiShoppingCart } from "react-icons/fi";
 import CartItem from "~components/Cart/CartItem";
 import useClearCart from "~hooks/cart/useClearCart";
 import useGetCart from "~hooks/cart/useGetCart";
-import { Cafeteria } from "~types";
+import { Cafeterias } from "~types";
 
 interface CartDrawerProp {
   isOpen: boolean;
   onClose: () => void;
-  cafe: Cafeteria;
+  cafe: Cafeterias;
 }
 
 function CartDrawer({ isOpen, onClose, cafe }: CartDrawerProp) {
