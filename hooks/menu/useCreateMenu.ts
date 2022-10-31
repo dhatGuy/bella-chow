@@ -16,13 +16,17 @@ export default function useCreateMenu() {
   const { data: user } = useProfile();
   const router = useRouter();
 
-  const handleUpload = async (files: CreateMenu["image"], name: string) => {
+  const handleUpload = async (
+    files: CreateMenu["image"],
+    name: string,
+    cafe_id: number
+  ) => {
     if (!files) throw new Error("Image upload failed");
     const fileExt = files.fileExtension;
 
     const { data, error } = await supabase.storage
       .from("food-app")
-      .upload(`menus/${name}.${fileExt}`, files.file); // create folder for each cafe
+      .upload(`menus/${cafe_id}/${name}.${fileExt}`, files.file);
 
     if (error) throw new Error(error.message);
 
@@ -36,23 +40,27 @@ export default function useCreateMenu() {
   };
 
   const createMenu = async (menu: CreateMenu) => {
-    // TODO: generate id to make it easier for deleting image
-    let imgUrl = await handleUpload(menu.image, menu.name);
+    if (!user) throw new Error("You must be logged in to create a menu");
+
+    let imgUrl = await handleUpload(menu.image, menu.name, user?.cafeteria.id);
 
     if (!imgUrl) throw new Error("Image upload failed");
 
     if (!user?.cafeteria) throw new Error("Cafeteria not found");
 
+    // TODO: generate id to make it easier for deleting image
     const { data, error } = await supabase.from("menu").insert({
       ...menu,
       image: imgUrl,
-      cafe_id: user?.cafeteria.id,
+      cafe_id: user.cafeteria.id,
     });
 
     if (error) {
       await supabase.storage
         .from("food-app")
-        .remove([`menus/${menu.name}.${menu.image?.fileExtension}`]);
+        .remove([
+          `menus/${user.cafeteria.id}/${menu.name}.${menu.image?.fileExtension}`,
+        ]);
 
       throw new Error(error.message);
     }
