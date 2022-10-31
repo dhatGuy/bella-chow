@@ -26,7 +26,6 @@ type FormData = {
   cafeName: string;
   role: "CAFE_OWNER";
   username: string;
-  // file?: Array<FilePondInitialFile | FilePondFile | Blob | string>;
 };
 
 export default function Register() {
@@ -41,35 +40,7 @@ export default function Register() {
     },
   });
 
-  // const FilePondRevert = (uniqueFileId, load, error) => {
-  //   console.log("uniqueFileId", uniqueFileId);
-  //   const url = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/food-app/cafe-banner/${uniqueFileId}`;
-
-  //   const request = new XMLHttpRequest();
-  //   request.open("DELETE", url);
-  //   // set authorization header
-  //   request.setRequestHeader(
-  //     "Authorization",
-  //     `Bearer ${session?.access_token}`
-  //   );
-
-  //   request.onload = function () {
-  //     if (request.status >= 200 && request.status < 300) {
-  //       // the load method accepts either a string (id) or an object
-  //       load();
-  //     } else {
-  //       // Can call the error method if something is wrong, should exit after
-  //       error("oh no");
-  //     }
-  //   };
-
-  //   request.send();
-  // };
-
-  const onSubmit = handleSubmit((formData) => {
-    console.log(formData);
-    createCafe.mutate(formData);
-  });
+  const onSubmit = handleSubmit((formData) => createCafe.mutate(formData));
 
   return (
     <Box

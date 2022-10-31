@@ -38,21 +38,14 @@ export default function Login() {
   } = useForm<FormData>();
 
   useEffect(() => {
-    if (user && !user.user_metadata?.role) {
-      router.push("/");
-    } else if (user) {
-      router.push("/admin");
+    if (user) {
+      user.user_metadata?.role === "CUSTOMER"
+        ? router.push((router.query.from as string) || "/")
+        : router.push((router.query.from as string) || "/admin");
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  }, [router, user]);
 
-  const onSubmit = handleSubmit((data) => {
-    loginMutation.mutate(data, {
-      onSuccess: () => {
-        router.push((router.query.from as string) || "/");
-      },
-    });
-  });
+  const onSubmit = handleSubmit((data) => loginMutation.mutate(data));
 
   return (
     <Flex
