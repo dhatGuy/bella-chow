@@ -12,8 +12,8 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
-import useCafeOrders from "hooks/useCafeOrders";
 import Moment from "react-moment";
+import useCafeOrders from "~hooks/order/useCafeOrders";
 
 const Main = () => {
   // const { user } = useUser();
@@ -72,7 +72,11 @@ const Main = () => {
                 <Tr key={order.id}>
                   <Td>
                     <Flex align="center">
-                      <Avatar size="sm" mr={2} name={order.username} />
+                      <Avatar
+                        size="sm"
+                        mr={2}
+                        name={order.user.username ?? ""}
+                      />
                       <Flex flexDir="column">
                         <Heading size="sm" letterSpacing="tight">
                           {order.id}
@@ -86,12 +90,11 @@ const Main = () => {
                   <Td>{order.user.username}</Td>
                   <Td>
                     <AvatarGroup size="md" max={2}>
-                      {/* TODO: change type */}
-                      {order.menu?.map((menu: any) => (
+                      {order.items.map((item) => (
                         <Avatar
-                          key={menu.id}
-                          name={menu.name}
-                          src={menu.image}
+                          key={item.menu.id}
+                          name={item.menu.name}
+                          src={item.menu.image}
                         />
                       ))}
                     </AvatarGroup>

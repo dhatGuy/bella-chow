@@ -1,4 +1,3 @@
-import { withPageAuth } from "@supabase/auth-helpers-nextjs";
 // import MyChart from "../components/MyChart";
 /**
  * cafe can change order status to
@@ -25,17 +24,21 @@ import {
 } from "@chakra-ui/react";
 import Moment from "react-moment";
 import AdminLayout from "~components/AdminLayout";
+import useCafeOrders from "~hooks/order/useCafeOrders";
 
 const Dashboard = () => {
   // const { user } = useUser();
-  // const { data, isLoading, error } = useCafeOrders();
+  const { data: orders, isLoading, error } = useCafeOrders();
 
-  // const totalBalance = data
-  //   ?.reduce((total, order) => total + order.amount, 0)
-  //   .toFixed(2);
-  // if (isLoading) {
-  //   return <Text>Loading...</Text>;
-  // }
+  // income for the month
+  const totalBalance = orders?.reduce((acc, order) => {
+    return acc + order.amount;
+  }, 0);
+
+  if (isLoading) {
+    return <Text>Loading...</Text>;
+  }
+
   return (
     <Flex
       // w={["100%", "100%", "60%", "60%", "55%"]}
@@ -52,10 +55,13 @@ const Dashboard = () => {
         </Flex>
       </Heading>
       <Text color="gray" fontSize="sm">
-        My Balance
+        Income for the month of{" "}
+        <Flex display="inline-flex" fontWeight="bold">
+          <Moment format="MMMM">{new Date()}</Moment>
+        </Flex>
       </Text>
       <Text fontWeight="bold" fontSize="2xl">
-        ₦{0}
+        ₦{totalBalance}
       </Text>
       <Flex justifyContent="space-between" mt={8}>
         <Flex align="flex-end">
@@ -79,41 +85,47 @@ const Dashboard = () => {
               </Tr>
             </Thead>
             <Tbody>
-              {/* {data?.map((order) => ( */}
-              <Tr>
-                <Td>
-                  <Flex align="center">
-                    <Avatar size="sm" mr={2} name={"order.username"} />
-                    <Flex flexDir="column">
-                      <Heading size="sm" letterSpacing="tight">
-                        {"order.id"}
-                      </Heading>
-                      <Text fontSize="sm" color="gray">
-                        <Moment format="ddd LL">{"order.date"}</Moment>
-                      </Text>
+              {orders?.map((order) => (
+                <Tr key={order.id}>
+                  <Td>
+                    <Flex align="center">
+                      <Avatar
+                        size="sm"
+                        mr={2}
+                        name={order.user?.firstname ?? ""}
+                      />
+                      <Flex flexDir="column">
+                        <Heading size="sm" letterSpacing="tight">
+                          {order.id}
+                        </Heading>
+                        <Text fontSize="sm" color="gray">
+                          <Moment format="ddd LL">{order.date}</Moment>
+                        </Text>
+                      </Flex>
                     </Flex>
-                  </Flex>
-                </Td>
-                <Td>{"order.user.username"}</Td>
-                <Td>
-                  <AvatarGroup size="md" max={2}>
-                    {/* TODO: change type */}
-                    {/* {order.menu?.map((menu: any) => ( */}
-                    <Avatar
-                      // key={menu.id}
-                      name={"menu.name"}
-                      // src={menu.image}
-                    />
-                    {/* ))} */}
-                  </AvatarGroup>
-                </Td>
-                <Td isNumeric>
-                  <Text fontWeight="bold" display="inline-table">
-                    ₦{"order.amount"}
-                  </Text>
-                </Td>
-              </Tr>
-              {/* // ))} */}
+                  </Td>
+                  <Td>{order.user?.firstname}</Td>
+                  <Td>
+                    <AvatarGroup size="md" max={2}>
+                      {/* TODO: change type */}
+                      {order.items.map((item) => {
+                        return (
+                          <Avatar
+                            key={item.menu.id}
+                            name={item.menu.name}
+                            src={item.menu.image}
+                          />
+                        );
+                      })}
+                    </AvatarGroup>
+                  </Td>
+                  <Td isNumeric>
+                    <Text fontWeight="bold" display="inline-table">
+                      ₦{order.amount}
+                    </Text>
+                  </Td>
+                </Tr>
+              ))}
             </Tbody>
           </Table>
         </Flex>
@@ -130,7 +142,3 @@ export default Dashboard;
 Dashboard.getLayout = (page: React.ReactElement) => (
   <AdminLayout>{page}</AdminLayout>
 );
-
-export const getServerSideProps = withPageAuth({
-  redirectTo: "/login",
-});

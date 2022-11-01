@@ -19,6 +19,7 @@ export default function useProfile() {
     const { data, error } = await supabaseClient
       .from("user")
       .select("*, cafeteria:cafeteria!owner_id(*)")
+      .eq("id", session.user.id) // though RLS is enable, cafe owner have access to all users
       .single();
 
     if (error) {

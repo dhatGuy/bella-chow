@@ -4,12 +4,13 @@ import {
 } from "@supabase/auth-helpers-react";
 import { useMutation } from "@tanstack/react-query";
 import { state } from "~context/state";
+import { Database } from "~types/supabase";
 
 interface CreateUserProps {
   email: string;
   password: string;
   username?: string;
-  role?: "CUSTOMER" | "CAFE_OWNER";
+  role?: Database["public"]["Enums"]["role"];
 }
 
 export const createUser = async (
