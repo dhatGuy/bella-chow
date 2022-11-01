@@ -17,9 +17,9 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import useCafeOrders from "hooks/useCafeOrders";
 import router from "next/router";
 import Moment from "react-moment";
+import useCafeOrders from "~hooks/order/useCafeOrders";
 import { supabase } from "~lib/api";
 
 export const OrderStatus = ({ changeStatus }) => {

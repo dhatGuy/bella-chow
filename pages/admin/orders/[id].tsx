@@ -13,37 +13,18 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import { withPageAuth } from "@supabase/auth-helpers-nextjs";
-import {
-  dehydrate,
-  QueryClient,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { dehydrate, QueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { GetServerSideProps } from "next/types";
 import Moment from "react-moment";
+import { useGetOrder } from "~hooks/order";
 import { supabase } from "~lib/api";
+import { OrderWithItemsAndMenuAndUser } from "~types";
 
 const Order = () => {
   const router = useRouter();
-  const queryClient = useQueryClient();
 
-  const fetchOrder = async () => {
-    const { data, error } = await supabase
-      .from("order")
-      .select(
-        `
-        *, user:users(username), orderItems(*, menu(*))
-      `
-      )
-      .eq("id", router.query.id as string)
-      .single();
-    if (error) {
-      throw new Error(error.message);
-    }
-    return data;
-  };
-  const { data: order } = useQuery(["order", router.query.id], fetchOrder);
+  const { data: order } = useGetOrder(Number(router.query.id));
 
   if (!order) {
     return null;
@@ -54,8 +35,7 @@ const Order = () => {
       <Heading as="h1">Order Details</Heading>
       <Box boxShadow="md">
         <Text>Order id: #{order.id}</Text>
-        {/* TODO: fix type */}
-        {/* <Text>Ordered by: {order.user.username}</Text> */}
+        <Text>Ordered by: {order.user.username}</Text>
         <Text>
           Placed on: <Moment format="ddd LL">{order.date}</Moment>
         </Text>
@@ -75,8 +55,7 @@ const Order = () => {
               <Th isNumeric>Price</Th>
             </Tr>
           </Thead>
-          {/* @ts-ignore */}
-          {order.orderItems.map((item: any) => (
+          {order.items.map((item: any) => (
             <Tr key={item.id}>
               <Td>
                 <Flex
@@ -115,7 +94,7 @@ export default Order;
 export const getServerSideProps: GetServerSideProps = withPageAuth({
   redirectTo: "/login",
   getServerSideProps: async (ctx) => {
-    const id = ctx.query.id;
+    const id = Number(ctx.query.id);
     const queryClient = new QueryClient();
 
     const fetchOrder = async () => {
@@ -123,16 +102,19 @@ export const getServerSideProps: GetServerSideProps = withPageAuth({
         .from("order")
         .select(
           `
-        *, user:users(username), orderItems(*, menu(*))
+        *, user(username), items:order_items(*, menu(*))
       `
         )
-        .eq("id", id as string)
+        .eq("id", id)
         .single();
 
-      return data;
+      return data as OrderWithItemsAndMenuAndUser;
     };
 
-    await queryClient.prefetchQuery(["order", ctx.query.id], fetchOrder);
+    await queryClient.prefetchQuery(
+      ["order", Number(ctx.query.id)],
+      fetchOrder
+    );
 
     return {
       props: {

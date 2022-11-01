@@ -12,8 +12,8 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
-import useCafeOrders from "hooks/useCafeOrders";
 import Moment from "react-moment";
+import useCafeOrders from "~hooks/order/useCafeOrders";
 
 const Main = () => {
   // const { user } = useUser();

@@ -54,6 +54,11 @@ export type OrderWithItemsAndMenu = Orders & {
   items: OrderItemWithMenu[];
 };
 
+export type OrderWithItemsAndMenuAndUser = Orders & {
+  items: OrderItemWithMenu[];
+  user: Users;
+};
+
 export type MenuCategoryWithMenus = MenuCategories & {
   menus: Menus[];
 };
