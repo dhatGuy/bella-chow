@@ -39,9 +39,9 @@ export default function Login() {
 
   useEffect(() => {
     if (user) {
-      user.user_metadata?.role === "CUSTOMER"
-        ? router.push((router.query.from as string) || "/")
-        : router.push((router.query.from as string) || "/admin");
+      user.user_metadata?.role === "CAFE_OWNER"
+        ? router.push((router.query.from as string) || "/admin")
+        : router.push((router.query.from as string) || "/");
     }
   }, [router, user]);
 

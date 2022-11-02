@@ -1,5 +1,5 @@
 import { Box, HStack, Text, VStack } from "@chakra-ui/react";
-import Moment from "react-moment";
+import dayjs from "dayjs";
 import Rating from "~components/Rating";
 
 interface ReviewProps {
@@ -15,9 +15,7 @@ const Review = ({ username, date, content, rating }: ReviewProps) => {
       <HStack justify="space-between">
         <Box>
           <Text fontWeight="bold">{username}</Text>
-          <Text>
-            <Moment format="ddd LL">{date}</Moment>
-          </Text>
+          <Text>{dayjs(date).format("d MMM YYYY, h:mm A")}</Text>
         </Box>
         <Rating rating={rating} />
       </HStack>

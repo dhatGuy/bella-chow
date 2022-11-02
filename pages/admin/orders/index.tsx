@@ -14,8 +14,8 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
+import dayjs from "dayjs";
 import router from "next/router";
-import Moment from "react-moment";
 import { useCafeOrders, useUpdateOrder } from "~hooks/order";
 
 export const OrderStatus = ({ id }: { id: number }) => {
@@ -70,9 +70,7 @@ const Orders = () => {
             >
               <Td>{order.id}</Td>
               <Td>{order.amount}</Td>
-              <Td>
-                <Moment format="ddd LL">{order.date}</Moment>
-              </Td>
+              <Td>{dayjs(order.date).format("d MMM YYYY, h:mm A")}</Td>
               <Td>{order.status}</Td>
               <Td cursor="pointer">
                 <OrderStatus id={order.id} />

@@ -9,8 +9,8 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import { withPageAuth } from "@supabase/auth-helpers-nextjs";
+import dayjs from "dayjs";
 import Router from "next/router";
-import Moment from "react-moment";
 import Spinner from "~components/Spinner";
 import useGetOrders from "~hooks/order/useGetOrders";
 
@@ -41,9 +41,7 @@ const Order = () => {
                     key={order.id}
                   >
                     <Td>{order.payment_ref}</Td>
-                    <Td>
-                      <Moment format="ddd LL">{order.date}</Moment>
-                    </Td>
+                    <Td>{dayjs(order.date).format("d MMM YYYY, h:mm A")}</Td>
                     <Td>{order.status}</Td>
                     <Td>₦{order.amount}</Td>
                   </Tr>

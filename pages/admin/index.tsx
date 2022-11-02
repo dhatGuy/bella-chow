@@ -1,13 +1,3 @@
-// import MyChart from "../components/MyChart";
-/**
- * cafe can change order status to
- * 1. completed
- * 2. pending
- * 3. processing
- * 4. on hold
- * 5. delivered
- * can also delete order
- */
 import {
   Avatar,
   AvatarGroup,
@@ -22,7 +12,7 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
-import Moment from "react-moment";
+import dayjs from "dayjs";
 import AdminLayout from "~components/AdminLayout";
 import useCafeOrders from "~hooks/order/useCafeOrders";
 
@@ -30,7 +20,7 @@ const Dashboard = () => {
   // const { user } = useUser();
   const { data: orders, isLoading, error } = useCafeOrders();
 
-  // income for the month
+  // income for the current month
   const totalBalance = orders?.reduce((acc, order) => {
     return acc + order.amount;
   }, 0);
@@ -57,7 +47,9 @@ const Dashboard = () => {
       <Text color="gray" fontSize="sm">
         Income for the month of{" "}
         <Flex display="inline-flex" fontWeight="bold">
-          <Moment format="MMMM">{new Date()}</Moment>
+          <Text color="gray" fontSize="sm">
+            {dayjs().format("MMMM")}
+          </Text>
         </Flex>
       </Text>
       <Text fontWeight="bold" fontSize="2xl">
@@ -68,9 +60,9 @@ const Dashboard = () => {
           <Heading as="h2" size="lg" letterSpacing="tight">
             Recent orders
           </Heading>
-          {/* <Text fontSize="small" color="gray" ml={4}>
-            Apr 2021
-          </Text> */}
+          <Text fontSize="small" color="gray" ml={4}>
+            {dayjs().format("MMM YYYY")}
+          </Text>
         </Flex>
       </Flex>
       <Flex flexDir="column">
@@ -99,7 +91,7 @@ const Dashboard = () => {
                           {order.id}
                         </Heading>
                         <Text fontSize="sm" color="gray">
-                          <Moment format="ddd LL">{order.date}</Moment>
+                          {dayjs(order.date).format("d MMM YYYY, h:mm A")}
                         </Text>
                       </Flex>
                     </Flex>
@@ -107,7 +99,6 @@ const Dashboard = () => {
                   <Td>{order.user?.firstname}</Td>
                   <Td>
                     <AvatarGroup size="md" max={2}>
-                      {/* TODO: change type */}
                       {order.items.map((item) => {
                         return (
                           <Avatar

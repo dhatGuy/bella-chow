@@ -14,9 +14,9 @@ import {
 } from "@chakra-ui/react";
 import { withPageAuth } from "@supabase/auth-helpers-nextjs";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
+import dayjs from "dayjs";
 import { useRouter } from "next/router";
 import { GetServerSideProps } from "next/types";
-import Moment from "react-moment";
 import { useGetOrder } from "~hooks/order";
 import { supabase } from "~lib/api";
 import { OrderWithItemsAndMenuAndUser } from "~types";
@@ -36,9 +36,7 @@ const Order = () => {
       <Box boxShadow="md">
         <Text>Order id: #{order.id}</Text>
         <Text>Ordered by: {order.user.username}</Text>
-        <Text>
-          Placed on: <Moment format="ddd LL">{order.date}</Moment>
-        </Text>
+        <Text>Placed on: {dayjs(order.date).format("d MMM YYYY, h:mm A")}</Text>
         <Text>Amount: {order.amount}</Text>
         <Text>Payment Ref: {order.payment_ref}</Text>
         <Tag>{order.status}</Tag>
