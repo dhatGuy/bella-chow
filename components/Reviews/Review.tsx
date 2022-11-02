@@ -5,11 +5,11 @@ import Rating from "~components/Rating";
 interface ReviewProps {
   username: string;
   date: string;
-  content: string;
+  comment: string;
   rating: number;
 }
 
-const Review = ({ username, date, content, rating }: ReviewProps) => {
+const Review = ({ username, date, comment, rating }: ReviewProps) => {
   return (
     <VStack align="stretch" mb="4">
       <HStack justify="space-between">
@@ -20,7 +20,7 @@ const Review = ({ username, date, content, rating }: ReviewProps) => {
         <Rating rating={rating} />
       </HStack>
       <Box>
-        <Text>{content}</Text>
+        <Text>{comment}</Text>
       </Box>
     </VStack>
   );

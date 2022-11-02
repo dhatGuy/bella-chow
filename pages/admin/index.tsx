@@ -14,10 +14,11 @@ import {
 } from "@chakra-ui/react";
 import dayjs from "dayjs";
 import AdminLayout from "~components/AdminLayout";
+import useProfile from "~hooks/auth/useProfile";
 import useCafeOrders from "~hooks/order/useCafeOrders";
 
 const Dashboard = () => {
-  // const { user } = useUser();
+  const { data: user } = useProfile();
   const { data: orders, isLoading, error } = useCafeOrders();
 
   // income for the current month
@@ -38,11 +39,8 @@ const Dashboard = () => {
       overflow="auto"
       minH="100vh"
     >
-      <Heading fontWeight="normal" mb={4} letterSpacing="tight">
-        Welcome back,{" "}
-        <Flex display="inline-flex" fontWeight="bold">
-          Admin
-        </Flex>
+      <Heading fontWeight="bold" mb={4} letterSpacing="wide">
+        {user?.cafeteria.name}
       </Heading>
       <Text color="gray" fontSize="sm">
         Income for the month of{" "}
@@ -84,11 +82,11 @@ const Dashboard = () => {
                       <Avatar
                         size="sm"
                         mr={2}
-                        name={order.user?.firstname ?? ""}
+                        name={`${order.user?.firstname}`}
                       />
                       <Flex flexDir="column">
                         <Heading size="sm" letterSpacing="tight">
-                          {order.id}
+                          #{order.id}
                         </Heading>
                         <Text fontSize="sm" color="gray">
                           {dayjs(order.date).format("d MMM YYYY, h:mm A")}
@@ -96,7 +94,7 @@ const Dashboard = () => {
                       </Flex>
                     </Flex>
                   </Td>
-                  <Td>{order.user?.firstname}</Td>
+                  <Td>{`${order.user?.firstname} ${order.user?.lastname}`}</Td>
                   <Td>
                     <AvatarGroup size="md" max={2}>
                       {order.items.map((item) => {

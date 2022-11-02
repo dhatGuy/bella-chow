@@ -16,7 +16,7 @@ const Menus = () => {
   const { data: menus, isLoading } = useMenus();
 
   const mutation = useMutation(
-    async (id) => {
+    async (id: number) => {
       const { data, error } = await supabase
         .from("menu")
         .delete()
@@ -43,7 +43,7 @@ const Menus = () => {
     }
   );
 
-  const onDelete = async (id: void) => {
+  const onDelete = async (id: number) => {
     mutation.mutate(id);
   };
 
@@ -72,7 +72,11 @@ const Menus = () => {
         mx={[null, "2"]}
       >
         {menus?.map((menu) => (
-          <MenuItem onDelete={onDelete} menu={menu} key={menu.id} />
+          <MenuItem
+            onDelete={() => onDelete(menu.id)}
+            menu={menu}
+            key={menu.id}
+          />
         ))}
       </SimpleGrid>
     </Box>

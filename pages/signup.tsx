@@ -36,23 +36,14 @@ export default function Signup() {
   const user = useUser();
 
   useEffect(() => {
-    if (user && !user.user_metadata?.role) {
-      router.push("/");
-    } else if (user) {
+    if (user && user.user_metadata?.role === "CAFE_OWNER") {
       router.push("/admin");
+    } else if (user) {
+      router.push("/");
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  }, [router, user]);
 
-  const onSubmit = handleSubmit((data) => {
-    createUserMutation.mutate(data, {
-      onSuccess: (user) => {
-        user?.user_metadata?.role === "CUSTOMER"
-          ? router.push("/")
-          : router.push("/admin");
-      },
-    });
-  });
+  const onSubmit = handleSubmit((data) => createUserMutation.mutate(data));
 
   return (
     <Flex

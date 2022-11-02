@@ -30,8 +30,7 @@ export default function ReviewModal({
   const { data: reviews, isLoading } = useGetReviews(cafeId, isOpen);
   const { data: user } = useUser();
 
-  let userReview =
-    reviews?.find((review) => review.user_id === user?.id) || null;
+  let userReview = reviews?.find((review) => review.user_id === user?.id);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="lg">
@@ -47,7 +46,7 @@ export default function ReviewModal({
           p="4"
           boxShadow="md"
         >
-          {!!isLoading ? (
+          {isLoading ? (
             <Center>
               <Spinner />
             </Center>
@@ -57,15 +56,15 @@ export default function ReviewModal({
             reviews.map((review) => (
               <Review
                 key={review.id}
-                username={review.user.username}
+                username={review.username}
                 rating={review.rating}
-                content={review.content}
+                comment={review.comment}
                 date={review.date}
               />
             ))
           )}
         </Box>
-        {!!user && <AddReview cafeId={cafeId} userReview={userReview} />}
+        {user ? <AddReview cafeId={cafeId} userReview={userReview} /> : null}
       </ModalContent>
     </Modal>
   );

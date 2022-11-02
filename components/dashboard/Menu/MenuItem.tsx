@@ -11,10 +11,14 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
+import { Menus } from "~types";
 
-// @ts-ignore
-// TODO: remove ts-ignore
-const MenuItem = ({ menu, onDelete }) => {
+interface MenuItemProps {
+  menu: Menus;
+  onDelete: (id: number) => void;
+}
+
+const MenuItem = ({ menu, onDelete }: MenuItemProps) => {
   const { image, description, name, price, available, id } = menu;
   const router = useRouter();
 

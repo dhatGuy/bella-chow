@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   FormControl,
+  FormErrorMessage,
   FormLabel,
   Heading,
   Select,
@@ -9,54 +10,59 @@ import {
   Textarea,
   VStack,
 } from "@chakra-ui/react";
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
-import useProfile from "~hooks/auth/useProfile";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import useAddReview from "~hooks/review/useAddReview";
 import { ReviewWithUserAndCafeteria } from "~types";
 
 interface AddReviewProps {
   cafeId: number;
-  userReview: ReviewWithUserAndCafeteria | null;
+  userReview: ReviewWithUserAndCafeteria | undefined;
 }
 
+type FormData = {
+  rating: number;
+  comment: string;
+};
+
 const AddReview = ({ cafeId, userReview }: AddReviewProps) => {
-  const { data: user } = useProfile();
   const addReviewMutation = useAddReview();
-  const [rating, setRating] = useState(userReview?.rating || 0);
-  const [content, setContent] = useState(userReview?.content || "");
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<FormData>();
 
   useEffect(() => {
-    setRating(userReview?.rating || 0);
-    setContent(userReview?.content || "");
-  }, [userReview]);
+    if (userReview) {
+      reset({
+        rating: userReview.rating || 0,
+        comment: userReview.comment || "",
+      });
+    }
+  }, [reset, userReview]);
 
-  const onSave = (e: FormEvent<HTMLInputElement>): void => {
-    e.preventDefault();
-
-    if (!user) return;
-
+  const onSave = handleSubmit((values) => {
     addReviewMutation.mutate({
+      ...values,
       cafeId,
-      rating,
-      content,
-      userId: user.id,
     });
-  };
+  });
 
   return (
     <Box p={2}>
       <VStack as="form" onSubmit={onSave}>
         <>
           <Heading as="h5">Your review about this cafe</Heading>
-          <FormControl>
+
+          <FormControl isInvalid={!!errors.rating} id="rating">
             <FormLabel>Rate your experience</FormLabel>
             <Select
               title="Rating"
               placeholder="Select a rating"
-              value={rating}
-              onChange={(e: ChangeEvent<HTMLSelectElement>): void =>
-                setRating(Number(e.currentTarget.value))
-              }
+              {...register("rating", { required: "Rating is required" })}
             >
               <option value={1}>1</option>
               <option value={2}>2</option>
@@ -64,23 +70,32 @@ const AddReview = ({ cafeId, userReview }: AddReviewProps) => {
               <option value={4}>4</option>
               <option value={5}>5</option>
             </Select>
+            <FormErrorMessage>{errors.rating?.message}</FormErrorMessage>
           </FormControl>
 
-          <FormControl mt={4}>
-            <FormLabel>Content</FormLabel>
+          <FormControl mt={4} isInvalid={!!errors.comment} id="comment">
+            <FormLabel>Comment</FormLabel>
             <Textarea
-              placeholder="Say your mind"
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
+              title="Comment"
+              placeholder="Write your comment here"
+              {...register("comment", {
+                minLength: {
+                  value: 10,
+                  message: "Comment must be at least 10 characters",
+                },
+              })}
             />
           </FormControl>
-          {addReviewMutation.error && (
-            <Text color="red" as="i">
-              Could not add review
+          {addReviewMutation.isError ? (
+            <Text textColor="red" as="i">
+              {addReviewMutation.error instanceof Error
+                ? addReviewMutation.error.message
+                : "Something went wrong"}
             </Text>
-          )}
+          ) : null}
           <Button
             mt="2"
+            w="full"
             colorScheme="blue"
             type="submit"
             isLoading={addReviewMutation.isLoading}

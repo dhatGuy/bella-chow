@@ -1,23 +1,23 @@
 import { Box, Container, Heading } from "@chakra-ui/react";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useQuery } from "@tanstack/react-query";
 import Review from "~components/Reviews/Review";
-import WithCafeAuth from "~components/WithCafeAuth";
 import useProfile from "~hooks/auth/useProfile";
-import { supabase } from "~lib/api";
+import { Database } from "~types/supabase";
 
 const Reviews = () => {
   const { data: user } = useProfile();
+  const supabaseClient = useSupabaseClient<Database>();
   const getReviews = async () => {
-    const { data, error } = await supabase
-      .from("reviews")
-      .select(`*, user:users(username)`);
+    const { data, error } = await supabaseClient
+      .from("review")
+      .select(`*, user(username), cafeteria(name)`)
+      .eq("cafe_id", user?.cafeteria.id);
+
     return data;
   };
-  const {
-    data: reviews,
-    isLoading,
-    error,
-  } = useQuery(["reviews", user], getReviews);
+  const { data: reviews, isLoading, error } = useQuery(["reviews"], getReviews);
+
   if (isLoading || error) {
     return <Box>Loading...</Box>;
   }
@@ -30,9 +30,9 @@ const Reviews = () => {
       {reviews?.map((review) => (
         <Box key={review.id} boxShadow="lg" p="3">
           <Review
-            username={review.user.username}
+            username={review.username}
             rating={review.rating}
-            content={review.content}
+            comment={review.comment}
             date={review.date}
           />
         </Box>
@@ -41,4 +41,4 @@ const Reviews = () => {
   );
 };
 
-export default WithCafeAuth(Reviews);
+export default Reviews;

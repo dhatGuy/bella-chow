@@ -1,6 +1,3 @@
-// TODO: fix paystack type
-// @ts-nocheck
-
 import {
   Button,
   chakra,
@@ -20,8 +17,7 @@ import {
 import { useRouter } from "next/router";
 import { FiShoppingCart } from "react-icons/fi";
 import CartItem from "~components/Cart/CartItem";
-import useClearCart from "~hooks/cart/useClearCart";
-import useGetCart from "~hooks/cart/useGetCart";
+import { useClearCart, useGetCart } from "~hooks/cart";
 import { Cafeterias } from "~types";
 
 interface CartDrawerProp {
