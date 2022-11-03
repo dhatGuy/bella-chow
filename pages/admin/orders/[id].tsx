@@ -53,34 +53,43 @@ const Order = () => {
               <Th isNumeric>Price</Th>
             </Tr>
           </Thead>
-          {order.items.map((item: any) => (
-            <Tr key={item.id}>
-              <Td>
-                <Flex
-                  flexDir={["column", "column", "row"]}
-                  // justify="space-between"
-                  align={{ base: "stretch" }}
-                >
-                  <Image
-                    mr="2"
-                    objectFit="cover"
-                    w={["100%", "250px"]}
-                    h="150px"
-                    alt={item.menu.name}
-                    src={item.menu.image}
-                  />
-                  <Box>
-                    <Text fontWeight="bold" fontSize="xl">
-                      {item.menu.name}
-                    </Text>
-                    <Text>{item.menu.price}</Text>
-                  </Box>
-                </Flex>
-              </Td>
-              <Td isNumeric>{item.qty}</Td>
-              <Td isNumeric>₦{item.total_price}</Td>
-            </Tr>
-          ))}
+          {order.items.map((item) =>
+            item.menu ? (
+              <Tr key={item.id}>
+                <Td>
+                  <Flex
+                    flexDir={["column", "column", "row"]}
+                    // justify="space-between"
+                    align={{ base: "stretch" }}
+                  >
+                    <Image
+                      mr="2"
+                      objectFit="cover"
+                      w={["100%", "250px"]}
+                      h="150px"
+                      alt={item.menu.name}
+                      src={item.menu.image}
+                    />
+                    <Box>
+                      <Text fontWeight="bold" fontSize="xl">
+                        {item.menu.name}
+                      </Text>
+                      <Text>{item.menu.price}</Text>
+                    </Box>
+                  </Flex>
+                </Td>
+                <Td isNumeric>{item.qty}</Td>
+                <Td isNumeric>₦{item.total_price}</Td>
+              </Tr>
+            ) : (
+              // menu has been deleted
+              <Tr key={item.id}>
+                <Td>Menu has been deleted</Td>
+                <Td isNumeric>{item.qty}</Td>
+                <Td isNumeric>₦{item.total_price}</Td>
+              </Tr>
+            )
+          )}
         </Table>
       </Box>
     </Box>

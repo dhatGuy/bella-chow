@@ -21,7 +21,7 @@ import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import "filepond/dist/filepond.min.css";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { FilePond, registerPlugin } from "react-filepond";
 import { Controller, useForm } from "react-hook-form";
 import Spinner from "~components/Spinner";
@@ -49,6 +49,12 @@ const Edit = () => {
     user?.cafeteria.slug
   );
   const editMenu = useEditMenu(Number(router.query.id));
+  const countRef = useRef(0);
+  /**
+   * use the ref to track whether the user has uploaded a new image
+   * because the load() method of the FilePond component is called on first render
+   * and react hook form have the imageFile dirty flag set to true
+   */
 
   const {
     handleSubmit,
@@ -57,16 +63,7 @@ const Edit = () => {
     formState: { errors, isDirty, dirtyFields },
     watch,
     reset,
-  } = useForm<FormValues>({
-    defaultValues: {
-      imageFile: [
-        {
-          source: menu?.image,
-          options: { type: "local" },
-        },
-      ],
-    },
-  });
+  } = useForm<FormValues>();
 
   useEffect(() => {
     if (cafe && menu) {
@@ -91,11 +88,15 @@ const Edit = () => {
   }
 
   const onSave = handleSubmit((values) => {
-    console.log(dirtyFields);
+    const imageDirty = dirtyFields.imageFile && countRef.current > 2;
+
+    console.log(countRef.current);
     editMenu.mutate({
       ...values,
       imageFile: watch("imageFile")[0] as FilePondFile,
       imgUrl: menu.image,
+      imageChanged: imageDirty,
+      nameChanged: dirtyFields.name,
     });
   });
 
@@ -176,7 +177,11 @@ const Edit = () => {
                   // @ts-ignore
                   files={value}
                   allowMultiple={false}
-                  onupdatefiles={onChange}
+                  onupdatefiles={(fileItems) => {
+                    console.log("changed");
+                    onChange(fileItems);
+                    countRef.current++;
+                  }}
                   server={{
                     async load(source, load, error, progress) {
                       const request = new Request(source);
@@ -209,7 +214,7 @@ const Edit = () => {
             <Button
               type="submit"
               isLoading={editMenu.isLoading}
-              isDisabled={!isDirty}
+              // isDisabled={!isDirty}
               loadingText="Saving..."
             >
               Save

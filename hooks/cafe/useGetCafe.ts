@@ -18,13 +18,14 @@ export default function useGetCafe(slug?: string) {
       reviews:review(*)`
       )
       .eq("slug", slug)
+      .returns<CafeteriaWithMenuAndReviews>()
       .single();
 
     if (error) {
       throw new Error(error.message);
     }
 
-    return cafeteria as CafeteriaWithMenuAndReviews;
+    return cafeteria;
   };
 
   return useQuery(["cafe", slug], () => getCafe(slug));

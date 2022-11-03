@@ -11,16 +11,24 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
+import { useDeleteMenu } from "~hooks/menu";
 import { Menus } from "~types";
 
 interface MenuItemProps {
   menu: Menus;
-  onDelete: (id: number) => void;
 }
 
-const MenuItem = ({ menu, onDelete }: MenuItemProps) => {
+const MenuItem = ({ menu }: MenuItemProps) => {
   const { image, description, name, price, available, id } = menu;
   const router = useRouter();
+  const deleteMenu = useDeleteMenu();
+
+  const onDelete = async () => {
+    deleteMenu.mutate({
+      id,
+      image,
+    });
+  };
 
   return (
     <Box maxW="sm" borderWidth="1px" borderRadius="lg" overflow="hidden">
@@ -65,7 +73,7 @@ const MenuItem = ({ menu, onDelete }: MenuItemProps) => {
               >
                 Edit
               </MenuChild>
-              <MenuChild onClick={() => onDelete(menu.id)}>Delete</MenuChild>
+              <MenuChild onClick={() => onDelete()}>Delete</MenuChild>
             </MenuList>
           </Menu>
         </Box>

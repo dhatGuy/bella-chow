@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import useProfile from "~hooks/auth/useProfile";
 import { Menus } from "~types";
 import { Database } from "~types/supabase";
+import { slugify } from "~utils";
 
 type CreateMenu = Omit<Menus, "id" | "image" | "cafe_id"> & {
   image: FilePondFile | undefined;
@@ -21,12 +22,15 @@ export default function useCreateMenu() {
     name: string,
     cafe_id: number
   ) => {
-    if (!files) throw new Error("Image upload failed");
+    if (!files || !files.file) throw new Error("Image upload failed");
     const fileExt = files.fileExtension;
 
     const { data, error } = await supabase.storage
       .from("food-app")
-      .upload(`menus/${cafe_id}/${name}.${fileExt}`, files.file);
+      .upload(`menus/${cafe_id}/${slugify(name)}.${fileExt}`, files.file);
+    /**
+     * save the image in a folder named after the cafe id
+     */
 
     if (error) throw new Error(error.message);
 
@@ -34,7 +38,7 @@ export default function useCreateMenu() {
       data: { publicUrl },
     } = supabase.storage
       .from("food-app")
-      .getPublicUrl(`menus/${name}.${fileExt}`);
+      .getPublicUrl(`menus/${cafe_id}/${slugify(name)}.${fileExt}`);
 
     return publicUrl;
   };
@@ -59,7 +63,9 @@ export default function useCreateMenu() {
       await supabase.storage
         .from("food-app")
         .remove([
-          `menus/${user.cafeteria.id}/${menu.name}.${menu.image?.fileExtension}`,
+          `menus/${user.cafeteria.id}/${slugify(menu.name)}.${
+            menu.image?.fileExtension
+          }`,
         ]);
 
       throw new Error(error.message);

@@ -13,13 +13,14 @@ const useCafeOrders = () => {
 
     const { data, error } = await supabaseClient
       .from("order")
-      .select(`*, items:order_item(*, menu(*)), user(*)`);
+      .select(`*, items:order_item(*, menu(*)), user(*)`)
+      .returns<OrderWithItemsAndMenuAndUser>();
     // RLS: .eq("cafe_id", user.cafeteria.id);
 
     if (error) {
       throw new Error(error.message);
     }
-    return data as OrderWithItemsAndMenuAndUser[];
+    return data;
   };
 
   return useQuery(["orders", user?.cafeteria.id], fetchOrders);

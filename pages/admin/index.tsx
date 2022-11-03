@@ -97,15 +97,16 @@ const Dashboard = () => {
                   <Td>{`${order.user?.firstname} ${order.user?.lastname}`}</Td>
                   <Td>
                     <AvatarGroup size="md" max={2}>
-                      {order.items.map((item) => {
-                        return (
+                      {order.items.map((item) =>
+                        // check item menu has been deleted
+                        item.menu ? (
                           <Avatar
                             key={item.menu.id}
                             name={item.menu.name}
                             src={item.menu.image}
                           />
-                        );
-                      })}
+                        ) : null
+                      )}
                     </AvatarGroup>
                   </Td>
                   <Td isNumeric>

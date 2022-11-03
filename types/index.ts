@@ -43,7 +43,7 @@ export type CartWithItemAndMenu = Carts & {
 };
 
 export type OrderItemWithMenu = OrderItems & {
-  menu: Menus;
+  menu: Menus | null;
 };
 
 export type OrderWithOrderItems = Orders & {

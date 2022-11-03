@@ -10,12 +10,13 @@ export default function useGetReviews(cafeId: number, isOpen: boolean) {
     const { data, error } = await supabaseClient
       .from("review")
       .select(`*, user(username), cafeteria(name)`)
-      .eq("cafe_id", cafeId);
+      .eq("cafe_id", cafeId)
+      .returns<ReviewWithUserAndCafeteria>();
 
     if (error) {
       throw new Error(error.message);
     }
-    return data as ReviewWithUserAndCafeteria[];
+    return data;
   };
 
   return useQuery(["reviews", cafeId], () => getReviews(cafeId), {

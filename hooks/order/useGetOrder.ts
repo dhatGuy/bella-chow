@@ -15,13 +15,14 @@ export default function useGetOrder(orderId: number) {
       `
       )
       .eq("id", orderId)
+      .returns<OrderWithItemsAndMenuAndUser>()
       .single(); // RLS will only return the order if the user is the owner or cafe owner
 
     if (error) {
       throw new Error(error.message);
     }
 
-    return data as OrderWithItemsAndMenuAndUser;
+    return data;
   };
 
   return useQuery(["order", orderId], () => getOrder(orderId));
