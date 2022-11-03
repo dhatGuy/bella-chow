@@ -15,7 +15,7 @@ const Review = ({ username, date, comment, rating }: ReviewProps) => {
       <HStack justify="space-between">
         <Box>
           <Text fontWeight="bold">{username}</Text>
-          <Text>{dayjs(date).format("d MMM YYYY, h:mm A")}</Text>
+          <Text>{dayjs(date).format("D MMM YYYY, h:mm A")}</Text>
         </Box>
         <Rating rating={rating} />
       </HStack>

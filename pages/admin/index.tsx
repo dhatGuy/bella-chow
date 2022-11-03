@@ -89,7 +89,7 @@ const Dashboard = () => {
                           #{order.id}
                         </Heading>
                         <Text fontSize="sm" color="gray">
-                          {dayjs(order.date).format("d MMM YYYY, h:mm A")}
+                          {dayjs(order.date).format("D MMM YYYY, h:mm A")}
                         </Text>
                       </Flex>
                     </Flex>

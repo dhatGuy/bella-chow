@@ -32,7 +32,7 @@ const Order = () => {
       <Box boxShadow="md">
         <Text>Order id: #{order?.id}</Text>
         <Text>
-          Placed on: {dayjs(order?.date).format("d MMM YYYY, h:mm A")}
+          Placed on: {dayjs(order?.date).format("D MMM YYYY, h:mm A")}
         </Text>
         <Text>Amount: {order?.amount}</Text>
         <Text>Payment Ref: {order?.payment_ref}</Text>

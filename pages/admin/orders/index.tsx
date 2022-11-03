@@ -70,7 +70,7 @@ const Orders = () => {
             >
               <Td>{order.id}</Td>
               <Td>{order.amount}</Td>
-              <Td>{dayjs(order.date).format("d MMM YYYY, h:mm A")}</Td>
+              <Td>{dayjs(order.date).format("D MMM YYYY, h:mm A")}</Td>
               <Td>{order.status}</Td>
               <Td cursor="pointer">
                 <OrderStatus id={order.id} />
