@@ -41,7 +41,7 @@ const Order = () => {
                     key={order.id}
                   >
                     <Td>{order.payment_ref}</Td>
-                    <Td>{dayjs(order.date).format("d MMM YYYY, h:mm A")}</Td>
+                    <Td>{dayjs(order.date).format("D MMM YYYY, h:mm A")}</Td>
                     <Td>{order.status}</Td>
                     <Td>₦{order.amount}</Td>
                   </Tr>

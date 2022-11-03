@@ -82,7 +82,6 @@ const Order = () => {
                 <Td isNumeric>₦{item.total_price}</Td>
               </Tr>
             ) : (
-              // menu has been deleted
               <Tr key={item.id}>
                 <Td>Menu has been deleted</Td>
                 <Td isNumeric>{item.qty}</Td>

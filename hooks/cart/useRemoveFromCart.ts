@@ -37,9 +37,7 @@ export default function useRemoveFromCart(cafeId: number) {
         return {
           ...old,
           totalAmount: old.totalAmount - item.total_price || 0,
-          cartItems: old.cartItems.filter(
-            (item: any) => item.id !== cartItemId
-          ),
+          cartItems: old.cartItems.filter((item) => item.id !== cartItemId),
         };
       });
 
