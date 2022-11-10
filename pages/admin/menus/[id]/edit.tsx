@@ -24,6 +24,7 @@ import { useRouter } from "next/router";
 import { useEffect, useRef } from "react";
 import { FilePond, registerPlugin } from "react-filepond";
 import { Controller, useForm } from "react-hook-form";
+import AdminLayout from "~components/AdminLayout";
 import Spinner from "~components/Spinner";
 import useProfile from "~hooks/auth/useProfile";
 import useGetCafe from "~hooks/cafe/useGetCafe";
@@ -227,6 +228,9 @@ const Edit = () => {
 };
 
 export default Edit;
+Edit.getLayout = (page: React.ReactElement) => (
+  <AdminLayout>{page}</AdminLayout>
+);
 
 export const getServerSideProps: GetServerSideProps = withPageAuth({
   redirectTo: "/login",

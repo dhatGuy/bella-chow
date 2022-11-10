@@ -1,6 +1,7 @@
 import { Box, Container, Heading } from "@chakra-ui/react";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useQuery } from "@tanstack/react-query";
+import AdminLayout from "~components/AdminLayout";
 import Review from "~components/Reviews/Review";
 import useProfile from "~hooks/auth/useProfile";
 import { Database } from "~types/supabase";
@@ -16,7 +17,11 @@ const Reviews = () => {
 
     return data;
   };
-  const { data: reviews, isLoading, error } = useQuery(["reviews"], getReviews);
+  const {
+    data: reviews,
+    isLoading,
+    error,
+  } = useQuery(["reviews", user?.cafeteria.id], getReviews);
 
   if (isLoading || error) {
     return <Box>Loading...</Box>;
@@ -42,3 +47,7 @@ const Reviews = () => {
 };
 
 export default Reviews;
+
+Reviews.getLayout = (page: React.ReactElement) => (
+  <AdminLayout>{page}</AdminLayout>
+);

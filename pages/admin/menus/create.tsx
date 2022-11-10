@@ -19,6 +19,7 @@ import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import "filepond/dist/filepond.min.css";
 import { FilePond, registerPlugin } from "react-filepond";
 import { Controller, useForm } from "react-hook-form";
+import AdminLayout from "~components/AdminLayout";
 import useProfile from "~hooks/auth/useProfile";
 import useGetCafe from "~hooks/cafe/useGetCafe";
 import { useCreateMenu } from "~hooks/menu";
@@ -173,6 +174,10 @@ const Create = () => {
 };
 
 export default Create;
+
+Create.getLayout = (page: React.ReactElement) => (
+  <AdminLayout>{page}</AdminLayout>
+);
 
 export const getServerSideProps = withPageAuth({
   redirectTo: "/login",

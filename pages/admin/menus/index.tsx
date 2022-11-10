@@ -1,14 +1,14 @@
 import { Box, Heading, Link, SimpleGrid } from "@chakra-ui/react";
 import { withPageAuth } from "@supabase/auth-helpers-nextjs";
 import NextLink from "next/link";
+import AdminLayout from "~components/AdminLayout";
 import MenuItem from "~components/dashboard/Menu/MenuItem";
-import Spinner from "~components/Spinner";
 import { useMenus } from "~hooks/menu";
 
 const Menus = () => {
   const { data: menus, isLoading } = useMenus();
 
-  if (isLoading) return <Spinner />;
+  // if (isLoading) return <Spinner />;
 
   return (
     <Box>
@@ -41,6 +41,10 @@ const Menus = () => {
 };
 
 export default Menus;
+
+Menus.getLayout = (page: React.ReactElement) => (
+  <AdminLayout>{page}</AdminLayout>
+);
 
 export const getServerSideProps = withPageAuth({
   redirectTo: "/login",

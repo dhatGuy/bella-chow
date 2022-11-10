@@ -1,6 +1,7 @@
 import {
   Avatar,
   AvatarGroup,
+  Box,
   Divider,
   Flex,
   Heading,
@@ -14,11 +15,12 @@ import {
 } from "@chakra-ui/react";
 import dayjs from "dayjs";
 import AdminLayout from "~components/AdminLayout";
+import Spinner from "~components/Spinner";
 import useProfile from "~hooks/auth/useProfile";
 import useCafeOrders from "~hooks/order/useCafeOrders";
 
 const Dashboard = () => {
-  const { data: user } = useProfile();
+  const { data: user, isLoading: userLoading } = useProfile();
   const { data: orders, isLoading, error } = useCafeOrders();
 
   // income for the current month
@@ -26,9 +28,7 @@ const Dashboard = () => {
     return acc + order.amount;
   }, 0);
 
-  if (isLoading) {
-    return <Text>Loading...</Text>;
-  }
+  if (isLoading || userLoading) return <Spinner />;
 
   return (
     <Flex
@@ -37,19 +37,16 @@ const Dashboard = () => {
       p="3%"
       flexDir="column"
       overflow="auto"
-      minH="100vh"
     >
-      <Heading fontWeight="bold" mb={4} letterSpacing="wide">
-        {user?.cafeteria.name}
-      </Heading>
-      <Text color="gray" fontSize="sm">
+      <Box>{user?.cafeteria.name}</Box>
+      <Box color="gray" fontSize="sm">
         Income for the month of{" "}
         <Flex display="inline-flex" fontWeight="bold">
           <Text color="gray" fontSize="sm">
             {dayjs().format("MMMM")}
           </Text>
         </Flex>
-      </Text>
+      </Box>
       <Text fontWeight="bold" fontSize="2xl">
         ₦{totalBalance}
       </Text>
@@ -109,10 +106,8 @@ const Dashboard = () => {
                       )}
                     </AvatarGroup>
                   </Td>
-                  <Td isNumeric>
-                    <Text fontWeight="bold" display="inline-table">
-                      ₦{order.amount}
-                    </Text>
+                  <Td isNumeric fontWeight="bold" display="inline-table">
+                    ₦{order.amount}
                   </Td>
                 </Tr>
               ))}

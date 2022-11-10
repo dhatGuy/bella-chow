@@ -17,6 +17,7 @@ import { dehydrate, QueryClient } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import { useRouter } from "next/router";
 import { GetServerSideProps } from "next/types";
+import AdminLayout from "~components/AdminLayout";
 import { useGetOrder } from "~hooks/order";
 import { supabase } from "~lib/api";
 import { OrderWithItemsAndMenuAndUser } from "~types";
@@ -97,6 +98,10 @@ const Order = () => {
 
 export default Order;
 
+Order.getLayout = (page: React.ReactElement) => (
+  <AdminLayout>{page}</AdminLayout>
+);
+
 export const getServerSideProps: GetServerSideProps = withPageAuth({
   redirectTo: "/login",
   getServerSideProps: async (ctx) => {
@@ -112,9 +117,10 @@ export const getServerSideProps: GetServerSideProps = withPageAuth({
       `
         )
         .eq("id", id)
+        .returns<OrderWithItemsAndMenuAndUser>()
         .single();
 
-      return data as OrderWithItemsAndMenuAndUser;
+      return data;
     };
 
     await queryClient.prefetchQuery(

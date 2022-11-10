@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   Flex,
   Menu,
@@ -16,6 +15,8 @@ import {
 } from "@chakra-ui/react";
 import dayjs from "dayjs";
 import router from "next/router";
+import AdminLayout from "~components/AdminLayout";
+import Spinner from "~components/Spinner";
 import { useCafeOrders, useUpdateOrder } from "~hooks/order";
 
 export const OrderStatus = ({ id }: { id: number }) => {
@@ -46,7 +47,7 @@ const Orders = () => {
   const { data: orders, isLoading } = useCafeOrders();
 
   if (isLoading) {
-    return <Box>Loading...</Box>;
+    return <Spinner />;
   }
 
   return (
@@ -84,3 +85,7 @@ const Orders = () => {
 };
 
 export default Orders;
+
+Orders.getLayout = (page: React.ReactElement) => (
+  <AdminLayout>{page}</AdminLayout>
+);
