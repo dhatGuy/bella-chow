@@ -32,7 +32,7 @@ export default function useProfile() {
 
     return {
       ...data,
-      cafeteria: data.cafeteria[0],
+      cafeteria: data?.cafeteria || null,
     } as UserResponseSuccess;
   };
 
